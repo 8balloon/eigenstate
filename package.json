@@ -1,6 +1,6 @@
 {
   "name": "eigenstate",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Stupid-easy React state management object",
   "main": "lib/index.js",
   "scripts": {
