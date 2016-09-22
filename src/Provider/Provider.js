@@ -1,3 +1,4 @@
+import objectAssign from 'object-assign'
 import WrappedUpdates from './WrappedUpdates'
 
 export const Provider = React.createClass({
@@ -24,7 +25,7 @@ export const Provider = React.createClass({
 
   render: function() {
 
-    const childProps = Object.assign({},
+    const childProps = objectAssign({},
       this.props,
       this.state
     )

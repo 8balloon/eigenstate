@@ -1,5 +1,7 @@
+import objectAssign from 'object-assign'
+
 function mapObjectValues(obj, mapFunction) {
-  return Object.assign.apply({},
+  return objectAssign.apply({},
     Object.keys(obj).map(key => ({
       [key]: mapFunction(obj[key], key, obj)
     }))
