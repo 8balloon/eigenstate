@@ -38,7 +38,7 @@ export default function WrappedUpdates(updates, middleware, providerContext) {
       }
     }
 
-    return function performUpdateConsideringMiddleware(payload, illegalSecondArgument) {
+    var wrappedUpdate = function performUpdateConsideringMiddleware(payload, illegalSecondArgument) {
 
       assert.updateWasNotPassedSecondArgument(illegalSecondArgument, key, path)
 
@@ -55,6 +55,10 @@ export default function WrappedUpdates(updates, middleware, providerContext) {
         performUpdate(payload)
       }
     }
+
+    wrappedUpdate.__baseUpdateFunction = update
+
+    return wrappedUpdate
   })
 
   return wrappedUpdates

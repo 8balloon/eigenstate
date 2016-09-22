@@ -11,6 +11,7 @@ export default function Counter(props) {
     erringSlowIncrementProcedure,
     implBadIncrementCount,
     erringProviderUpdatePropRemovingUpdate,
+    erringUpdateSwapper,
     downCount
   } = props
 
@@ -36,6 +37,9 @@ export default function Counter(props) {
       </div>
       <div className="erringProviderUpdatePropRemovingUpdate" onClick={() => erringProviderUpdatePropRemovingUpdate(7)}>
         erringProviderUpdatePropRemovingUpdate
+      </div>
+      <div className="erringUpdateSwapper" onClick={() => erringUpdateSwapper(7)}>
+        erringUpdateSwapper
       </div>
       <div className="tooManyArgumentsIncrement" onClick={() => incrementCount(1, 2)}>
         call increment with too many arguments

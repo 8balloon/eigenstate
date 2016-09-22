@@ -47,5 +47,17 @@ export function newStateContainsShapeOfOriginalState(newState, originalState, ke
     if (!(prop in newState)) {
       throw new Error(errorMessages.newStateLacksShapeOfOriginalState(key, path, prop))
     }
+
+    const newValue = newState[prop]
+
+    if (newValue instanceof Function) {
+
+      const newBaseUpdateFunction = newValue.__baseUpdateFunction
+      const originalBaseUpdateFunction = originalState[prop]
+
+      if (newBaseUpdateFunction !== originalBaseUpdateFunction) {
+        throw new Error(errorMessages.updateFunctionWasChanged(key, path, prop))
+      }
+    }
   }
 }

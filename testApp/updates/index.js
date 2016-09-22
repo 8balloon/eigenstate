@@ -34,6 +34,13 @@ export default {
     return {}
   },
 
+  erringUpdateSwapper: (payload, state) => {
+    return {
+      ...state,
+      erringProviderUpdatePropRemovingUpdate: function foo() {}
+    }
+  },
+
   downCount: {
 
     count: 0,

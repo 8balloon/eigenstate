@@ -11,3 +11,7 @@ export function tooManyUpdateArguments(key, path) {
 export function newStateLacksShapeOfOriginalState(key, path, prop) {
   return `Update "${key}" at path "${path}" returned a state which lacks property "${prop}". You cannot remove properties defined via Provider.updates.`
 }
+
+export function updateFunctionWasChanged(key, path, prop) {
+  return `Update "${key}" at path "${path}" returned a state which lacks the original update function with key "${prop}". You cannot change udpate functions at runtime.`
+}
