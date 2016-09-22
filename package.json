@@ -1,7 +1,7 @@
 {
-  "name": "switchless",
-  "version": "0.5.3",
-  "description": "Smart state container for JavaScript apps",
+  "name": "eigenstate",
+  "version": "0.0.2",
+  "description": "Stupid-easy React state management object",
   "main": "lib/library.min.js",
   "scripts": {
     "build": "webpack --mode=build",
@@ -30,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/8balloon/switchless.git"
+    "url": "https://github.com/8balloon/eigenstate.git"
   },
   "keywords": [
     "webpack",
@@ -44,9 +44,9 @@
   "author": "Ethan Gregory Clark",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/8balloon/switchless/issues"
+    "url": "https://github.com/8balloon/eigenstate/issues"
   },
-  "homepage": "https://github.com/8balloon/switchless",
+  "homepage": "https://github.com/8balloon/eigenstate",
   "npmFileMap": [
     {
       "basePath": "/lib/",
