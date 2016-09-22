@@ -1,27 +1,27 @@
-// var webpack = require('webpack');
-// var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+var webpack = require('webpack');
+var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var path = require('path');
-// var env = require('yargs').argv.mode;
+var env = require('yargs').argv.mode;
 
-// var libraryName = 'Library';
-//
-// var plugins = [], outputFile;
-//
-// if (env === 'build') {
-//   plugins.push(new UglifyJsPlugin({ minimize: true }));
-//   outputFile = libraryName + '.min.js';
-// } else {
-//   outputFile = libraryName + '.js';
-// }
+var libraryName = 'eigenstate';
+
+var plugins = [], outputFile;
+
+if (env === 'build') {
+  plugins.push(new UglifyJsPlugin({ minimize: true }));
+  outputFile = libraryName + '.min.js';
+} else {
+  outputFile = libraryName + '.js';
+}
 
 var config = {
   entry: __dirname + '/src/index.js',
   output: {
     path: __dirname + '/lib',
-    library: 'eigenstate',
-    filename: 'eigenstate.js',
-    // filename: outputFile,
-    // library: libraryName,
+    // library: 'eigenstate',
+    // filename: 'eigenstate.js',
+    filename: outputFile,
+    library: libraryName,
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
@@ -39,10 +39,10 @@ var config = {
     ]
   },
   resolve: {
-    // root: path.resolve('./src'),
+    root: path.resolve('./src'),
     extensions: ['', '.js']
   },
-  // plugins: plugins
+  plugins: plugins
 };
 
 module.exports = config;
