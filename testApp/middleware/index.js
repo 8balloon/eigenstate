@@ -1,4 +1,4 @@
-import { verboseLogger } from '../../src'
+import { updateLogger } from '../../src'
 
 export default function testMiddleware(executeUpdate, payload, extras) {
 
@@ -14,5 +14,5 @@ export default function testMiddleware(executeUpdate, payload, extras) {
     newPayload = payload
   }
 
-  verboseLogger(executeUpdate, newPayload, extras)
+  updateLogger(executeUpdate, newPayload, extras)
 }

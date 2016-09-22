@@ -72,7 +72,7 @@ Middleware has several uses, which are covered later. Here we will focus on logg
 Here is an example of a logging Switchless middleware. For each update that is called, this middleware logs the update key and update payload before letting update execution continue.
 
 ```js
-function verboseLogger(executeUpdate, payload, extras) {
+function updateLogger(executeUpdate, payload, extras) {
 
   const { key, getState } = extras
 
@@ -85,15 +85,15 @@ function verboseLogger(executeUpdate, payload, extras) {
 }
 ```
 
-If this middleware looks useful to you, feel free to use it. In fact, we actually include it as part of Switchless -- it's the ```verboseLogger```. You can use it like this:
+If this middleware looks useful to you, feel free to use it. In fact, we actually include it as part of Switchless -- it's the ```updateLogger```. You can use it like this:
 
 ```js
-import { Provider, verboseLogger } from 'switchless'
+import { Provider, updateLogger } from 'switchless'
 
 ...
 
 ReactDOM.render(
-  <Provider updates={updates} middleware={verboseLogger}>
+  <Provider updates={updates} middleware={updateLogger}>
     <Counter />
   </Provider>,
   ...
@@ -174,7 +174,7 @@ While you should never use middleware to kick off updates directly, middleware h
 You may find it useful to let non-Switchless JavaScript entities trigger updates on your Switchless application. The best way to do this is via custom Switchless middleware. Here's an example of such middleware; notice how it leverages existing middleware:
 
 ```js
-import { verboseLogger } from 'switchless'
+import { updateLogger } from 'switchless'
 
 function yourCustomControlPassingMiddleware(executeUpdate, payload, extras) {
 
@@ -188,7 +188,7 @@ function yourCustomControlPassingMiddleware(executeUpdate, payload, extras) {
     })
   }
 
-  verboseLogger(executeUpdate, payload, extras)
+  updateLogger(executeUpdate, payload, extras)
 }
 ```
 
