@@ -1,0 +1,58 @@
+{
+  "name": "switchless",
+  "version": "0.5.3",
+  "description": "Smart state container for JavaScript apps",
+  "main": "lib/library.min.js",
+  "scripts": {
+    "build": "webpack --mode=build",
+    "testApp": "cd testApp && webpack-dev-server -d --hot --inline --progress --colors",
+    "test": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
+  },
+  "peerDependencies": {
+    "react": "^15.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-core": "6.1.18",
+    "babel-loader": "6.1.0",
+    "babel-plugin-add-module-exports": "0.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-preset-es2015": "6.3.13",
+    "chai": "3.4.1",
+    "mocha": "2.3.4",
+    "yargs": "3.32.0",
+    "babel-preset-react": "^6.3.13",
+    "file-loader": "^0.8.5",
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/8balloon/switchless.git"
+  },
+  "keywords": [
+    "webpack",
+    "es6",
+    "starter",
+    "library",
+    "universal",
+    "umd",
+    "commonjs"
+  ],
+  "author": "Ethan Gregory Clark",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/8balloon/switchless/issues"
+  },
+  "homepage": "https://github.com/8balloon/switchless",
+  "npmFileMap": [
+    {
+      "basePath": "/lib/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ]
+}
