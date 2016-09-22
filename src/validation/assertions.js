@@ -41,7 +41,7 @@ export function updateWasNotPassedSecondArgument(illegalSecondArgument, key, pat
   }
 }
 
-export function newStateContainsShapeOfOriginalState(newState, originalState, key, path) {
+export function newStateMatchesDefinition(newState, originalState, key, path) {
 
   for (var prop in originalState) {
     if (!(prop in newState)) {

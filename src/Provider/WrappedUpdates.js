@@ -31,7 +31,7 @@ export default function WrappedUpdates(updates, middleware, providerContext) {
           throw new Error(`Update ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Updates should return a value OR call other updates. See "Updates: Operations and Procedures" at ${documentationURL}`)
         }
 
-        assert.newStateContainsShapeOfOriginalState(newLocalState, parent, key, path)
+        assert.newStateMatchesDefinition(newLocalState, parent, key, path)
 
         const newState = mutSetValueByPath(state, path, newLocalState)
         providerContext.setState(newState)
