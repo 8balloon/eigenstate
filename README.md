@@ -1,19 +1,16 @@
 # Eigenstate
 
-Eigenstate is a state management tool for [React](https://facebook.github.io/react/index.html) applications.
+Eigenstate is a state management tool for [React](https://facebook.github.io/react/index.html).
 
-With Eigenstate, you define your state and all possible changes
+Eigenstate allows you to define your state along with all possible changes it may undergo. This makes it extremely powerful and intuitive.
 
 
-Switchless helps you write applications that are easy to set up, extend, and test.
 
-## purpose
+## how to use
 
-Switchless was born out of frustration with Redux. Redux is great, but it is hard/verbose to set up, requires you to write repetitive action creators and parsers, and presumes the use of "complementary packages". (If you've never used Redux, you can read about it [here](https://github.com/reactjs/redux).)
 
-Switchless comes fully configured for React, so no wiring is required. Its simple ```key:update``` model provides a simpler alternative to Redux actions, which is just as powerful. This means no ```switch``` statements or "type" strings -- you only write updates.
 
-## the gist / getting started
+
 
 Switchless lets you control your state via updates. Updates are functions which return a new application state.
 
@@ -262,3 +259,6 @@ ReactDOM.render(
 ## future direction
 If anyone likes Eigenstate, I'll factor out its core so it can be used in other applications.
 Also, going to think about making embeddable in React applications. (May be a no-go.)
+
+
+Eigenstate was formerly [Switchless](https://github.com/8balloon/switchless).
