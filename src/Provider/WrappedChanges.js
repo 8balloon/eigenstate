@@ -25,6 +25,7 @@ export default function WrappedChanges(changes, middleware, providerContext) {
       latestChangeInvocationID = thisChangeInvocationID
 
       const localStateChanges = change(resolvedPayload, stateAtPath, wrappedChangesAtPath)
+      assert.changesMatchDefinition(localStateChanges, parent, key, path)
       const newLocalState = objectAssign({}, stateAtPath, localStateChanges)
 
       if (newLocalState !== undefined) {
@@ -33,7 +34,7 @@ export default function WrappedChanges(changes, middleware, providerContext) {
           throw new Error(`Change ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Changes should return a value OR call other changes. See "Changes: Operations and Procedures" at ${documentationURL}`)
         }
 
-        assert.newStateMatchesDefinition(newLocalState, parent, key, path)
+        assert.newStateMatchesDefinition(newLocalState, parent, key, path) //remove?
 
         const newState = mutSetValueByPath(state, path, newLocalState)
         providerContext.setState(newState)

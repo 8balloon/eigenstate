@@ -31,7 +31,7 @@ export default {
   },
 
   changeThatRemovesChange: (payload, state) => {
-    return {}
+    return {implBadIncrementCount: null}
   },
 
   erringChangeSwapper: (payload, state) => {
