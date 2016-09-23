@@ -1,4 +1,4 @@
-export function verboseLogger(details) {
+export function logVerbosely(details) {
 
   const {
     key,

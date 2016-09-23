@@ -3,9 +3,9 @@ import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils
 import * as assert from '../validation/assertions'
 import { documentationURL } from '../validation/errorMessages'
 
-export default function Eigenstate(changes, middleware, context) {
+export default function Eigenstate(changes, onChange, context) {
 
-  middleware && assert.onChangePropIsFunction(middleware)
+  onChange && assert.onChangePropIsFunction(onChange)
 
   var latestChangeInvocationID = Math.random() //consider starting at 0 and incrementing
 
@@ -38,7 +38,7 @@ export default function Eigenstate(changes, middleware, context) {
         context.setState(newState)
       }
 
-      middleware && middleware({
+      onChange && onChange({
         key,
         path,
         payload,
@@ -48,7 +48,7 @@ export default function Eigenstate(changes, middleware, context) {
       })
     }
 
-    armedChange.__changeDefinition = change
+    armedChange.__definition = change
 
     return armedChange
   })

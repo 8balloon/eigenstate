@@ -2,7 +2,7 @@ export const documentationURL = 'https://github.com/8balloon/switchless/blob/mas
 
 export const noProviderChangesProp = 'Switchless Provider requires an "changes" property'
 export const changesLeavesNotFunctions = 'Switchless Provider.props.changes must contain values that are Functions'
-export const middlewareIsNotFunction = 'Switchless Provider middleware must be a Function'
+export const onChangePropIsNotFunction = 'Switchless Provider onChange must be a Function'
 
 export function tooManyChangeArguments(key, path) {
   return `Change "${key}" at path "${path}" was called with multiple arguments. Changes may only be invoked with a single argument; see ${documentationURL}`

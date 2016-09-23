@@ -1,3 +1,3 @@
 export { Provider } from './Provider/Provider'
-export { verboseLogger } from './verboseLogger'
+export { logVerbosely } from './logVerbosely'
 export { connect } from './connect'

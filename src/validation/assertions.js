@@ -29,9 +29,9 @@ export function leavesAreFunctions(objTree, errorMessage) {
 
 // validation assertions
 
-export function onChangePropIsFunction(middleware) {
+export function onChangePropIsFunction(onChange) {
 
-  isFunction(middleware, errorMessages.middlewareIsNotFunction)
+  isFunction(onChange, errorMessages.onChangePropIsNotFunction)
 }
 
 export function changeWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
@@ -70,7 +70,7 @@ export function changeResultsFitStateDef(stateChanges, stateDefinitions, key, pa
         throw new Error("State change function was replaced!!") //revisit
       }
 
-      if (stateChange.__changeDefinition !== stateDefinition) {
+      if (stateChange.__definition !== stateDefinition) {
         throw new Error(errorMessages.changeFunctionWasChanged(key, path, prop))
       }
     }

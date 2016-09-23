@@ -5,8 +5,8 @@ export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    const { stateDef, middleware } = props
-    this.state = Eigenstate(stateDef, middleware, this)
+    const { stateDef, onChange } = props
+    this.state = Eigenstate(stateDef, onChange, this)
   }
 
   getChildContext() {
@@ -17,18 +17,18 @@ export class Provider extends React.Component {
 
   componentWillMount() {
 
-    const { stateDef, middleware } = this.props
+    const { stateDef, onChange } = this.props
 
-    this.setState(Eigenstate(stateDef, middleware, this))
+    this.setState(Eigenstate(stateDef, onChange, this))
   }
 
   componentWillReceiveProps(nextProps) {
 
-    const { stateDef, middleware } = this.props
+    const { stateDef, onChange } = this.props
 
-    if ( (stateDef !== nextProps.stateDef) || (middleware !== nextProps.middleware) ) {
+    if ( (stateDef !== nextProps.stateDef) || (onChange !== nextProps.onChange) ) {
 
-      this.setState(Eigenstate(nextProps.stateDef, nextProps.middleware, this))
+      this.setState(Eigenstate(nextProps.stateDef, nextProps.onChange, this))
     }
   }
 

@@ -9,10 +9,10 @@ import ReactDOM from 'react-dom'
 import stateDef from './stateDef'
 import Components from './components'
 
-import { Provider, verboseLogger } from '../src'
+import { Provider, logVerbosely } from '../src'
 
 ReactDOM.render(
-  <Provider stateDef={stateDef} middleware={verboseLogger}>
+  <Provider stateDef={stateDef} onChange={logVerbosely}>
     <Components />
   </Provider>,
   document.getElementById('react-root')
