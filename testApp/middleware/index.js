@@ -1,6 +1,6 @@
-import { updateLogger } from '../../src'
+import { changeLogger } from '../../src'
 
-export default function testMiddleware(executeUpdate, payload, extras) {
+export default function testMiddleware(executeChange, payload, extras) {
 
   var newPayload
 
@@ -14,5 +14,5 @@ export default function testMiddleware(executeUpdate, payload, extras) {
     newPayload = payload
   }
 
-  updateLogger(executeUpdate, newPayload, extras)
+  changeLogger(executeChange, newPayload, extras)
 }

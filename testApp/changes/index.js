@@ -30,14 +30,14 @@ export default {
     }
   },
 
-  updateThatRemovesUpdate: (payload, state) => {
+  changeThatRemovesChange: (payload, state) => {
     return {}
   },
 
-  erringUpdateSwapper: (payload, state) => {
+  erringChangeSwapper: (payload, state) => {
     return {
       ...state,
-      updateThatRemovesUpdate: function foo() {}
+      changeThatRemovesChange: function foo() {}
     }
   },
 

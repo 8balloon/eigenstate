@@ -1,35 +1,35 @@
 import objectAssign from 'object-assign'
-import WrappedUpdates from './WrappedUpdates'
+import WrappedChanges from './WrappedChanges'
 
 export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    const { updates, middleware } = props
-    this.state = WrappedUpdates(updates, middleware, this)
+    const { changes, middleware } = props
+    this.state = WrappedChanges(changes, middleware, this)
   }
 
   getChildContext() {
     return {
-      wrappedUpdates: this.state
+      wrappedChanges: this.state
     }
   }
 
   componentWillMount() {
 
-    const { updates, middleware } = this.props
+    const { changes, middleware } = this.props
 
-    this.setState(WrappedUpdates(updates, middleware, this))
+    this.setState(WrappedChanges(changes, middleware, this))
   }
 
   componentWillReceiveProps(nextProps) {
 
-    const { updates, middleware } = this.props
-    const { newUpdates, newMiddleware } = nextProps
+    const { changes, middleware } = this.props
+    const { newChanges, newMiddleware } = nextProps
 
-    if ( (updates !== newUpdates) || (middleware !== newMiddleware) ) {
+    if ( (changes !== newChanges) || (middleware !== newMiddleware) ) {
 
-      this.setState(WrappedUpdates(newUpdates, newMiddleware, this))
+      this.setState(WrappedChanges(newChanges, newMiddleware, this))
     }
   }
 
@@ -40,5 +40,5 @@ export class Provider extends React.Component {
 }
 
 Provider.childContextTypes = {
-  wrappedUpdates: React.PropTypes.object.isRequired
+  wrappedChanges: React.PropTypes.object.isRequired
 }

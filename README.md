@@ -4,11 +4,32 @@ Eigenstate is a state management tool for [React](https://facebook.github.io/rea
 
 Eigenstate allows you to define your state along with all possible changes it may undergo. This makes it extremely powerful and intuitive.
 
-
-
 ## how to use
 
+Define your state + changes in an object, and pass that to a ```Provider```. Eigenstate does the rest.
 
+```js
+import { Provider } from 'eigenstate'
+
+const state = {
+
+  count: 0,
+  
+  increment: (payload, state) => {
+    return {
+      ...state,
+      count: count + payload
+    }
+  }
+}
+
+ReactDOM.render(
+  <Provider state={state}>
+    <Counter />
+  </Provider>,
+  document.getElementById('react-root')  
+)
+```
 
 
 

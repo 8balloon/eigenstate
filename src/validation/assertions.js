@@ -34,10 +34,10 @@ export function middlewareIsValid(middleware) {
   isFunction(middleware, errorMessages.middlewareIsNotFunction)
 }
 
-export function updateWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
+export function changeWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
 
   if (illegalSecondArgument !== undefined) {
-    throw new Error(errorMessages.tooManyUpdateArguments(key))
+    throw new Error(errorMessages.tooManyChangeArguments(key))
   }
 }
 
@@ -52,11 +52,11 @@ export function newStateMatchesDefinition(newState, originalState, key, path) {
 
     if (newValue instanceof Function) {
 
-      const newBaseUpdateFunction = newValue.__baseUpdateFunction
-      const originalBaseUpdateFunction = originalState[prop]
+      const newBaseChangeFunction = newValue.__baseChangeFunction
+      const originalBaseChangeFunction = originalState[prop]
 
-      if (newBaseUpdateFunction !== originalBaseUpdateFunction) {
-        throw new Error(errorMessages.updateFunctionWasChanged(key, path, prop))
+      if (newBaseChangeFunction !== originalBaseChangeFunction) {
+        throw new Error(errorMessages.changeFunctionWasChanged(key, path, prop))
       }
     }
   }

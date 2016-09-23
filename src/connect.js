@@ -9,12 +9,12 @@ export function connect(Component) {
     }
 
     render() {
-      return React.createElement(Component, this.context.wrappedUpdates)
+      return React.createElement(Component, this.context.wrappedChanges)
     }
   }
 
   Connect.contextTypes = {
-    wrappedUpdates: React.PropTypes.object.isRequired
+    wrappedChanges: React.PropTypes.object.isRequired
   }
 
   return Connect

@@ -10,8 +10,8 @@ export default function Counter(props) {
     erringIncrementReducer,
     erringSlowIncrementProcedure,
     implBadIncrementCount,
-    updateThatRemovesUpdate,
-    erringUpdateSwapper,
+    changeThatRemovesChange,
+    erringChangeSwapper,
     downCount
   } = props
 
@@ -35,11 +35,11 @@ export default function Counter(props) {
       <div className="implBadIncrementCount" onClick={() => implBadIncrementCount(7)}>
         implBadIncrementCount
       </div>
-      <div className="updateThatRemovesUpdate" onClick={() => updateThatRemovesUpdate(7)}>
-        updateThatRemovesUpdate
+      <div className="changeThatRemovesChange" onClick={() => changeThatRemovesChange(7)}>
+        changeThatRemovesChange
       </div>
-      <div className="erringUpdateSwapper" onClick={() => erringUpdateSwapper(7)}>
-        erringUpdateSwapper
+      <div className="erringChangeSwapper" onClick={() => erringChangeSwapper(7)}>
+        erringChangeSwapper
       </div>
       <div className="tooManyArgumentsIncrement" onClick={() => incrementCount(1, 2)}>
         call increment with too many arguments
