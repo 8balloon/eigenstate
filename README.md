@@ -11,7 +11,7 @@ Define your state + changes in an object, and pass that to a ```Provider```. Eig
 ```js
 import { Provider } from 'eigenstate'
 
-const state = {
+const stateDef = {
   count: 0,
   increment: (payload, state) => ({count: state.count + payload})
 }
@@ -23,7 +23,7 @@ const Counter = (props) => (
 )
 
 ReactDOM.render(
-  <Provider state={state}>
+  <Provider stateDef={stateDef}>
     <Counter />
   </Provider>,
   document.getElementById('react-root')  

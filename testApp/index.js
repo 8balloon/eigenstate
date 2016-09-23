@@ -6,14 +6,14 @@ import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import changes from './changes'
+import stateDef from './stateDef'
 import middleware from './middleware'
 import Components from './components'
 
 import { Provider } from '../src'
 
 ReactDOM.render(
-  <Provider changes={changes} middleware={middleware}>
+  <Provider stateDef={stateDef} middleware={middleware}>
     <Components />
   </Provider>,
   document.getElementById('react-root')

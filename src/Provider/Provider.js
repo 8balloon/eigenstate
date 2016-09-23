@@ -5,8 +5,8 @@ export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    const { changes, middleware } = props
-    this.state = WrappedChanges(changes, middleware, this)
+    const { stateDef, middleware } = props
+    this.state = WrappedChanges(stateDef, middleware, this)
   }
 
   getChildContext() {
@@ -17,19 +17,18 @@ export class Provider extends React.Component {
 
   componentWillMount() {
 
-    const { changes, middleware } = this.props
+    const { stateDef, middleware } = this.props
 
-    this.setState(WrappedChanges(changes, middleware, this))
+    this.setState(WrappedChanges(stateDef, middleware, this))
   }
 
   componentWillReceiveProps(nextProps) {
 
-    const { changes, middleware } = this.props
-    const { newChanges, newMiddleware } = nextProps
+    const { stateDef, middleware } = this.props
 
-    if ( (changes !== newChanges) || (middleware !== newMiddleware) ) {
+    if ( (stateDef !== nextProps.stateDef) || (middleware !== nextProps.middleware) ) {
 
-      this.setState(WrappedChanges(newChanges, newMiddleware, this))
+      this.setState(WrappedChanges(nextProps.stateDef, nextProps.middleware, this))
     }
   }
 
