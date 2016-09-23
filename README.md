@@ -12,9 +12,7 @@ Define your state + changes in an object, and pass that to a ```Provider```. Eig
 import { Provider } from 'eigenstate'
 
 const state = {
-
   count: 0,
-
   increment: (payload, state) => ({count: state.count + payload})
 }
 
@@ -32,56 +30,42 @@ ReactDOM.render(
 )
 ```
 
-
-
-Switchless lets you control your state via updates. Updates are functions which return a new application state.
-
-Updates generally look like this: ```(payload, state) => newState```. (If you're coming from Redux, this will look familiar.)
-
-To use Switchless, you've got to put your updates in an ```updates``` object, which is a collection of ```key:update``` pairs.
-
-To define your initial application state, define a function on the special key ```__init__```.
+Does it look like we're missing something? Well, we're not. Here's a more complex example.
 
 ```js
-/*
-State + updates for a simple counter application
-*/
-const updates = {
-
-  __init__: function() {
-
-    return { count: 0 }
-  },
-  incrementCount: function(payload, state) {
-
-    return { count: state + payload}
-  }
+const state = {
+  rows: 'xxx',
+  columns: '012',
+  addRow: (payload, state) => ({rows: state.rows + 'x'}),
+  addColumn: (payload, state) => ({columns: state.columns + state.columns.length % 10}),
+  removeRow: (payload, state) => ({rows: state.rows.slice(0, -1)}),
+  removeColumn: (payload, state) => ({columns: state.columns.slice(0, -1)})
 }
-```
 
-Make your state and updates available to the rest of your application by passing them to the Switchless ```<Provider>```, like this:
-
-```js
-/*
-Component + rendering for a simple counter application
-*/
-import { Provider } from 'switchless'
-
-const Counter = (props) => (
-  <div className="counter" onClick={() => props.updates.incrementCount(1)}>
-    {props.count}
-  </div>
-)
+const Grid = (props) => {
+  console.log("GRIDPROPS:", props)
+  return (
+    <div>
+      <div onClick={props.addRow}>Add row</div>
+      <div onClick={props.addColumn}>Add column</div>
+      {
+        props.rows.split('').map((char, idx) => (
+          <div key={idx}>{props.columns}</div>
+        ))
+      }
+      <div onClick={props.removeRow}>Remove row</div>
+      <div onClick={props.removeColumn}>Remove column</div>
+    </div>
+  )
+}
 
 ReactDOM.render(
-  <Provider updates={updates}>
-    <Count />
+  <Provider changes={state}>
+    <Grid />
   </Provider>,
-  ...
+  document.getElementById('react-root')
 )
 ```
-
-Combine the two examples above, and you have a functioning Switchless application! And all in ~25 lines of code.
 
 ## intermediate features
 
