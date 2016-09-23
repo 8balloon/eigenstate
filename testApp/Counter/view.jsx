@@ -1,4 +1,4 @@
-export default function Counter(props) {
+export default function CounterView(props) {
 
   console.log("STATE:", props)
   window.state = props
@@ -37,9 +37,6 @@ export default function Counter(props) {
       </div>
       <div className="changeThatRemovesChange" onClick={() => changeThatRemovesChange(7)}>
         changeThatRemovesChange
-      </div>
-      <div className="erringChangeSwapper" onClick={() => erringChangeSwapper(7)}>
-        erringChangeSwapper
       </div>
       <div className="tooManyArgumentsIncrement" onClick={() => incrementCount(1, 2)}>
         call increment with too many arguments

@@ -34,13 +34,6 @@ export default {
     return {implBadIncrementCount: null}
   },
 
-  erringChangeSwapper: (payload, state) => {
-    return {
-      ...state,
-      changeThatRemovesChange: function foo() {}
-    }
-  },
-
   downCount: {
 
     count: 0,
@@ -48,18 +41,6 @@ export default {
     decrement: (payload, state) => ({...state,
       count: state.count - payload
     })
-
-  },
-
-  squareCount: {
-
-    count: 2,
-
-    square: (payload, state) => ({...state,
-      count: state.count * state.count
-    }),
-
-    triggerIncrement: (payload, state) => state.incrementCount(2416)
 
   },
 

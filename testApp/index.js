@@ -6,14 +6,15 @@ import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import stateDef from './stateDef'
-import Components from './components'
-
 import { Provider, logVerbosely } from '../src'
 
+import Counter from './Counter'
+import Grid from './Grid'
+
 ReactDOM.render(
-  <Provider stateDef={stateDef} onChange={logVerbosely}>
-    <Components />
-  </Provider>,
+  <div id="apps">
+    <Counter />
+    <Grid />
+  </div>,
   document.getElementById('react-root')
 )
