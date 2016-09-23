@@ -14,14 +14,15 @@ import { Provider } from 'eigenstate'
 const state = {
 
   count: 0,
-  
-  increment: (payload, state) => {
-    return {
-      ...state,
-      count: count + payload
-    }
-  }
+
+  increment: (payload, state) => ({count: state.count + payload})
 }
+
+const Counter = (props) => (
+  <div onClick={() => props.increment(10)}>
+    {props.count}
+  </div>
+)
 
 ReactDOM.render(
   <Provider state={state}>

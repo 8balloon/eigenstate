@@ -2,7 +2,7 @@ export default {
 
   count: 0,
 
-  incrementCount: (payload, state) => ({...state,
+  incrementCount: (payload, state) => ({
     count: state.count + payload
   }),
 

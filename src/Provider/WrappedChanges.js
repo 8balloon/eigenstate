@@ -1,3 +1,4 @@
+import objectAssign from 'object-assign'
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
 import { documentationURL } from '../validation/errorMessages'
@@ -23,7 +24,8 @@ export default function WrappedChanges(changes, middleware, providerContext) {
       const thisChangeInvocationID = Math.random()
       latestChangeInvocationID = thisChangeInvocationID
 
-      const newLocalState = change(resolvedPayload, stateAtPath, wrappedChangesAtPath)
+      const localStateChanges = change(resolvedPayload, stateAtPath, wrappedChangesAtPath)
+      const newLocalState = objectAssign({}, stateAtPath, localStateChanges)
 
       if (newLocalState !== undefined) {
 
