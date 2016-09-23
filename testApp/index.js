@@ -13,7 +13,7 @@ import Components from './components'
 import { Provider } from '../src'
 
 ReactDOM.render(
-  <Provider updates={updates} middleware={middleware} extraProps={{hello: 'world'}}>
+  <Provider updates={updates} middleware={middleware}>
     <Components />
   </Provider>,
   document.getElementById('react-root')

@@ -1,6 +1,9 @@
-# Switchless
+# Eigenstate
 
-Switchless is a smart state container for [React](https://facebook.github.io/react/index.html). It helps you define and control your application's state.
+Eigenstate is a state management tool for [React](https://facebook.github.io/react/index.html) applications.
+
+With Eigenstate, you define your state and all possible changes
+
 
 Switchless helps you write applications that are easy to set up, extend, and test.
 
@@ -255,3 +258,7 @@ ReactDOM.render(
   document.getElementById('react-root')
 )
 ```
+
+## future direction
+If anyone likes Eigenstate, I'll factor out its core so it can be used in other applications.
+Also, going to think about making embeddable in React applications. (May be a no-go.)

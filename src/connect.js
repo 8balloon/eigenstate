@@ -9,18 +9,11 @@ export function connect(Component) {
     }
 
     render() {
-
-      const childProps = objectAssign({},
-        this.context.extraProps,
-        this.context.wrappedUpdates
-      )
-
-      return React.createElement(Component, childProps)
+      return React.createElement(Component, this.context.wrappedUpdates)
     }
   }
 
   Connect.contextTypes = {
-    extraProps: React.PropTypes.object.isRequired,
     wrappedUpdates: React.PropTypes.object.isRequired
   }
 
