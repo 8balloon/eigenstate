@@ -3,42 +3,38 @@ import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils
 import * as assert from '../validation/assertions'
 import { documentationURL } from '../validation/errorMessages'
 
-export default function Eigenstate(changes, middleware, providerContext) {
+export default function Eigenstate(changes, middleware, context) {
 
   middleware && assert.middlewareIsValid(middleware)
 
-  const getState = () => providerContext.state
+  const getState = () => context.state
 
-  var latestChangeInvocationID = Math.random()
+  var latestChangeInvocationID = Math.random() //consider starting at 0 and incrementing
 
+  /*stateDef with wrapped change functions*/
   const eigenstate = mapObjectTreeLeaves(changes, (change, key, path, parent) => {
 
-    // Not a change -- just state. Do not modify.
+    // Not a change -- just state. So no wrapping required.
     if (!(change instanceof Function)) return change
 
     const performChange = function(resolvedPayload) {
 
-      const state = providerContext.state
-      const stateAtPath = getValueByPath(state, path)
-      const eigenstateAtPath = getValueByPath(eigenstate, path)
+      const contextState = objectAssign({}, context.state)
+      const contextStateAtPath = getValueByPath(contextState, path)
 
       const thisChangeInvocationID = Math.random()
       latestChangeInvocationID = thisChangeInvocationID
 
-      const localStateChanges = change(resolvedPayload, stateAtPath, eigenstateAtPath)
-      assert.changesMatchDefinition(localStateChanges, parent, key, path)
-      const newLocalState = objectAssign({}, stateAtPath, localStateChanges)
+      const localChangeResults = change(resolvedPayload, contextStateAtPath)
+      assert.changeResultsFitStateDef(localChangeResults, parent, key, path)
+      const newLocalState = objectAssign({}, contextStateAtPath, localChangeResults)
 
       if (newLocalState !== undefined) {
 
-        if (thisChangeInvocationID !== latestChangeInvocationID) {
-          throw new Error(`Change ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Changes should return a value OR call other changes. See "Changes: Operations and Procedures" at ${documentationURL}`)
-        }
+        assert.noOtherChangesHaveBeenInvoked(thisChangeInvocationID, latestChangeInvocationID)
 
-        assert.newStateMatchesDefinition(newLocalState, parent, key, path) //remove?
-
-        const newState = mutSetValueByPath(state, path, newLocalState)
-        providerContext.setState(newState)
+        const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
+        context.setState(newState)
       }
     }
 
@@ -51,8 +47,7 @@ export default function Eigenstate(changes, middleware, providerContext) {
         middleware(performChange, payload, {
           key,
           path,
-          changes: eigenstate,
-          getState
+          eigenstate
         })
       }
       else {

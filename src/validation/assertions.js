@@ -41,27 +41,6 @@ export function changeWasNotPassedSecondArgument(illegalSecondArgument, key, pat
   }
 }
 
-export function newStateMatchesDefinition(newState, originalState, key, path) {
-
-  for (var prop in originalState) {
-    if (!(prop in newState)) {
-      throw new Error(errorMessages.newStateLacksShapeOfOriginalState(key, path, prop))
-    }
-
-    const newValue = newState[prop]
-
-    if (newValue instanceof Function) {
-
-      const newBaseChangeFunction = newValue.__baseChangeFunction
-      const originalBaseChangeFunction = originalState[prop]
-
-      if (newBaseChangeFunction !== originalBaseChangeFunction) {
-        throw new Error(errorMessages.changeFunctionWasChanged(key, path, prop))
-      }
-    }
-  }
-}
-
 function containsNoFunctions(objTree, errorMessage) {
   mapObjectTreeLeaves(objTree, (val) => {
     if (val instanceof Function) {
@@ -70,7 +49,13 @@ function containsNoFunctions(objTree, errorMessage) {
   })
 }
 
-export function changesMatchDefinition(stateChanges, stateDefinitions, key, path) {
+export function noOtherChangesHaveBeenInvoked(thisChangeInvocationID, latestChangeInvocationID) {
+  if (thisChangeInvocationID !== latestChangeInvocationID) {
+    throw new Error(`Change ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Changes should return a value OR call other changes. See "Changes: Operations and Procedures" at ${documentationURL}`)
+  }
+}
+
+export function changeResultsFitStateDef(stateChanges, stateDefinitions, key, path) {
 
   for (var prop in stateChanges) {
     if (!(prop in stateDefinitions)) {
@@ -96,7 +81,7 @@ export function changesMatchDefinition(stateChanges, stateDefinitions, key, path
           containsNoFunctions(stateDefinition, 'A change function that was defined has been removed by change yayhda at path yayadadada') //revisit
         }
         else {
-          changesMatchDefinition(stateChange, stateDefinition, key, path) //are key and path correct here?
+          changeResultsFitStateDef(stateChange, stateDefinition, key, path) //are key and path correct here?
         }
       }
     }
