@@ -10,7 +10,7 @@ export default function Counter(props) {
     erringIncrementReducer,
     erringSlowIncrementProcedure,
     implBadIncrementCount,
-    erringProviderUpdatePropRemovingUpdate,
+    updateThatRemovesUpdate,
     erringUpdateSwapper,
     downCount
   } = props
@@ -35,8 +35,8 @@ export default function Counter(props) {
       <div className="implBadIncrementCount" onClick={() => implBadIncrementCount(7)}>
         implBadIncrementCount
       </div>
-      <div className="erringProviderUpdatePropRemovingUpdate" onClick={() => erringProviderUpdatePropRemovingUpdate(7)}>
-        erringProviderUpdatePropRemovingUpdate
+      <div className="updateThatRemovesUpdate" onClick={() => updateThatRemovesUpdate(7)}>
+        updateThatRemovesUpdate
       </div>
       <div className="erringUpdateSwapper" onClick={() => erringUpdateSwapper(7)}>
         erringUpdateSwapper

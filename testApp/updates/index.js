@@ -30,14 +30,14 @@ export default {
     }
   },
 
-  erringProviderUpdatePropRemovingUpdate: (payload, state) => {
+  updateThatRemovesUpdate: (payload, state) => {
     return {}
   },
 
   erringUpdateSwapper: (payload, state) => {
     return {
       ...state,
-      erringProviderUpdatePropRemovingUpdate: function foo() {}
+      updateThatRemovesUpdate: function foo() {}
     }
   },
 

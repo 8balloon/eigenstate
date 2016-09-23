@@ -8,18 +8,13 @@ import ReactDOM from 'react-dom'
 
 import updates from './updates'
 import middleware from './middleware'
-import Counter from './components/Counter'
+import Components from './components'
 
-import { Provider, connect } from '../src'
-
-const Connect = connect(Counter)
-
-console.log("CONNCT IS:", Connect)
+import { Provider } from '../src'
 
 ReactDOM.render(
-  <Provider updates={updates} middleware={middleware}>
-    <Connect />
-    {/*<Counter />*/}
+  <Provider updates={updates} middleware={middleware} extraProps={{hello: 'world'}}>
+    <Components />
   </Provider>,
   document.getElementById('react-root')
 )

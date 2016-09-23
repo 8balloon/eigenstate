@@ -5,24 +5,20 @@ export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    this.wrappedUpdates = WrappedUpdates(props.updates, props.middleware, this)
-    this.state = this.wrappedUpdates
+    const { updates, middleware } = props
+    this.state = WrappedUpdates(updates, middleware, this)
   }
 
   getChildContext() {
-
     return {
-      providerProps: this.props,
+      extraProps: this.props.extraProps,
       wrappedUpdates: this.state
     }
   }
 
   componentWillMount() {
-
     const { updates, middleware } = this.props
-
-    const wrappedUpdates = WrappedUpdates(updates, middleware, this)
-    this.setState(wrappedUpdates)
+    this.setState(WrappedUpdates(updates, middleware, this))
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,7 +36,7 @@ export class Provider extends React.Component {
   render() {
 
     const childProps = objectAssign({},
-      this.props,
+      this.props.extraProps,
       this.state
     )
 
@@ -49,6 +45,6 @@ export class Provider extends React.Component {
 }
 
 Provider.childContextTypes = {
-  providerProps: React.PropTypes.object.isRequired,
+  extraProps: React.PropTypes.object.isRequired,
   wrappedUpdates: React.PropTypes.object.isRequired
 }
