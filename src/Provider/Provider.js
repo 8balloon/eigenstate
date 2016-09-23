@@ -1,17 +1,17 @@
 import objectAssign from 'object-assign'
-import WrappedChanges from './WrappedChanges'
+import Eigenstate from './Eigenstate'
 
 export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
     const { stateDef, middleware } = props
-    this.state = WrappedChanges(stateDef, middleware, this)
+    this.state = Eigenstate(stateDef, middleware, this)
   }
 
   getChildContext() {
     return {
-      wrappedChanges: this.state
+      eigenstate: this.state
     }
   }
 
@@ -19,7 +19,7 @@ export class Provider extends React.Component {
 
     const { stateDef, middleware } = this.props
 
-    this.setState(WrappedChanges(stateDef, middleware, this))
+    this.setState(Eigenstate(stateDef, middleware, this))
   }
 
   componentWillReceiveProps(nextProps) {
@@ -28,7 +28,7 @@ export class Provider extends React.Component {
 
     if ( (stateDef !== nextProps.stateDef) || (middleware !== nextProps.middleware) ) {
 
-      this.setState(WrappedChanges(nextProps.stateDef, nextProps.middleware, this))
+      this.setState(Eigenstate(nextProps.stateDef, nextProps.middleware, this))
     }
   }
 
@@ -39,5 +39,5 @@ export class Provider extends React.Component {
 }
 
 Provider.childContextTypes = {
-  wrappedChanges: React.PropTypes.object.isRequired
+  eigenstate: React.PropTypes.object.isRequired
 }

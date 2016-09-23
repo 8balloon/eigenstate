@@ -3,7 +3,7 @@ import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils
 import * as assert from '../validation/assertions'
 import { documentationURL } from '../validation/errorMessages'
 
-export default function WrappedChanges(changes, middleware, providerContext) {
+export default function Eigenstate(changes, middleware, providerContext) {
 
   middleware && assert.middlewareIsValid(middleware)
 
@@ -11,20 +11,21 @@ export default function WrappedChanges(changes, middleware, providerContext) {
 
   var latestChangeInvocationID = Math.random()
 
-  const wrappedChanges = mapObjectTreeLeaves(changes, (change, key, path, parent) => {
+  const eigenstate = mapObjectTreeLeaves(changes, (change, key, path, parent) => {
 
+    // Not a change -- just state. Do not modify.
     if (!(change instanceof Function)) return change
 
     const performChange = function(resolvedPayload) {
 
       const state = providerContext.state
       const stateAtPath = getValueByPath(state, path)
-      const wrappedChangesAtPath = getValueByPath(wrappedChanges, path)
+      const eigenstateAtPath = getValueByPath(eigenstate, path)
 
       const thisChangeInvocationID = Math.random()
       latestChangeInvocationID = thisChangeInvocationID
 
-      const localStateChanges = change(resolvedPayload, stateAtPath, wrappedChangesAtPath)
+      const localStateChanges = change(resolvedPayload, stateAtPath, eigenstateAtPath)
       assert.changesMatchDefinition(localStateChanges, parent, key, path)
       const newLocalState = objectAssign({}, stateAtPath, localStateChanges)
 
@@ -50,7 +51,7 @@ export default function WrappedChanges(changes, middleware, providerContext) {
         middleware(performChange, payload, {
           key,
           path,
-          changes: wrappedChanges,
+          changes: eigenstate,
           getState
         })
       }
@@ -64,5 +65,5 @@ export default function WrappedChanges(changes, middleware, providerContext) {
     return wrappedChange
   })
 
-  return wrappedChanges
+  return eigenstate
 }
