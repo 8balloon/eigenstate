@@ -5,7 +5,6 @@ export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    this.providerProps = props
     this.wrappedUpdates = WrappedUpdates(props.updates, props.middleware, this)
     this.state = this.wrappedUpdates
   }
@@ -13,8 +12,8 @@ export class Provider extends React.Component {
   getChildContext() {
 
     return {
-      providerProps: this.providerProps,
-      wrappedUpdates: this.wrappedUpdates
+      providerProps: this.props,
+      wrappedUpdates: this.state
     }
   }
 
