@@ -22,6 +22,13 @@ export class Provider extends React.Component {
     this.setState(Eigenstate(stateDef, onChange, this))
   }
 
+  componentDidMount() {
+
+    if (this.props.onCreate) {
+      this.props.onCreate(() => this.state)
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
 
     const { stateDef, onChange } = this.props
