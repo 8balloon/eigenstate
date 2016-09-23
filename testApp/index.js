@@ -10,11 +10,16 @@ import updates from './updates'
 import middleware from './middleware'
 import Counter from './components/Counter'
 
-import { Provider } from '../src'
+import { Provider, connect } from '../src'
+
+const Connect = connect(Counter)
+
+console.log("CONNCT IS:", Connect)
 
 ReactDOM.render(
   <Provider updates={updates} middleware={middleware}>
-    <Counter />
+    <Connect />
+    {/*<Counter />*/}
   </Provider>,
   document.getElementById('react-root')
 )
