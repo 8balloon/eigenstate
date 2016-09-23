@@ -5,9 +5,7 @@ import { documentationURL } from '../validation/errorMessages'
 
 export default function Eigenstate(changes, middleware, context) {
 
-  middleware && assert.middlewareIsValid(middleware)
-
-  const getState = () => context.state
+  middleware && assert.onChangePropIsFunction(middleware)
 
   var latestChangeInvocationID = Math.random() //consider starting at 0 and incrementing
 
@@ -17,7 +15,9 @@ export default function Eigenstate(changes, middleware, context) {
     // Not a change -- just state. So no wrapping required.
     if (!(change instanceof Function)) return change
 
-    const performChange = function(resolvedPayload) {
+    var armedChange = function performChangeWithContext(payload, illegalSecondArgument) {
+
+      assert.changeWasNotPassedSecondArgument(illegalSecondArgument, key, path)
 
       const contextState = objectAssign({}, context.state)
       const contextStateAtPath = getValueByPath(contextState, path)
@@ -25,8 +25,9 @@ export default function Eigenstate(changes, middleware, context) {
       const thisChangeInvocationID = Math.random()
       latestChangeInvocationID = thisChangeInvocationID
 
-      const localChangeResults = change(resolvedPayload, contextStateAtPath)
+      const localChangeResults = change(payload, contextStateAtPath)
       assert.changeResultsFitStateDef(localChangeResults, parent, key, path)
+
       const newLocalState = objectAssign({}, contextStateAtPath, localChangeResults)
 
       if (newLocalState !== undefined) {
@@ -36,28 +37,20 @@ export default function Eigenstate(changes, middleware, context) {
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
         context.setState(newState)
       }
+
+      middleware && middleware({
+        key,
+        path,
+        payload,
+        localEigenstate: contextStateAtPath,
+        changeResults: localChangeResults,
+        nextLocalEigenstate: newLocalState
+      })
     }
 
-    var wrappedChange = function performChangeConsideringMiddleware(payload, illegalSecondArgument) {
+    armedChange.__changeDefinition = change
 
-      assert.changeWasNotPassedSecondArgument(illegalSecondArgument, key, path)
-
-      if (middleware) {
-
-        middleware(performChange, payload, {
-          key,
-          path,
-          eigenstate
-        })
-      }
-      else {
-        performChange(payload)
-      }
-    }
-
-    wrappedChange.__baseChangeFunction = change
-
-    return wrappedChange
+    return armedChange
   })
 
   return eigenstate

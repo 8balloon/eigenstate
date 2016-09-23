@@ -7,13 +7,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import stateDef from './stateDef'
-import middleware from './middleware'
 import Components from './components'
 
-import { Provider } from '../src'
+import { Provider, verboseLogger } from '../src'
 
 ReactDOM.render(
-  <Provider stateDef={stateDef} middleware={middleware}>
+  <Provider stateDef={stateDef} middleware={verboseLogger}>
     <Components />
   </Provider>,
   document.getElementById('react-root')
