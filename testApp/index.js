@@ -10,11 +10,13 @@ import { Provider, logVerbosely } from '../src'
 
 import Counter from './Counter'
 import Grid from './Grid'
+import Todos from './Todos'
 
 ReactDOM.render(
   <div id="apps">
     <Counter />
     <Grid />
+    <Todos />
   </div>,
   document.getElementById('react-root')
 )
