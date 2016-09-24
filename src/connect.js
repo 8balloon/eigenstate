@@ -1,3 +1,4 @@
+import React from 'react'
 import objectAssign from 'object-assign'
 
 export function connect(Component) {

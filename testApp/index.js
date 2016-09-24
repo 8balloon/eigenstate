@@ -16,7 +16,6 @@ ReactDOM.render(
   <div id="apps">
     <Counter />
     <Grid />
-    <Todos />
   </div>,
   document.getElementById('react-root')
 )
