@@ -10,7 +10,12 @@ export function connect(Component) {
     }
 
     render() {
-      return React.createElement(Component, this.context.eigenstate)
+      const componentProps = objectAssign({},
+        this.context.eigenstate,
+        this.props
+      )
+
+      return React.createElement(Component, componentProps)
     }
   }
 

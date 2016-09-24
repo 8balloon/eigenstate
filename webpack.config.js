@@ -1,5 +1,3 @@
-var webpack = require('webpack')
-
 module.exports = {
   entry: {
     js: './src/index.js'
@@ -27,7 +25,5 @@ module.exports = {
   externals: {
     react: true,
     objectAssign: true
-    // React: 'react',
-    // objectAssign: 'object-assign'
   }
 }

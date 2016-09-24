@@ -1,10 +1,10 @@
 {
   "name": "eigenstate",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "Stupid-easy React state management object",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "build": "webpack",
     "testApp": "cd testApp && webpack-dev-server -d --hot --inline --progress --colors",
     "test": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
   },
