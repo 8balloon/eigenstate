@@ -9,7 +9,7 @@ This means that the values of the original Eigenstate instance are overwritten, 
 It is consistent because it is changing in a way which was a part of its definition.
 */
 
-export default function Eigenstate(stateDefinition, onChange, stateAccess) {
+export default function Eigenstate(stateDefinition, onChange, stateAccessor) {
 
   assert.stateDefIsObject(stateDefinition)
   onChange && assert.onChangePropIsFunction(onChange)
@@ -18,7 +18,7 @@ export default function Eigenstate(stateDefinition, onChange, stateAccess) {
 
   const eigenstate = mapObjectTreeLeaves(stateDefinition, (property, key, path, localStateDef) => {
 
-    // Not a method -- just a value. So no wrapping required.
+    // Not a method -- just a value. So no "arming" required.
     if (!(property instanceof Function)) return property
     const method = property
 
@@ -26,7 +26,7 @@ export default function Eigenstate(stateDefinition, onChange, stateAccess) {
 
       assert.methodWasNotPassedSecondArgument(illegalSecondArgument, key, path)
 
-      const contextState = stateAccess.getState()
+      const contextState = stateAccessor.getState()
       const contextStateAtPath = getValueByPath(contextState, path)
 
       const thisInvocationID = latestInvocationID + 1
@@ -43,7 +43,7 @@ export default function Eigenstate(stateDefinition, onChange, stateAccess) {
         const newLocalState = objectAssign({}, contextStateAtPath, localMethodReturn)
 
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
-        stateAccess.setState(newState, () => {
+        stateAccessor.setState(newState, () => {
 
           onChange && onChange({
             methodKey: key,
@@ -52,7 +52,7 @@ export default function Eigenstate(stateDefinition, onChange, stateAccess) {
             returnValue: localMethodReturn,
             previousLocalState: contextStateAtPath,
             localState: newLocalState,
-            state: stateAccess.getState()
+            state: stateAccessor.getState()
           })
         })
       }

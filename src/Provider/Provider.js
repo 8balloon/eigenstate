@@ -9,60 +9,47 @@ export class Provider extends React.Component {
     super(props, context)
     const { stateDef, onChange } = props
 
-    this.eigenstate = null
+    this.__eigenstate = null
 
-    const stateAccess = {
-      getState: () => this.eigenstate,
+    this.stateAccessor = {
+      getState: () => this.__eigenstate,
       setState: (newState, callback) => {
-        this.eigenstate = newState
-        this.forceUpdate()
-        callback()
+        this.__eigenstate = newState
+        this.forceUpdate(callback())
       }
     }
 
-    this.eigenstate = Eigenstate(stateDef, onChange, stateAccess)
+    this.__eigenstate = Eigenstate(stateDef, onChange, this.stateAccessor)
   }
 
   getChildContext() {
     return {
-      eigenstate: this.eigenstate
+      eigenstate: this.stateAccessor.getState()
     }
   }
-
-  // componentWillMount() {
-  //
-  //   const { stateDef, onChange } = this.props
-  //
-  //   const eigenstate = Eigenstate(stateDef, onChange, this)
-  //   this.eigenstate = eigenstate
-  //   this.setState(eigenstate)
-  // }
 
   componentDidMount() {
 
     if (this.props.eigenstate) {
-      this.props.eigenstate(() => this.eigenstate)
+      this.props.eigenstate(() => this.stateAccessor.getState())
     }
   }
 
-  // componentWillReceiveProps(next) {
-  //
-  //   const { stateDef, onChange } = this.props
-  //
-  //   if ( (stateDef !== next.stateDef) || (onChange !== next.onChange) ) {
-  //
-  //     const eigenstate = Eigenstate(next.stateDef, next.onChange, this)
-  //     this.eigenstate = eigenstate
-  //     this.setState(eigenstate)
-  //   }
-  // }
+  componentWillReceiveProps(next) {
+
+    const { stateDef, onChange } = this.props
+
+    if ( (stateDef !== next.stateDef) || (onChange !== next.onChange) ) {
+
+      this.stateAccessor.setState(Eigenstate(next.stateDef, next.onChange, this))
+    }
+  }
 
   render() {
 
-    assert.stateDoesNotConflictWithProps(this.eigenstate, this.props)
+    assert.stateDoesNotConflictWithProps(this.__eigenstate, this.props)
 
-    //properties take precidence to allow for 'overriding' Eigenstate internals
-    const childProps = objectAssign({}, this.eigenstate, this.props)
+    const childProps = objectAssign({}, this.__eigenstate, this.props)
 
     return React.cloneElement(this.props.children, childProps)
   }
