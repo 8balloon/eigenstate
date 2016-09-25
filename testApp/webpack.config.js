@@ -4,7 +4,7 @@ module.exports = {
   entry: {
     devServer: 'webpack-dev-server/client?http://localhost:8080',
     devServerHot: 'webpack/hot/dev-server',
-    js: './index.js',
+    js: './index.jsx',
     html: './index.html'
   },
   output: {

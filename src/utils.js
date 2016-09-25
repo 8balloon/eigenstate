@@ -1,6 +1,9 @@
 import objectAssign from 'object-assign'
 
 function mapObjectValues(obj, mapFunction) {
+
+  if (obj instanceof Array) return obj.map(mapFunction)
+
   return objectAssign.apply({},
     Object.keys(obj).map(key => ({
       [key]: mapFunction(obj[key], key, obj)

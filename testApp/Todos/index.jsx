@@ -1,10 +1,15 @@
 import { Provider, logVerbosely } from '../../src'
 
+const newTodo = "new todo"
+
 const stateDef = {
+
   todos: [{
     text: "make Todo list",
     complete: false
   }],
+  potentialTodo: newTodo,
+
   addTodo: (todo, state) => ({
     todos: [].concat(state.todos, todo)
   }),
@@ -35,49 +40,54 @@ const stateDef = {
   }),
   clearCompleted: (payload, state) => ({
     todos: state.todos.filter(todo => !todo.complete)
+  }),
+  setPotentialTodo: (text, state) => ({
+    potentialTodo: text
+  }),
+  considerTodo: (text, state) => ({
+    potentialTodo: text
+  }),
+  acceptTodo: (_, state) => {
+    state.addTodo({
+      text: state.potentialTodo,
+      complete: false
+    })
+    // state.resetPotentialTodo()
+  },
+  resetPotentialTodo: (_, state) => ({
+    potentialTodo: newTodo
   })
 }
 
-const TodoList = (props) => {
-
-  console.log("PROPS.todos.length:", props.todos.length)
-
-  return (
+const TodoList = (props) => (
+  <div>
+    <div>TO DO:</div>
     <div>
-      <div>TO DO:</div>
-      <div>
-        {
-          props.todos.map((todo, index) => (
+      {
+        props.todos.map((todo, index) => (
+          <div key={index}>
             <div>
-              <div>
-                {
-                  todo.text
-                }
-              </div>
-              <div onClick={() => todo.completed ? props.completeTodo(index) : props.deleteTodo(index)}>
-                {
-                  todo.completed
-                }
-              </div>
+              { todo.text }
             </div>
-          ))
-        }
-      </div>
-      <div>
-        <input>
-          New Todo
-        </input>
-        <div>
-          Add Todo
-        </div>
+            <div onClick={() => todo.completed ? props.completeTodo(index) : props.deleteTodo(index)}>
+              { todo.completed }
+            </div>
+          </div>
+        ))
+      }
+    </div>
+    <div>
+      <input id="todoInput" value={props.potentialTodo} onChange={(event) => props.setPotentialTodo(event.target.value)} />
+      <div onClick={props.acceptTodo}>
+        Add Todo
       </div>
     </div>
-  )
-}
+  </div>
+)
 
 export default function Todos() {
   return (
-    <Provider stateDef={stateDef}>
+    <Provider stateDef={stateDef} onChange={logVerbosely}>
       <TodoList />
     </Provider>
   )
