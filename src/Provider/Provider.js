@@ -31,13 +31,13 @@ export class Provider extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(next) {
 
     const { stateDef, onChange } = this.props
 
-    if ( (stateDef !== nextProps.stateDef) || (onChange !== nextProps.onChange) ) {
+    if ( (stateDef !== next.stateDef) || (onChange !== next.onChange) ) {
 
-      this.setState(Eigenstate(nextProps.stateDef, nextProps.onChange, this))
+      this.setState(Eigenstate(next.stateDef, next.onChange, this))
     }
   }
 
