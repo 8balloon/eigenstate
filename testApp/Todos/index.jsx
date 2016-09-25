@@ -52,7 +52,7 @@ const stateDef = {
       text: state.potentialTodo,
       complete: false
     })
-    // state.resetPotentialTodo()
+    state.resetPotentialTodo()
   },
   resetPotentialTodo: (_, state) => ({
     potentialTodo: newTodo

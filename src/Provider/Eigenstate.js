@@ -9,7 +9,7 @@ This means that the values of the original Eigenstate instance are overwritten, 
 It is consistent because it is changing in a way which was a part of its definition.
 */
 
-export default function Eigenstate(stateDefinition, onChange, context) {
+export default function Eigenstate(stateDefinition, onChange, stateAccess) {
 
   assert.stateDefIsObject(stateDefinition)
   onChange && assert.onChangePropIsFunction(onChange)
@@ -26,7 +26,7 @@ export default function Eigenstate(stateDefinition, onChange, context) {
 
       assert.methodWasNotPassedSecondArgument(illegalSecondArgument, key, path)
 
-      const contextState = objectAssign({}, context.state)
+      const contextState = stateAccess.getState()
       const contextStateAtPath = getValueByPath(contextState, path)
 
       const thisInvocationID = latestInvocationID + 1
@@ -43,7 +43,7 @@ export default function Eigenstate(stateDefinition, onChange, context) {
         const newLocalState = objectAssign({}, contextStateAtPath, localMethodReturn)
 
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
-        context.setState(newState, () => {
+        stateAccess.setState(newState, () => {
 
           onChange && onChange({
             methodKey: key,
@@ -52,21 +52,21 @@ export default function Eigenstate(stateDefinition, onChange, context) {
             returnValue: localMethodReturn,
             previousLocalState: contextStateAtPath,
             localState: newLocalState,
-            state: context.state
+            state: stateAccess.getState()
           })
         })
       }
-      else { // this method is an asynchronous procedure, not an operation
-        onChange && onChange({
-          key,
-          methodPath: path,
-          payload,
-          returnValue: undefined,
-          previousLocalState: contextStateAtPath,
-          localState: contextStateAtPath,
-          state: contextState
-        })
-      }
+      // else { // this method is an asynchronous procedure, not an operation
+      //   onChange && onChange({
+      //     key,
+      //     methodPath: path,
+      //     payload,
+      //     returnValue: undefined,
+      //     previousLocalState: contextStateAtPath,
+      //     localState: contextStateAtPath,
+      //     state: contextState
+      //   })
+      // }
     }
   })
 
