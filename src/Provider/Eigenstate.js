@@ -35,7 +35,7 @@ export default function Eigenstate(stateDefinition, onChange, context) {
       const localMethodReturn = method(payload, contextStateAtPath)
 
 
-      if (localMethodReturn !== undefined) { //this method is an operation, not a procedure
+      if (localMethodReturn !== undefined) { //this method is a synchronous operation, not a procedure
 
         assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
         assert.methodReturnFitsStateDef(localMethodReturn, localStateDef, key, path)
@@ -56,7 +56,7 @@ export default function Eigenstate(stateDefinition, onChange, context) {
           })
         })
       }
-      else { // this method is a procedure, not an operation
+      else { // this method is an asynchronous procedure, not an operation
         onChange && onChange({
           key,
           methodPath: path,
