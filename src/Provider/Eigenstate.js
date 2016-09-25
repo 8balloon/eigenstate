@@ -8,7 +8,7 @@ export default function Eigenstate(stateDefinition, onChange, context) {
   assert.stateDefIsObject(stateDefinition)
   onChange && assert.onChangePropIsFunction(onChange)
 
-  var latestInvocationID = Math.random() //consider starting at 0 and incrementing
+  var latestInvocationID = 0
 
   /*stateDef with wrapped methods*/
   const eigenstate = mapObjectTreeLeaves(stateDefinition, (property, key, path, parent) => {
@@ -24,7 +24,7 @@ export default function Eigenstate(stateDefinition, onChange, context) {
       const contextState = objectAssign({}, context.state)
       const contextStateAtPath = getValueByPath(contextState, path)
 
-      const thisInvocationID = Math.random()
+      const thisInvocationID = latestInvocationID + 1
       latestInvocationID = thisInvocationID
 
       const localMethodReturns = method(payload, contextStateAtPath)
@@ -34,7 +34,7 @@ export default function Eigenstate(stateDefinition, onChange, context) {
 
       if (newLocalState !== undefined) {
 
-        assert.noOtherMethodsHaveBeenInvoked(thisInvocationID, latestInvocationID)
+        assert.noOtherMethodsHaveBeenInvoked(thisInvocationID, latestInvocationID, key, path)
 
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
         context.setState(newState)

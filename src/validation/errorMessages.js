@@ -2,16 +2,20 @@ export const documentationURL = 'https://github.com/8balloon/switchless/blob/mas
 
 export const stateDefIsNotObject = "A stateDef object is required by the Eigenstate Provider"
 export const methodsLeavesNotFunctions = 'Switchless Provider.props.methods must contain values that are Functions'
-export const onChangePropIsNotFunction = 'Switchless Provider onChange must be a Function'
+export const onMethodPropIsNotFunction = 'Switchless Provider onMethod must be a Function'
+
+export function statePropConflict(key) {
+  return `There was a conflict between state "${key}" and prop "${key}" on an Eigenstate <Provider> child or an Eigenstate connect()ed component. You are encouraged to avoid state/prop conflicts. State is being overridden by props.`
+}
 
 export function tooManyMethodArguments(key, path) {
-  return `Change "${key}" at path "${path}" was called with multiple arguments. Changes may only be invoked with a single argument; see ${documentationURL}`
+  return `Method "${key}" at path "${path}" was called with multiple arguments. Methods may only be invoked with a single argument; see ${documentationURL}`
 }
 
-export function newStateLacksShapeOfOriginalState(key, path, prop) {
-  return `Change "${key}" at path "${path}" returned a state which lacks property "${prop}". You cannot remove properties defined via Provider.methods.`
+export function functionWasReturned(key, path, localKey) {
+  return `Method "${key}" at path "${path}" returned a function via key "${localKey}". Methods may only return values.`
 }
 
-export function methodFunctionWasChanged(key, path, prop) {
-  return `Change "${key}" at path "${path}" returned a state which lacks the original method with key "${prop}". You cannot method udpate functions at runtime.`
+export function methodWasOverwritten(key, path, localKey) {
+  return `Method "${key}" at path "${path}" returned a value which overwrote a method at key "${localKey}". Methods may not be overwritten.`
 }

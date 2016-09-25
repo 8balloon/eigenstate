@@ -12,7 +12,7 @@ export default {
 
   erringIncrementReducer: (payload, state) => {
     state.incrementCount(payload)
-    return {...state,
+    return {
       count: state.count + payload
     }
   },
@@ -25,7 +25,7 @@ export default {
 
   implBadIncrementCount: (payload, state) => {
     state.incrementCount(1337)
-    return {...state,
+    return {
       count: state.count + payload
     }
   },
@@ -35,27 +35,18 @@ export default {
   },
 
   downCount: {
-
     count: 0,
-
-    decrement: (payload, state) => ({...state,
+    decrement: (payload, state) => ({
       count: state.count - payload
     })
-
   },
 
   cubeCount: {
-
     pretentiousNesting: {
-
       count: 12321,
-
-      increment: (payload, state) => ({...state,
+      increment: (payload, state) => ({
         count: state.count + 1
       })
-
     }
-
   }
-
 }

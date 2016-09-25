@@ -42,6 +42,15 @@ export function onChangePropIsFunction(onChange) {
   isFunction(onChange, errorMessages.onChangePropIsNotFunction)
 }
 
+export function stateDoesNotConflictWithProps(state, props, key) {
+  //props is likely (hopefully) smaller
+  for (var key in props) {
+    if (key in state) {
+      console.warn(errorMessages.statePropConflict(key))
+    }
+  }
+}
+
 export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
 
   if (illegalSecondArgument !== undefined) {
@@ -49,49 +58,35 @@ export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, pat
   }
 }
 
-function containsNoFunctions(objTree, errorMessage) {
-  mapObjectTreeLeaves(objTree, (val) => {
+export function noOtherMethodsHaveBeenInvoked(thisInvocationID, latestInvocationID, key, path) {
+  if (thisInvocationID !== latestInvocationID) {
+    throw new Error(`Method ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Methods should return a value XOR call other methods. See "methods in depth" at ${documentationURL}`)
+  }
+}
+
+function containsNoFunctions(obj, errorMessage) {
+
+  if (obj instanceof Function) {
+    throw new Error(errorMessage)
+  }
+
+  if ( !(obj instanceof Object) || (obj === null) ) return
+
+  mapObjectTreeLeaves(obj, (val) => {
     if (val instanceof Function) {
       throw new Error(errorMessage)
     }
   })
 }
 
-export function noOtherMethodsHaveBeenInvoked(thisInvocationID, latestInvocationID) {
-  if (thisInvocationID !== latestInvocationID) {
-    throw new Error(`Method ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Methods should return a value XOR call other methods. See "methods in depth" at ${documentationURL}`)
-  }
-}
-
 export function methodReturnFitsStateDef(newState, stateDefinitions, key, path) {
 
-  for (var prop in newState) {
-    if (!(prop in stateDefinitions)) {
-      throw new Error(errorMessages.newStateLacksShapeOfOriginalState(key, path, prop)) //revisit
-    }
+  for (var localKey in newState) {
 
-    const newStateProperty = newState[prop] //need renaming
-    const statePropertyDefinition = stateDefinitions[prop]
+    const newStateProperty = newState[localKey]
+    const statePropertyDefinition = stateDefinitions[localKey]
 
-    if (statePropertyDefinition instanceof Function) {
-      if (!(newStateProperty instanceof Function)) {
-        throw new Error("State method was replaced!!") //revisit
-      }
-
-      if (newStateProperty.__definition !== statePropertyDefinition) {
-        throw new Error(errorMessages.methodFunctionWasChanged(key, path, prop))
-      }
-    }
-    else {
-      //if value, ok
-      if ((statePropertyDefinition instanceof Object) && (statePropertyDefinition !== null)) {
-        if (!(newStateProperty instanceof Object) || (newStateProperty === null)) {
-          containsNoFunctions(statePropertyDefinition, 'A method that was defined has been removed by method yayhda at path yayadadada') //revisit
-        }
-        else {
-          methodReturnFitsStateDef(newStateProperty, statePropertyDefinition, key, path) //are key and path correct here?
-        }
-      }
-    }
+    containsNoFunctions(newStateProperty, errorMessages.functionWasReturned(key, path, localKey))
+    containsNoFunctions(statePropertyDefinition, errorMessages.methodWasOverwritten(key, path, localKey))
   }
 }

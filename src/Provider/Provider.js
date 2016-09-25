@@ -1,5 +1,6 @@
 import React from 'react'
 import objectAssign from 'object-assign'
+import * as assert from '../validation/assertions'
 import Eigenstate from './Eigenstate'
 
 export class Provider extends React.Component {
@@ -42,7 +43,12 @@ export class Provider extends React.Component {
 
   render() {
 
-    return React.cloneElement(this.props.children, this.state)
+    assert.stateDoesNotConflictWithProps(this.state, this.props)
+
+    //properties take precidence to allow for 'overriding' Eigenstate internals
+    const childProps = objectAssign({}, this.state, this.props)
+
+    return React.cloneElement(this.props.children, childProps)
   }
 }
 
