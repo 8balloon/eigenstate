@@ -7,7 +7,6 @@ export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    const { stateDef, onChange } = props
 
     this.__eigenstate = null
 
@@ -19,7 +18,7 @@ export class Provider extends React.Component {
       }
     }
 
-    this.__eigenstate = Eigenstate(stateDef, onChange, this.stateAccessor)
+    this.__eigenstate = Eigenstate(props, this.stateAccessor)
   }
 
   getChildContext() {
@@ -41,7 +40,7 @@ export class Provider extends React.Component {
 
     if ( (stateDef !== next.stateDef) || (onChange !== next.onChange) ) {
 
-      this.stateAccessor.setState(Eigenstate(next.stateDef, next.onChange, this))
+      this.stateAccessor.setState(Eigenstate(next, this.stateAccessor))
     }
   }
 

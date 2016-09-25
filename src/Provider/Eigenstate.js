@@ -9,14 +9,17 @@ This means that the values of the original Eigenstate instance are overwritten, 
 It is consistent because it is changing in a way which was a part of its definition.
 */
 
-export default function Eigenstate(stateDefinition, onChange, stateAccessor) {
+export default function Eigenstate(props, stateAccessor) {
 
-  assert.stateDefIsObject(stateDefinition)
+  const { stateDef, onChange } = props
+  const { getState, setState } = stateAccessor
+
+  assert.stateDefIsObject(stateDef)
   onChange && assert.onChangePropIsFunction(onChange)
 
   var latestInvocationID = 0
 
-  const eigenstate = mapObjectTreeLeaves(stateDefinition, (property, key, path, localStateDef) => {
+  const eigenstate = mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
     // Not a method -- just a value. So no "arming" required.
     if (!(property instanceof Function)) return property
@@ -26,7 +29,7 @@ export default function Eigenstate(stateDefinition, onChange, stateAccessor) {
 
       assert.methodWasNotPassedSecondArgument(illegalSecondArgument, key, path)
 
-      const contextState = stateAccessor.getState()
+      const contextState = getState()
       const contextStateAtPath = getValueByPath(contextState, path)
 
       const thisInvocationID = latestInvocationID + 1
@@ -43,7 +46,7 @@ export default function Eigenstate(stateDefinition, onChange, stateAccessor) {
         const newLocalState = objectAssign({}, contextStateAtPath, localMethodReturn)
 
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
-        stateAccessor.setState(newState, () => {
+        setState(newState, () => {
 
           onChange && onChange({
             methodKey: key,
@@ -52,7 +55,7 @@ export default function Eigenstate(stateDefinition, onChange, stateAccessor) {
             returnValue: localMethodReturn,
             previousLocalState: contextStateAtPath,
             localState: newLocalState,
-            state: stateAccessor.getState()
+            state: getState()
           })
         })
       }
