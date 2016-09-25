@@ -29,15 +29,23 @@ export function leavesAreFunctions(objTree, errorMessage) {
 
 // validation assertions
 
+export function stateDefIsObject(stateDef) {
+
+  if ( !(stateDef instanceof Object) || (stateDef instanceof Function) || (stateDef === null) ) {
+    throw new Error(errorMessages.stateDefIsNotObject)
+  }
+}
+
+
 export function onChangePropIsFunction(onChange) {
 
   isFunction(onChange, errorMessages.onChangePropIsNotFunction)
 }
 
-export function changeWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
+export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
 
   if (illegalSecondArgument !== undefined) {
-    throw new Error(errorMessages.tooManyChangeArguments(key))
+    throw new Error(errorMessages.tooManyMethodArguments(key))
   }
 }
 
@@ -49,39 +57,39 @@ function containsNoFunctions(objTree, errorMessage) {
   })
 }
 
-export function noOtherChangesHaveBeenInvoked(thisChangeInvocationID, latestChangeInvocationID) {
-  if (thisChangeInvocationID !== latestChangeInvocationID) {
-    throw new Error(`Change ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Changes should return a value OR call other changes. See "Changes: Operations and Procedures" at ${documentationURL}`)
+export function noOtherMethodsHaveBeenInvoked(thisInvocationID, latestInvocationID) {
+  if (thisInvocationID !== latestInvocationID) {
+    throw new Error(`Method ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Methods should return a value XOR call other methods. See "methods in depth" at ${documentationURL}`)
   }
 }
 
-export function changeResultsFitStateDef(stateChanges, stateDefinitions, key, path) {
+export function methodReturnFitsStateDef(newState, stateDefinitions, key, path) {
 
-  for (var prop in stateChanges) {
+  for (var prop in newState) {
     if (!(prop in stateDefinitions)) {
       throw new Error(errorMessages.newStateLacksShapeOfOriginalState(key, path, prop)) //revisit
     }
 
-    const stateChange = stateChanges[prop] //need renaming
-    const stateDefinition = stateDefinitions[prop]
+    const newStateProperty = newState[prop] //need renaming
+    const statePropertyDefinition = stateDefinitions[prop]
 
-    if (stateDefinition instanceof Function) {
-      if (!(stateChange instanceof Function)) {
-        throw new Error("State change function was replaced!!") //revisit
+    if (statePropertyDefinition instanceof Function) {
+      if (!(newStateProperty instanceof Function)) {
+        throw new Error("State method was replaced!!") //revisit
       }
 
-      if (stateChange.__definition !== stateDefinition) {
-        throw new Error(errorMessages.changeFunctionWasChanged(key, path, prop))
+      if (newStateProperty.__definition !== statePropertyDefinition) {
+        throw new Error(errorMessages.methodFunctionWasChanged(key, path, prop))
       }
     }
     else {
       //if value, ok
-      if ((stateDefinition instanceof Object) && (stateDefinition !== null)) {
-        if (!(stateChange instanceof Object) || (stateChange === null)) {
-          containsNoFunctions(stateDefinition, 'A change function that was defined has been removed by change yayhda at path yayadadada') //revisit
+      if ((statePropertyDefinition instanceof Object) && (statePropertyDefinition !== null)) {
+        if (!(newStateProperty instanceof Object) || (newStateProperty === null)) {
+          containsNoFunctions(statePropertyDefinition, 'A method that was defined has been removed by method yayhda at path yayadadada') //revisit
         }
         else {
-          changeResultsFitStateDef(stateChange, stateDefinition, key, path) //are key and path correct here?
+          methodReturnFitsStateDef(newStateProperty, statePropertyDefinition, key, path) //are key and path correct here?
         }
       }
     }

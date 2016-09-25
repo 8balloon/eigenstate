@@ -31,7 +31,7 @@ const Counters = (props) => (
         var counters = []
         for (var i = 0; i < props.numCounters; i++) {
           counters.push(
-            <div className="counter">
+            <div className="counter" key={i}>
               { props.count }
             </div>
           )

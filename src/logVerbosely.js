@@ -5,7 +5,7 @@ export function logVerbosely(details) {
     path,
     payload,
     contextStateAtPath,
-    localChangeResults,
+    localMethodReturns,
     newLocalState
   } = details
 

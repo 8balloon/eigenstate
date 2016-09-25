@@ -10,7 +10,7 @@ export default function CounterView(props) {
     erringIncrementReducer,
     erringSlowIncrementProcedure,
     implBadIncrementCount,
-    changeThatRemovesChange,
+    methodThatRemovesOtherMethod,
     erringChangeSwapper,
     downCount
   } = props
@@ -35,8 +35,8 @@ export default function CounterView(props) {
       <div className="implBadIncrementCount" onClick={() => implBadIncrementCount(7)}>
         implBadIncrementCount
       </div>
-      <div className="changeThatRemovesChange" onClick={() => changeThatRemovesChange(7)}>
-        changeThatRemovesChange
+      <div className="methodThatRemovesOtherMethod" onClick={() => methodThatRemovesOtherMethod(7)}>
+        methodThatRemovesOtherMethod
       </div>
       <div className="tooManyArgumentsIncrement" onClick={() => incrementCount(1, 2)}>
         call increment with too many arguments

@@ -6,13 +6,7 @@ export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
     const { stateDef, onChange } = props
-
-    if ( !(stateDef instanceof Object) || (stateDef instanceof Function) || (stateDef === null) ) {
-      throw new Error("stateDef is required")
-    }
-
     this.state = Eigenstate(stateDef, onChange, this)
   }
 

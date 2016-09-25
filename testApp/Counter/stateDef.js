@@ -30,7 +30,7 @@ export default {
     }
   },
 
-  changeThatRemovesChange: (payload, state) => {
+  methodThatRemovesOtherMethod: (payload, state) => {
     return {implBadIncrementCount: null}
   },
 

@@ -3,36 +3,38 @@ import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils
 import * as assert from '../validation/assertions'
 import { documentationURL } from '../validation/errorMessages'
 
-export default function Eigenstate(changes, onChange, context) {
+export default function Eigenstate(stateDefinition, onChange, context) {
 
+  assert.stateDefIsObject(stateDefinition)
   onChange && assert.onChangePropIsFunction(onChange)
 
-  var latestChangeInvocationID = Math.random() //consider starting at 0 and incrementing
+  var latestInvocationID = Math.random() //consider starting at 0 and incrementing
 
-  /*stateDef with wrapped change functions*/
-  const eigenstate = mapObjectTreeLeaves(changes, (change, key, path, parent) => {
+  /*stateDef with wrapped methods*/
+  const eigenstate = mapObjectTreeLeaves(stateDefinition, (property, key, path, parent) => {
 
-    // Not a change -- just state. So no wrapping required.
-    if (!(change instanceof Function)) return change
+    // Not a method -- just a value. So no wrapping required.
+    if (!(property instanceof Function)) return property
+    const method = property
 
-    var armedChange = function performChangeWithContext(payload, illegalSecondArgument) {
+    var armedMethod = function callMethodWithContext(payload, illegalSecondArgument) {
 
-      assert.changeWasNotPassedSecondArgument(illegalSecondArgument, key, path)
+      assert.methodWasNotPassedSecondArgument(illegalSecondArgument, key, path)
 
       const contextState = objectAssign({}, context.state)
       const contextStateAtPath = getValueByPath(contextState, path)
 
-      const thisChangeInvocationID = Math.random()
-      latestChangeInvocationID = thisChangeInvocationID
+      const thisInvocationID = Math.random()
+      latestInvocationID = thisInvocationID
 
-      const localChangeResults = change(payload, contextStateAtPath)
-      assert.changeResultsFitStateDef(localChangeResults, parent, key, path)
+      const localMethodReturns = method(payload, contextStateAtPath)
+      assert.methodReturnFitsStateDef(localMethodReturns, parent, key, path)
 
-      const newLocalState = objectAssign({}, contextStateAtPath, localChangeResults)
+      const newLocalState = objectAssign({}, contextStateAtPath, localMethodReturns)
 
       if (newLocalState !== undefined) {
 
-        assert.noOtherChangesHaveBeenInvoked(thisChangeInvocationID, latestChangeInvocationID)
+        assert.noOtherMethodsHaveBeenInvoked(thisInvocationID, latestInvocationID)
 
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
         context.setState(newState)
@@ -43,14 +45,14 @@ export default function Eigenstate(changes, onChange, context) {
         path,
         payload,
         localEigenstate: contextStateAtPath,
-        changeResults: localChangeResults,
+        methodReturn: localMethodReturns,
         nextLocalEigenstate: newLocalState
       })
     }
 
-    armedChange.__definition = change
+    armedMethod.__definition = method
 
-    return armedChange
+    return armedMethod
   })
 
   return eigenstate
