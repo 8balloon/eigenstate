@@ -81,6 +81,8 @@ function containsNoFunctions(obj, errorMessage) {
 
 export function methodReturnFitsStateDef(newState, stateDefinitions, key, path) {
 
+  isObject(newState, errorMessages.methodDidNotReturnObject(key, path))
+
   for (var localKey in newState) {
 
     const newStateProperty = newState[localKey]

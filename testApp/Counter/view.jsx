@@ -1,7 +1,6 @@
 export default function CounterView(props) {
 
-  console.log("STATE:", props)
-  window.state = props
+  window.props = props
 
   const {
     count,

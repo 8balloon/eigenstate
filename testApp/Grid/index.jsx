@@ -10,7 +10,6 @@ const stateDef = {
 }
 
 const Grid = (props) => {
-  console.log("GRIDPROPS:", props)
   return (
     <div>
       <div onClick={props.addRow}>Add row</div>

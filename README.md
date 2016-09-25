@@ -50,8 +50,8 @@ A state definition is an object comprised of ```key:property``` pairs, where a p
 **Values** can be any JSON value -- That means objects, arrays, numbers, strings, Booleans, and null. You can access values via ```props.<key>``` from your application view.
 
 **Methods** are functions that can do one of two things.
-1. Return new state values.
-2. Call other state methods.
+1. Return new state values via ```{ key: value }``` objects.
+2. Call other state methods via their second parameter.
 
 Like values, you can access methods via ```props.<key>``` from your application view.
 

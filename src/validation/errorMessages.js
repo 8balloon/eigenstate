@@ -9,7 +9,11 @@ export function statePropConflict(key) {
 }
 
 export function tooManyMethodArguments(key, path) {
-  return `Method "${key}" at path "${path}" was called with multiple arguments. Methods may only be invoked with a single argument; see ${documentationURL}`
+  return `Method "${key}" at path "${path}" was called with multiple arguments. Methods may only be invoked with a single argument. See ${documentationURL}`
+}
+
+export function methodDidNotReturnObject(key, path) {
+  return `Method "${key}" at path "${path}" did not return an object. Values must be returned via { key: value } objects. See ${documentationURL}`
 }
 
 export function functionWasReturned(key, path, localKey) {
@@ -21,5 +25,5 @@ export function methodWasOverwritten(key, path, localKey) {
 }
 
 export function operationInvokedOtherMethod(key, path) {
-  return `Method ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Methods should return a value XOR call other methods. See "methods in depth" at ${documentationURL}`
+  return `Method ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Methods should return a value XOR call other methods. See ${documentationURL}`
 }

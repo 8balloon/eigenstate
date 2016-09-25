@@ -2,6 +2,13 @@ import objectAssign from 'object-assign'
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
 
+/*
+An Eigenstate is a stateDef + wrapped state methods that update context state values.
+The wrapped state methods returned by Eigenstate remain unchanged and accessible via the context, but state values are updated by those state methods, so they change.
+This means that the values of the original Eigenstate instance are overwritten, while its methods remain the same.
+It is consistent because it is changing in a way which was a part of its definition.
+*/
+
 export default function Eigenstate(stateDefinition, onChange, context) {
 
   assert.stateDefIsObject(stateDefinition)
@@ -9,14 +16,13 @@ export default function Eigenstate(stateDefinition, onChange, context) {
 
   var latestInvocationID = 0
 
-  /*stateDef with wrapped methods*/
-  const eigenstate = mapObjectTreeLeaves(stateDefinition, (property, key, path, parent) => {
+  const eigenstate = mapObjectTreeLeaves(stateDefinition, (property, key, path, localStateDef) => {
 
     // Not a method -- just a value. So no wrapping required.
     if (!(property instanceof Function)) return property
     const method = property
 
-    var armedMethod = function callMethodWithContext(payload, illegalSecondArgument) {
+    return function armedMethod(payload, illegalSecondArgument) {
 
       assert.methodWasNotPassedSecondArgument(illegalSecondArgument, key, path)
 
@@ -26,33 +32,42 @@ export default function Eigenstate(stateDefinition, onChange, context) {
       const thisInvocationID = latestInvocationID + 1
       latestInvocationID = thisInvocationID
 
-      const localMethodReturns = method(payload, contextStateAtPath)
-      assert.methodReturnFitsStateDef(localMethodReturns, parent, key, path)
+      const localMethodReturn = method(payload, contextStateAtPath)
 
-      const newLocalState = objectAssign({}, contextStateAtPath, localMethodReturns)
 
-      //this method is an operation, not a procedure
-      if (newLocalState !== undefined) {
+      if (localMethodReturn !== undefined) { //this method is an operation, not a procedure
 
         assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
+        assert.methodReturnFitsStateDef(localMethodReturn, localStateDef, key, path)
+
+        const newLocalState = objectAssign({}, contextStateAtPath, localMethodReturn)
 
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
-        context.setState(newState)
+        context.setState(newState, () => {
+
+          onChange && onChange({
+            methodKey: key,
+            methodPath: path,
+            payload,
+            returnValue: localMethodReturn,
+            previousLocalState: contextStateAtPath,
+            localState: newLocalState,
+            state: context.state
+          })
+        })
       }
-
-      onChange && onChange({
-        key,
-        path,
-        payload,
-        localEigenstate: contextStateAtPath,
-        methodReturn: localMethodReturns,
-        nextLocalEigenstate: newLocalState
-      })
+      else { // this method is a procedure, not an operation
+        onChange && onChange({
+          key,
+          methodPath: path,
+          payload,
+          returnValue: undefined,
+          previousLocalState: contextStateAtPath,
+          localState: contextStateAtPath,
+          state: contextState
+        })
+      }
     }
-
-    armedMethod.__definition = method
-
-    return armedMethod
   })
 
   return eigenstate

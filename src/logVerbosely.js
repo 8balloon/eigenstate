@@ -1,13 +1,17 @@
 export function logVerbosely(details) {
 
   const {
-    key,
-    path,
+    methodKey,
+    methodPath,
     payload,
-    contextStateAtPath,
-    localMethodReturns,
-    newLocalState
+    returnValue,
+    previousLocalState,
+    localState,
+    state
   } = details
 
-  console.log("CHANGE DETAILS:", details)
+  console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- METHOD CALLED`)
+  console.log('PAYLOAD / RETURN:', payload, returnValue)
+  console.log('STATE AT METHOD, BEFORE / AFTER:', previousLocalState, localState)
+  console.log('COMPLETE STATE RESULT:', state)
 }
