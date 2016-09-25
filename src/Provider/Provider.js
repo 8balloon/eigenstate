@@ -26,8 +26,8 @@ export class Provider extends React.Component {
 
   componentDidMount() {
 
-    if (this.props.onCreate) {
-      this.props.onCreate(() => this.state)
+    if (this.props.eigenstate) {
+      this.props.eigenstate(() => this.state)
     }
   }
 

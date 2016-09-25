@@ -6,11 +6,13 @@ It provides the same functionality as a Redux store, actions, action-creators, r
 
 ## how to use
 
-Create values and methods in a state definition object, and pass that to a ```Provider```. Eigenstate does the rest.
+Define your state methods and values in an object, and pass that to a ```Provider```. Eigenstate does the rest.
 
-Here is an example, followed by a more rigorous definition of a state object.
+Here is a working example of an Eigenstate application. See if you can figure out how to add a "clear count" feature.
 
 ```js
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { Provider } from 'eigenstate'
 
 /*
@@ -20,16 +22,17 @@ const CounterStateDef = {
   //a value
   count: 0,
   //a method
-  increment: (amount, state) => ({ count: state.count + 1 })
+  increment: (amount, state) => ({ count: state.count + amount })
 }
 
 /*
 Your application's view component.
-It will have access to the state method and value you defined via "props"
+When used as a child of the Eigenstate Provider, it will have access to your state methods and values via "props"
 */
 const CounterView = (props) => (
-  <div id="counter" onClick={() => props.increment(1)}>
-    {props.count}
+  <div id="counter">
+    <div id="count">{ props.count }</div>
+    <div id="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
   </div>
 )
 
@@ -45,12 +48,12 @@ ReactDOM.render(
 )
 ```
 
-A state definition is an object comprised of ```key:property``` pairs, where a property may be either a method or a value.
+A state definition is an object made up of ```key: method``` and ```key: value``` pairs.
 
-**Values** can be any JSON value -- That means objects, arrays, numbers, strings, Booleans, and null. You can access values via ```props.<key>``` from your application view.
+**Values** can be any JSON value (objects, arrays, numbers, strings, Booleans, and null). Access state values via ```props.<key>``` from your application view.
 
 **Methods** are functions that can do one of two things.
-1. Return new state values via ```{ key: value }``` objects.
+1. Return new state values in the form of ```{ key: value }``` objects.
 2. Call other state methods via their second parameter.
 
 Like values, you can access methods via ```props.<key>``` from your application view.
@@ -86,32 +89,7 @@ const stateDef = {
 }
 
 //view
-const Counters = (props) => (
-  <div id="counter-app">
-    <div id="counters">
-      {(function() {
-        var counters = []
-        for (var i = 0; i < props.numCounters; i++) {
-          counters.push(
-            <div className="counter" key={i}>
-              { props.count }
-            </div>
-          )
-        }
-        return counters
-      })()}
-    </div>  
-    <div id="counter-controllers">
-      <div onClick={props.addCounter}> add a counter </div>
-      <div onClick={props.removeCounter}> remove a counter </div>
-      <div onClick={() => props.incrementCount(5)}> small, fast increment </div>
-      <div onClick={() => props.delayedIncrement({
-        incrementAmount: 20,
-        delayMS: 1000
-      })}> big, slow increment </div>
-    </div>
-  </div>
-)
+const Counters = (props) => ( ... )
 
 ReactDOM.render(
   <Provider stateDef={stateDef}>
@@ -126,9 +104,10 @@ ReactDOM.render(
 
 Changes should either RETURN A VALUE or TRIGGER OTHER CHANGES. They should never do both -- in fact, if Eigenstate catches one of your change functions doing both, it will throw an error. (Explain why?)
 OPERATION vs PROCEDURE
+CHANGE vs EVENT
+METHODS vs VALUES
 
-
-## onChange / onLoad
+## eigenstate / onEvent / onChange
 
 ## nested state
 

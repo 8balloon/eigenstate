@@ -40,7 +40,7 @@ const stateDef = {
 
 const TodoList = (props) => {
 
-  console.log("PROPS:", props)
+  console.log("PROPS.todos.length:", props.todos.length)
 
   return (
     <div>

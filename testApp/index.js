@@ -10,7 +10,7 @@ import { Provider, logVerbosely } from '../src'
 
 import Counter from './Counter'
 import Grid from './Grid'
-// import Todos from './Todos'
+import Todos from './Todos'
 import Counters from './Counters'
 
 ReactDOM.render(
