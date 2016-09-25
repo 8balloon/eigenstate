@@ -58,9 +58,9 @@ export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, pat
   }
 }
 
-export function noOtherMethodsHaveBeenInvoked(thisInvocationID, latestInvocationID, key, path) {
+export function operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path) {
   if (thisInvocationID !== latestInvocationID) {
-    throw new Error(`Method ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Methods should return a value XOR call other methods. See "methods in depth" at ${documentationURL}`)
+    throw new Error(errorMessages.operationInvokedOtherMethod(key, path))
   }
 }
 

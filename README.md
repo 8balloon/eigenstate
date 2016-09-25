@@ -125,6 +125,7 @@ ReactDOM.render(
 
 
 Changes should either RETURN A VALUE or TRIGGER OTHER CHANGES. They should never do both -- in fact, if Eigenstate catches one of your change functions doing both, it will throw an error. (Explain why?)
+OPERATION vs PROCEDURE
 
 
 ## onChange / onLoad

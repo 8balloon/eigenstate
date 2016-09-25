@@ -1,7 +1,6 @@
 import objectAssign from 'object-assign'
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
-import { documentationURL } from '../validation/errorMessages'
 
 export default function Eigenstate(stateDefinition, onChange, context) {
 
@@ -32,9 +31,10 @@ export default function Eigenstate(stateDefinition, onChange, context) {
 
       const newLocalState = objectAssign({}, contextStateAtPath, localMethodReturns)
 
+      //this method is an operation, not a procedure
       if (newLocalState !== undefined) {
 
-        assert.noOtherMethodsHaveBeenInvoked(thisInvocationID, latestInvocationID, key, path)
+        assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
 
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
         context.setState(newState)

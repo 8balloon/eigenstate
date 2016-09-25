@@ -1,4 +1,4 @@
-export const documentationURL = 'https://github.com/8balloon/switchless/blob/master/README.md'
+const documentationURL = 'https://github.com/8balloon/switchless/blob/master/README.md'
 
 export const stateDefIsNotObject = "A stateDef object is required by the Eigenstate Provider"
 export const methodsLeavesNotFunctions = 'Switchless Provider.props.methods must contain values that are Functions'
@@ -18,4 +18,8 @@ export function functionWasReturned(key, path, localKey) {
 
 export function methodWasOverwritten(key, path, localKey) {
   return `Method "${key}" at path "${path}" returned a value which overwrote a method at key "${localKey}". Methods may not be overwritten.`
+}
+
+export function operationInvokedOtherMethod(key, path) {
+  return `Method ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Methods should return a value XOR call other methods. See "methods in depth" at ${documentationURL}`
 }
