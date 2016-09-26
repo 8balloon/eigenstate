@@ -147,7 +147,7 @@ NOTE: it is recommended that you first read the [how to use](https://github.com/
 
 ### nested state (combine first two examples via composition)
 
-### eigenstate / onEvent
+### eigenstate / onEvent / onUpdate
 
 CHANGE vs EVENT
 

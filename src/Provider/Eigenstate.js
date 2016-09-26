@@ -11,7 +11,7 @@ It is consistent because it is changing in a way which was a part of its definit
 
 export default function Eigenstate(props, stateAccessor) {
 
-  const { stateDef, onEvent } = props
+  const { stateDef, onEvent, onUpdate } = props
   const { getState, setState } = stateAccessor
 
   assert.stateDefIsObject(stateDef)
@@ -45,20 +45,22 @@ export default function Eigenstate(props, stateAccessor) {
         const newLocalState = objectAssign({}, contextStateAtPath, localMethodReturn)
 
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
-        setState(newState, () => {
 
-          onEvent && onEvent({
-            methodKey: key,
-            methodPath: path,
-            payload,
-            returnValue: localMethodReturn,
-            previousLocalState: contextStateAtPath,
-            localState: newLocalState,
-            state: getState()
-          })
+        setState(newState, () => onUpdate && onUpdate({
+          state: getState()
+        }))
+
+        onEvent && onEvent({
+          methodKey: key,
+          methodPath: path,
+          payload,
+          returnValue: localMethodReturn,
+          previousLocalState: contextStateAtPath,
+          localState: newLocalState,
+          state: newState
         })
       }
-      else { // this method is an asynchronous procedure, so no value has been returned, and state has not been directly changed.
+      else { // no return, so this is an asychronous procedure w/no state change
         onEvent && onEvent({
           methodKey: key,
           methodPath: path,
@@ -66,7 +68,7 @@ export default function Eigenstate(props, stateAccessor) {
           returnValue: undefined,
           previousLocalState: contextStateAtPath,
           localState: contextStateAtPath,
-          state: getState()
+          state: newState
         })
       }
     }
