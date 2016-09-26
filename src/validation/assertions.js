@@ -85,10 +85,7 @@ export function methodReturnFitsStateDef(newState, stateDefinitions, key, path) 
 
   for (var localKey in newState) {
 
-    const newStateProperty = newState[localKey]
     const statePropertyDefinition = stateDefinitions[localKey]
-
-    containsNoFunctions(newStateProperty, errorMessages.functionWasReturned(key, path, localKey))
     containsNoFunctions(statePropertyDefinition, errorMessages.methodWasOverwritten(key, path, localKey))
   }
 }

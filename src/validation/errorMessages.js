@@ -16,10 +16,6 @@ export function methodDidNotReturnObject(key, path) {
   return `Method "${key}" at path "${path}" did not return an object. Values must be returned via { key: value } objects. See ${documentationURL}`
 }
 
-export function functionWasReturned(key, path, localKey) {
-  return `Method "${key}" at path "${path}" returned a function via key "${localKey}". Methods may only return values.`
-}
-
 export function methodWasOverwritten(key, path, localKey) {
   return `Method "${key}" at path "${path}" returned a value which overwrote a method at key "${localKey}". Methods may not be overwritten.`
 }
