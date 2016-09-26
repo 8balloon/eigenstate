@@ -24,6 +24,6 @@ module.exports = {
   },
   externals: {
     react: true,
-    objectAssign: true
+    'object-assign': true
   }
 }
