@@ -1,7 +1,7 @@
 {
   "name": "eigenstate",
-  "version": "0.4.0",
-  "description": "Stupid-easy React state management object",
+  "version": "0.4.1",
+  "description": "React state methods",
   "main": "lib/index.js",
   "scripts": {
     "build": "webpack",
