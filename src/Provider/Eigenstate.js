@@ -11,11 +11,11 @@ It is consistent because it is changing in a way which was a part of its definit
 
 export default function Eigenstate(props, stateAccessor) {
 
-  const { stateDef, onChange } = props
+  const { stateDef, onEvent } = props
   const { getState, setState } = stateAccessor
 
   assert.stateDefIsObject(stateDef)
-  onChange && assert.onChangePropIsFunction(onChange)
+  onEvent && assert.onEventPropIsFunction(onEvent)
 
   var latestInvocationID = 0
 
@@ -37,7 +37,6 @@ export default function Eigenstate(props, stateAccessor) {
 
       const localMethodReturn = method(payload, contextStateAtPath)
 
-
       if (localMethodReturn !== undefined) { //this method is a synchronous operation, not a procedure
 
         assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
@@ -48,7 +47,7 @@ export default function Eigenstate(props, stateAccessor) {
         const newState = mutSetValueByPath(contextState, path, newLocalState) //semantics? (const, mut...)
         setState(newState, () => {
 
-          onChange && onChange({
+          onEvent && onEvent({
             methodKey: key,
             methodPath: path,
             payload,
@@ -59,17 +58,17 @@ export default function Eigenstate(props, stateAccessor) {
           })
         })
       }
-      // else { // this method is an asynchronous procedure, not an operation
-      //   onChange && onChange({
-      //     key,
-      //     methodPath: path,
-      //     payload,
-      //     returnValue: undefined,
-      //     previousLocalState: contextStateAtPath,
-      //     localState: contextStateAtPath,
-      //     state: contextState
-      //   })
-      // }
+      else { // this method is an asynchronous procedure, so no value has been returned, and state has not been directly changed.
+        onEvent && onEvent({
+          methodKey: key,
+          methodPath: path,
+          payload,
+          returnValue: undefined,
+          previousLocalState: contextStateAtPath,
+          localState: contextStateAtPath,
+          state: getState()
+        })
+      }
     }
   })
 

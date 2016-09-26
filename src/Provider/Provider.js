@@ -15,6 +15,10 @@ export class Provider extends React.Component {
       setState: (newState, callback) => {
         this.__eigenstate = newState
         this.forceUpdate(callback())
+        /*
+        We are not calling onEvent callbacks until React has updated.
+        This is to make Eigenstate apps easier to reason about from the perspective of an external application.
+        */
       }
     }
 
@@ -36,9 +40,9 @@ export class Provider extends React.Component {
 
   componentWillReceiveProps(next) {
 
-    const { stateDef, onChange } = this.props
+    const { stateDef, onEvent } = this.props
 
-    if ( (stateDef !== next.stateDef) || (onChange !== next.onChange) ) {
+    if ( (stateDef !== next.stateDef) || (onEvent !== next.onEvent) ) {
 
       this.stateAccessor.setState(Eigenstate(next, this.stateAccessor))
     }

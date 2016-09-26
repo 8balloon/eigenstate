@@ -33,7 +33,7 @@ const Grid = (props) => {
 
 export default function GridApp() {
   return (
-    <Provider stateDef={stateDef} onChange={logVerbosely}>
+    <Provider stateDef={stateDef} onEvent={logVerbosely}>
       <Grid />
     </Provider>
   )
