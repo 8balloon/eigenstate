@@ -8,17 +8,25 @@ import ReactDOM from 'react-dom'
 
 import { Provider, logVerbosely } from '../src'
 
-import Counter from './Counter'
-import Grid from './Grid'
+import SimpleCounter from '../examples/SimpleCounter'
+import Counters from '../examples/Counters'
+import Grid from '../examples/Grid'
+
+import ErroringCounter from './ErroringCounter'
+import ConnectCounterCompare from './ConnectCounterCompare'
 import Todos from './Todos'
-import Counters from './Counters'
 
 ReactDOM.render(
   <div id="apps">
-    <Counter />
+
+    <SimpleCounter />
     <Grid />
-    <Todos />
     <Counters />
+
+    <ErroringCounter />
+    <ConnectCounterCompare />
+    <Todos />
+
   </div>,
   document.getElementById('react-root')
 )
