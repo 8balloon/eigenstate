@@ -27,6 +27,7 @@ export class Provider extends React.Component {
 
   getChildContext() {
     return {
+      providerProps: this.props,
       eigenstate: this.stateAccessor.getState()
     }
   }
@@ -59,5 +60,6 @@ export class Provider extends React.Component {
 }
 
 Provider.childContextTypes = {
+  providerProps: React.PropTypes.object.isRequired,
   eigenstate: React.PropTypes.object.isRequired
 }

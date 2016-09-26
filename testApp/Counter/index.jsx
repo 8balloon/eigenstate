@@ -12,7 +12,7 @@ const ViewsWithAlternativelyProvidedProps = (props) => (
 
 export default function Counter() {
   return (
-    <Provider stateDef={stateDef} onEvent={logVerbosely}>
+    <Provider stateDef={stateDef} onEvent={logVerbosely} testProviderProp={9000}>
       <ViewsWithAlternativelyProvidedProps />
     </Provider>
   )

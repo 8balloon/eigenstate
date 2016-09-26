@@ -1,6 +1,7 @@
 export default function CounterView(props) {
 
   window.props = props
+  console.log("PROVIDER TEST PROP IN COUNTER VIEW:", props.testProviderProp)
 
   const {
     count,
