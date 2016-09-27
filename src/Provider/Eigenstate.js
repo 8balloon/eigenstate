@@ -11,6 +11,8 @@ export default function Eigenstate(props, stateAccessor) {
   onEvent && assert.onEventPropIsFunction(onEvent)
 
   var latestInvocationID = 0
+  var setStateTimeout = undefined
+  // var updatesBatched = 0
 
   var eigenstate = mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
@@ -41,9 +43,15 @@ export default function Eigenstate(props, stateAccessor) {
 
         eigenstate = mutSetValueByPath(contextState, path, newLocalState)
 
-        setState(eigenstate, () => onUpdate && onUpdate({
-          state: getState()
-        }))
+        clearTimeout(setStateTimeout)
+        setStateTimeout = setTimeout(() => {
+          // console.log("!!!UPDATES BATCHED:", updatesBatched)
+          // updatesBatched = 0
+          setState(eigenstate, () => onUpdate && onUpdate({
+            state: getState()
+          }))
+        }, 0)
+        // updatesBatched++
       }
 
       onEvent && onEvent({
