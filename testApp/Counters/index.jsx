@@ -25,8 +25,8 @@ const stateDef = {
 }
 
 const Counters = (props) => (
-  <div id="counter-app">
-    <div id="counters">
+  <div className="counter-app" style={{backgroundColor: 'orange'}}>
+    <div className="counters">
       {(function() {
         var counters = []
         for (var i = 0; i < props.numCounters; i++) {
@@ -39,7 +39,7 @@ const Counters = (props) => (
         return counters
       })()}
     </div>
-    <div id="counter-controllers">
+    <div className="counter-controllers">
       <div onClick={props.addCounter}> add a counter </div>
       <div onClick={props.removeCounter}> remove a counter </div>
       <div onClick={() => props.incrementCount(5)}> small, fast increment </div>

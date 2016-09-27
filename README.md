@@ -33,9 +33,9 @@ Your application's view component.
 When used as a child of the Eigenstate Provider, it will have access to your state values and methos via "props"
 */
 const CounterView = (props) => (
-  <div id="counter">
-    <div id="count">{ props.count }</div>
-    <div id="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
+  <div className="counter">
+    <div className="count">{ props.count }</div>
+    <div className="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
   </div>
 )
 
@@ -60,8 +60,6 @@ As the above example demonstrates, a state definition is a simple object. It's m
 Methods also have the option to asynchronously call other methods. Here is an example which demonstrates this capacity, along with a detailed breakdown:
 
 ```js
-// Other examples: https://github.com/8balloon/eigenstate/blob/master/examples
-
 /*
 State definition for a "multiple counters" application.
 A count is displayed across a variable number of counters.

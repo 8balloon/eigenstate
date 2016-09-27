@@ -14,9 +14,9 @@ Your application's view component.
 When used as a child of the Eigenstate Provider, it will have access to your state values and methos via "props"
 */
 const CounterView = (props) => (
-  <div id="counter">
-    <div id="count">{ props.count }</div>
-    <div id="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
+  <div className="simpleCounter" style={{backgroundColor: 'orange'}}>
+    <div className="count">{ props.count }</div>
+    <div className="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
   </div>
 )
 

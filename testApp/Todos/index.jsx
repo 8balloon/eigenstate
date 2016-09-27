@@ -60,7 +60,7 @@ const stateDef = {
 }
 
 const TodoList = (props) => (
-  <div>
+  <div className="todoList">
     <div>TO DO:</div>
     <div>
       {
@@ -77,7 +77,7 @@ const TodoList = (props) => (
       }
     </div>
     <div>
-      <input id="todoInput" value={props.potentialTodo} onChange={(event) => props.setPotentialTodo(event.target.value)} />
+      <input className="todoInput" value={props.potentialTodo} onChange={(event) => props.setPotentialTodo(event.target.value)} />
       <div onClick={props.acceptTodo}>
         Add Todo
       </div>

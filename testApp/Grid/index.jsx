@@ -11,7 +11,7 @@ const stateDef = {
 
 const Grid = (props) => {
   return (
-    <div id="grid">
+    <div className="grid">
       <div onClick={props.addRow}>Add row</div>
       <div onClick={props.removeRow}>Remove row</div>
       <div onClick={props.addColumn}>Add column</div>

@@ -16,7 +16,7 @@ export default function CounterView(props) {
   } = props
 
   return (
-    <div className="counter">
+    <div className="erroringCounter">
       <div className="count">
         {count}
       </div>

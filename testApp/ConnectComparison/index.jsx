@@ -6,25 +6,25 @@ const CounterStateDef = {
 }
 
 const CounterView = (props) => (
-  <div id="counter">
-    <div id="count">{ props.count }</div>
-    <div id="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
+  <div className="counter">
+    <div className="count">{ props.count }</div>
+    <div className="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
   </div>
 )
 
 const ConnectedCounterView = connect(CounterView)
 
 const CountersWrapper = (props) => (
-  <div id="connectCounterCompare">
+  <div className="connectCounterCompare" style={{backgroundColor: 'orange'}}>
     <CounterView {...props} />
     <ConnectedCounterView />
   </div>
 )
 
-export default function ConnectCounterCompare() {
+export default function ConnectComparison() {
   return (
     <Provider stateDef={CounterStateDef}>
-      <CounterView />
+      <CountersWrapper />
     </Provider>
   )
 }
