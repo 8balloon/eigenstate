@@ -5,31 +5,29 @@ export default function Store() {
     , cbIntervalID = null
     // , updatesBatched = 0
 
-  const store = {
+  const getState = () => eigenstate,
+  const setOnSetStateCallback = (cb) => { onSetStateCallback = cb }
+  const setState = (state, callerCallback) => {
 
-    getState: () => eigenstate,
+    eigenstate = state
 
-    setState: (state, onSetStateCallbackCallback) => {
+    cbIntervalID && clearInterval(cbIntervalID)
+    cbIntervalID = setInterval(() => {
 
-      eigenstate = state
+      // The onSetStateCallback is expected to call the callerCallback
+      onSetStateCallback && onSetStateCallback(callerCallback)
 
-      cbIntervalID && clearInterval(cbIntervalID)
-      cbIntervalID = setInterval(() => {
-
-        onSetStateCallback && onSetStateCallback(onSetStateCallbackCallback)
-
-        clearInterval(cbIntervalID)
-        cbIntervalID = null
-        // console.log("!!!UPDATES BATCHED:", updatesBatched)
-        // updatesBatched = 0
-      }, 0)
-      // updatesBatched++
-    },
-
-    setOnSetStateCallback: (cb) => {
-      onSetStateCallback = cb
-    }
+      clearInterval(cbIntervalID)
+      cbIntervalID = null
+      // console.log("!!!UPDATES BATCHED:", updatesBatched)
+      // updatesBatched = 0
+    }, 0)
+    // updatesBatched++
   }
 
-  return store
+  return {
+    getState,
+    setState,
+    setOnSetStateCallback
+  }
 }

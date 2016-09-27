@@ -17,7 +17,7 @@ Sound like a lot to handle? It isn't; Eigenstate is **really easy**. It comes pr
 
 Define application state *methods* and *values* in an object, and pass that to a ```Provider```. Eigenstate does the rest.
 
-Here's a tiny example Eigenstate application: (Concepts are [here](https://github.com/8balloon/eigenstate#architecture-overview), but it's recommended that you look at the examples first.)
+Here's a tiny example Eigenstate application: (Concepts are [here](https://github.com/8balloon/eigenstate#architecture-overview), but it's recommended that you read the examples first.)
 
 ```js
 // simple React + Eigenstate counter application
