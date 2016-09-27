@@ -2,7 +2,7 @@ import objectAssign from 'object-assign'
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
 
-export default function Eigenstate(stateDef, onAction, setState) {
+export default function Eigenstate({stateDef, onAction}, setState) {
 
   assert.stateDefIsObject(stateDef)
   onAction && assert.onActionPropIsFunction(onAction)

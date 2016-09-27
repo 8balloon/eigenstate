@@ -1,10 +1,12 @@
 import Eigenstate from './Eigenstate'
 
-export default function Store({stateDef, onAction}, onSetStateCallback) {
+export default function Store({stateDef, onAction, onUpdate}, onUpdateCallback) {
 
   var eigenstate = null
     , cbIntervalID = null
     // , updatesBatched = 0
+
+  const callOnUpdateWithState = !onUpdate ? () => {} : () => onUpdate(eigenstate)
 
   const getState = () => eigenstate
   const setState = (state, callerCallback) => {
@@ -14,8 +16,7 @@ export default function Store({stateDef, onAction}, onSetStateCallback) {
     cbIntervalID && clearInterval(cbIntervalID)
     cbIntervalID = setInterval(() => {
 
-      // The onSetStateCallback is expected to call the callerCallback
-      onSetStateCallback && onSetStateCallback(callerCallback)
+      onUpdateCallback(callOnUpdateWithState)
 
       clearInterval(cbIntervalID)
       cbIntervalID = null
@@ -30,7 +31,7 @@ export default function Store({stateDef, onAction}, onSetStateCallback) {
     setState
   }
 
-  eigenstate = Eigenstate(stateDef, onAction, setState)
+  eigenstate = Eigenstate({stateDef, onAction}, setState)
 
   return store
 }

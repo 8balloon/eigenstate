@@ -4,7 +4,10 @@ import View from './View'
 
 export default function ErroringCounter() {
   return (
-    <Provider stateDef={stateDef} onAction={logVerbosely} testProviderProp={9000}>
+    <Provider stateDef={stateDef}
+      onAction={logVerbosely}
+      onUpdate={(state) => {console.log("!!!UPDATE OCCURRED:", state)}}
+      testProviderProp={9000}>
       <View />
     </Provider>
   )
