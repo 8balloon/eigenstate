@@ -15,10 +15,6 @@ export class Provider extends React.Component {
       setState: (newState, onUpdateCallback) => {
         this.__eigenstate = newState
         this.forceUpdate(onUpdateCallback && onUpdateCallback())
-        /*
-        We are not calling onEvent callbacks until React has updated.
-        This is to make Eigenstate apps easier to reason about from the perspective of an external application.
-        */
       }
     }
 
