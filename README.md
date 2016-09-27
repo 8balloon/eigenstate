@@ -8,8 +8,9 @@ It was written to provide the complete functionality of the [Redux](https://gith
 
 * Simple, composable state objects
 * Pure functional / asynchronous state methods
-* Complete action and change event emission
+* Complete action and change event emission <!-- automatic action event generation ? -->
 * Virtual state + update batching (it's fast)
+<!-- hot reloading -->
 
 Sound like a lot to handle? It isn't -- Eigenstate is **really easy**. It is pre-configured for React, and is easy to set up, embed, or debug.
 
