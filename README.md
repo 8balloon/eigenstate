@@ -8,17 +8,16 @@ It was written to provide the complete functionality of the [Redux](https://gith
 
 * Simple, composable state objects
 * Pure functional / asynchronous state methods
-* Complete action and change event emission <!-- automatic action event generation ? -->
-* Virtual state + update batching (it's fast)
-<!-- hot reloading -->
+* Auto-generated "action" and "update" events
+* Virtual state + automatic update batching
 
-Sound like a lot to handle? It isn't -- Eigenstate is **really easy**. It is pre-configured for React, and is easy to set up, embed, or debug.
+Sound like a lot to handle? It isn't -- Eigenstate is **really easy**. What's more, it requires almost no wiring to set up, debug, or embed. It is also pre-configured for React, and requires no other libraries or packages to work.
 
-## how to use
+## how to use + examples
 
 Define application state *methods* and *values* in an object, and pass that to a ```Provider```. Eigenstate does the rest.
 
-Here's a tiny example Eigenstate application: (Concepts are [here](https://github.com/8balloon/eigenstate#architecture-overview), but it's recommended that you read the examples first.)
+Here's a tiny example application that uses Eigenstate. (If you've already read the examples, the concepts are [here](https://github.com/8balloon/eigenstate#architecture-overview).)
 
 ```js
 // simple React + Eigenstate counter application
@@ -49,15 +48,13 @@ ReactDOM.render(
 )
 ```
 
-### simple Eigenstate application example
-
 As demonstrated in the example above, a state definition is a simple object. It's made up of ```key: value``` and ```key: method``` pairs.
 
-**Values** are your application data in JSON form. This means objects, arrays, numbers, strings, etc. They are passed to the children of a ```Provider``` by their keys, as demonstrated above.
+**Values** are your application data in JSON form. This means that they can be objects, arrays, numbers, strings, Booleans, or null. Values are passed to the child of a ```Provider``` by their keys, as demonstrated above; the "count" value is accessed in the "counter" div via "props.count".
 
-**Methods** are functions you can call to update your state values. Like values, you can consume them from your view components via ```props.<key>```.
+**Methods** are functions you can call to update your state's values. Like values, you can use methods in your view components via ```props.<key>```. This is demonstrated above: the "increment" method is used in the onClick handler in the div with the content "COUNT UP".
 
-Methods can work two ways; they can return updated state values, or they can call other methods. Here is an example which demonstrates both capacities:
+Methods can work two ways; they can work as shown above (returning updated state values), or they can do things that have side effects, like calling other methods, or performing asynchronous actions. Here is an example which demonstrates both capacities:
 
 ```js
 /*
@@ -147,7 +144,10 @@ NOTE: it is recommended that you first read the [how to use](https://github.com/
 
 ### eigenstate / onAction / onUpdate
 
-CHANGE vs EVENT
+ACTION vs UPDATE
+ADDRESS SIDE EFFECTS (maybe: procedures vs updates?)
+eigenstate for redux users? (focus on actions)
+React-router example
 
 ### @connect
 
