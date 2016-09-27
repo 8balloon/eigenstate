@@ -4,7 +4,7 @@ import * as assert from '../validation/assertions'
 
 export default function Eigenstate(props, store) {
 
-  const { stateDef, onAction, onUpdate } = props
+  const { stateDef, onAction } = props
   const { getState, setState } = store
 
   assert.stateDefIsObject(stateDef)
@@ -41,9 +41,7 @@ export default function Eigenstate(props, store) {
 
         eigenstate = mutSetValueByPath(contextState, path, newLocalState)
 
-        setState(eigenstate, () => onUpdate && onUpdate({
-          state: getState()
-        }))
+        setState(eigenstate)
       }
 
       onAction && onAction({
