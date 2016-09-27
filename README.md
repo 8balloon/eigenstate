@@ -1,63 +1,62 @@
 # Eigenstate
 
-Eigenstate is an object-oriented alternative to [Redux](https://github.com/reactjs/redux).
+Eigenstate is a [Flux](https://facebook.github.io/flux/) alternative.
 
-Eigenstate allows you to define *values* and *methods* in a *state definition* object. This object is used to provide the same functionality as a Redux store, actions, action-creators, reducers, and middleware. No configuration with React or other packages is required.
+It was written to provide the complete functionality of the [Redux](https://github.com/reactjs/redux) ecosystem with almost no API.
+
+## features
+
+* Composable state objects
+* Pure functional / asynchronous state methods
+* Automatic update batching (so it's fast)
+* Complete embeddability and debuggability
+
+Sound like a lot to handle? It isn't; Eigenstate is **really easy**. It comes pre-configured for React, and is trivial to set up, embed, and debug.
 
 ## how to use
 
-Define your state methods and values in an object, and pass that to a ```Provider```. Eigenstate does the rest.
+Define application state *methods* and *values* in an object, and pass that to a ```Provider```. Eigenstate does the rest.
 
-Here is a working example of an Eigenstate application. If you only want to read about the concepts, you can skip ahead to the [architecture overview](https://github.com/8balloon/eigenstate#architecture-overview), but it's recommended that you read these examples first.
+Here's a tiny example Eigenstate application: (Concepts are [here](https://github.com/8balloon/eigenstate#architecture-overview), but it's recommended that you look at the examples first.)
 
 ```js
-/*
-A simple counter application.
-See if you can figure out how to implement a "clear count" feature!
-*/
+// simple React + Eigenstate counter application
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'eigenstate'
 
-/*
-Your application's state definition.
-This state definition has 1 value and 1 method.
-*/
-const CounterStateDef = {
+// state definition with 1 value and 1 method
+const stateDef = {
   count: 0,
   increment: (amount, state) => ({ count: state.count + amount })
 }
 
-/*
-Your application's view component.
-When used as a child of the Eigenstate Provider, it will have access to your state values and methos via "props"
-*/
-const CounterView = (props) => (
+// state values and methods are passed to your view via "props"
+const View = (props) => (
   <div className="counter">
-    <div className="count">{ props.count }</div>
-    <div className="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
+    { props.count }
+    <div onClick={() => props.increment(1)}> COUNT UP </div>
   </div>
 )
 
-/*
-Eigenstate's Provider creates your state object for you.
-It passes access to your state methods and values via "props"
-*/
+// see if you can add a "reset" feature to this application!
 ReactDOM.render(
-  <Provider stateDef={CounterStateDef}>
-    <CounterView />
+  <Provider stateDef={stateDef}>
+    <View />
   </Provider>,
   document.getElementById('react-root')  
 )
 ```
 
-As the above example demonstrates, a state definition is a simple object. It's made up of key: value and key: method pairs.
+### simple Eigenstate application example
 
-**Values** can be any valid JSON (objects, arrays, numbers, strings, Booleans, and null). Your application view can consume them via ```props.<key>```, as demonstrated above.
+As demonstrated in the example above, a state definition is a simple object. It's made up of ```key: value``` and ```key: method``` pairs.
 
-**Methods** are functions that return updated state values. Like values, you can access methods via ```props.<key>``` from your application view.
+**Values** are your application data in JSON form. This means objects, arrays, numbers, strings, etc. They are passed to the children of a ```Provider``` by their keys, as demonstrated above.
 
-Methods also have the option to asynchronously call other methods. Here is an example which demonstrates this capacity, along with a detailed breakdown:
+**Methods** are functions you can call to update your state values. Like values, you can consume them from your view components via ```props.<key>```.
+
+Methods can work two ways; they can return updated state values, or they can call other methods. Here is an example which demonstrates both capacities:
 
 ```js
 /*
