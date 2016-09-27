@@ -6,7 +6,8 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateCallback) 
     , cbIntervalID = null
     // , updatesBatched = 0
 
-  const callOnUpdateWithState = !onUpdate ? () => {} : () => onUpdate(eigenstate)
+  const noop = () => {}
+  const callOnUpdateWithState = () => !onUpdate ? noop : onUpdate(eigenstate)
 
   const getState = () => eigenstate
   const setState = (state, callerCallback) => {
