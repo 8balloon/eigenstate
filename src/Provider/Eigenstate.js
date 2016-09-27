@@ -45,9 +45,8 @@ export default function Eigenstate({stateDef, onAction}, setState) {
         methodPath: path,
         payload,
         returnValue: localMethodReturn,
-        previousLocalState: localState,
-        localState: nextLocalState || localState,
-        state: eigenstate
+        localState: localState,
+        nextLocalState: nextLocalState || localState
       })
     }
   })
