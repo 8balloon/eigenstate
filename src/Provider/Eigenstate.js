@@ -2,10 +2,7 @@ import objectAssign from 'object-assign'
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
 
-export default function Eigenstate(props, store) {
-
-  const { stateDef, onAction } = props
-  const { getState, setState } = store
+export default function Eigenstate(stateDef, onAction, setState) {
 
   assert.stateDefIsObject(stateDef)
   onAction && assert.onActionPropIsFunction(onAction)
@@ -22,24 +19,23 @@ export default function Eigenstate(props, store) {
 
       assert.methodWasNotPassedSecondArgument(illegalSecondArgument, key, path)
 
-      const contextState = getState()
-      const contextStateAtPath = getValueByPath(contextState, path)
+      const localState = getValueByPath(eigenstate, path)
 
       const thisInvocationID = latestInvocationID + 1
       latestInvocationID = thisInvocationID
 
-      const localMethodReturn = method(payload, contextStateAtPath)
+      const localMethodReturn = method(payload, localState)
 
-      var newLocalState = undefined
+      var nextLocalState = undefined
 
       if (localMethodReturn !== undefined) { //this method is a synchronous operation
 
         assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
         assert.methodReturnFitsStateDef(localMethodReturn, localStateDef, key, path)
 
-        newLocalState = objectAssign({}, contextStateAtPath, localMethodReturn)
+        nextLocalState = objectAssign({}, localState, localMethodReturn)
 
-        eigenstate = mutSetValueByPath(contextState, path, newLocalState)
+        eigenstate = mutSetValueByPath(eigenstate, path, nextLocalState)
 
         setState(eigenstate)
       }
@@ -49,8 +45,8 @@ export default function Eigenstate(props, store) {
         methodPath: path,
         payload,
         returnValue: localMethodReturn,
-        previousLocalState: contextStateAtPath,
-        localState: newLocalState || contextStateAtPath,
+        previousLocalState: localState,
+        localState: nextLocalState || localState,
         state: eigenstate
       })
     }

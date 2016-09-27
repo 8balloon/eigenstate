@@ -1,6 +1,6 @@
 import Eigenstate from './Eigenstate'
 
-export default function Store(props, onSetStateCallback) {
+export default function Store({stateDef, onAction}, onSetStateCallback) {
 
   var eigenstate = null
     , cbIntervalID = null
@@ -30,7 +30,7 @@ export default function Store(props, onSetStateCallback) {
     setState
   }
 
-  eigenstate = Eigenstate(props, store)
+  eigenstate = Eigenstate(stateDef, onAction, setState)
 
   return store
 }
