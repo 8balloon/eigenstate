@@ -7,7 +7,7 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateCallback) 
     // , updatesBatched = 0
 
   const noop = () => {}
-  const callOnUpdateWithState = () => !onUpdate ? noop : onUpdate(eigenstate)
+  const callOnUpdateWithState = !onUpdate ? noop : () => onUpdate(eigenstate)
 
   const getState = () => eigenstate
   const setState = (state, callerCallback) => {
