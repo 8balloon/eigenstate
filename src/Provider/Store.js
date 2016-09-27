@@ -1,12 +1,12 @@
-export default function Store() {
+import Eigenstate from './Eigenstate'
+
+export default function Store(props, onSetStateCallback) {
 
   var eigenstate = null
-    , onSetStateCallback = null
     , cbIntervalID = null
     // , updatesBatched = 0
 
   const getState = () => eigenstate
-  const setOnSetStateCallback = (cb) => { onSetStateCallback = cb }
   const setState = (state, callerCallback) => {
 
     eigenstate = state
@@ -25,9 +25,12 @@ export default function Store() {
     // updatesBatched++
   }
 
-  return {
+  const store = {
     getState,
-    setOnSetStateCallback,
     setState
   }
+
+  eigenstate = Eigenstate(props, store)
+
+  return store
 }

@@ -9,9 +9,7 @@ export class Provider extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    this.store = Store()
-    this.store.setState(Eigenstate(props, this.store))
-    this.store.setOnSetStateCallback((onUpdateCallback) => {
+    this.store = Store(props, (onUpdateCallback) => {
       this.forceUpdate(onUpdateCallback && onUpdateCallback())
     })
   }
