@@ -11,7 +11,6 @@ export function logVerbosely(details) {
   } = details
 
   console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- METHOD CALLED`)
-  console.log('PAYLOAD / RETURN:', payload, returnValue)
-  console.log('STATE AT METHOD, BEFORE / AFTER:', previousLocalState, localState)
-  console.log('COMPLETE STATE RESULT:', state)
+  console.log('payload / return:', payload, returnValue)
+  console.log('local state before / local state after / final state:', previousLocalState, localState, state)
 }

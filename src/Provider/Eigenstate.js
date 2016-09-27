@@ -43,14 +43,14 @@ export default function Eigenstate(props, stateAccessor) {
 
         eigenstate = mutSetValueByPath(contextState, path, newLocalState)
 
-        clearTimeout(setStateTimeout)
-        setStateTimeout = setTimeout(() => {
+        // clearTimeout(setStateTimeout)
+        // setStateTimeout = setTimeout(() => {
           // console.log("!!!UPDATES BATCHED:", updatesBatched)
           // updatesBatched = 0
           setState(eigenstate, () => onUpdate && onUpdate({
             state: getState()
           }))
-        }, 0)
+        // }, 0)
         // updatesBatched++
       }
 
