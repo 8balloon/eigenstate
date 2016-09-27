@@ -52,7 +52,7 @@ export default function Eigenstate(props, stateAccessor) {
         payload,
         returnValue: localMethodReturn,
         previousLocalState: contextStateAtPath,
-        localState: newLocalState,
+        localState: newLocalState || contextStateAtPath,
         state: eigenstate
       })
     }
