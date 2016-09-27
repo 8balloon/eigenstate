@@ -6,12 +6,12 @@ It was written to provide the complete functionality of the [Redux](https://gith
 
 ## features
 
-* Composable state objects
+* Simple, composable state objects
 * Pure functional / asynchronous state methods
-* Automatic update batching (so it's fast)
-* Complete embeddability and debuggability
+* Complete action and change event emission
+* Virtual state + update batching (it's fast)
 
-Sound like a lot to handle? It isn't; Eigenstate is **really easy**. It comes pre-configured for React, and is trivial to set up, embed, and debug.
+Sound like a lot to handle? It isn't -- Eigenstate is **really easy**. It is pre-configured for React, and is easy to set up, embed, or debug.
 
 ## how to use
 
@@ -144,7 +144,7 @@ NOTE: it is recommended that you first read the [how to use](https://github.com/
 
 ### nested state (combine first two examples via composition)
 
-### eigenstate / onEvent / onUpdate
+### eigenstate / onAction / onUpdate
 
 CHANGE vs EVENT
 

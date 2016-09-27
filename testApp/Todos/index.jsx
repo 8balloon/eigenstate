@@ -87,7 +87,7 @@ const TodoList = (props) => (
 
 export default function Todos() {
   return (
-    <Provider stateDef={stateDef} onEvent={logVerbosely}>
+    <Provider stateDef={stateDef} onAction={logVerbosely}>
       <TodoList />
     </Provider>
   )

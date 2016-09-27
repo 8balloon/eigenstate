@@ -4,11 +4,11 @@ import * as assert from '../validation/assertions'
 
 export default function Eigenstate(props, store) {
 
-  const { stateDef, onEvent, onUpdate } = props
+  const { stateDef, onAction, onUpdate } = props
   const { getState, setState } = store
 
   assert.stateDefIsObject(stateDef)
-  onEvent && assert.onEventPropIsFunction(onEvent)
+  onAction && assert.onActionPropIsFunction(onAction)
 
   var latestInvocationID = 0
   var setStateTimeout = undefined
@@ -46,7 +46,7 @@ export default function Eigenstate(props, store) {
         }))
       }
 
-      onEvent && onEvent({
+      onAction && onAction({
         methodKey: key,
         methodPath: path,
         payload,

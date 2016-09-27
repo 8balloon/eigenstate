@@ -37,9 +37,9 @@ export function stateDefIsObject(stateDef) {
 }
 
 
-export function onEventPropIsFunction(onEvent) {
+export function onActionPropIsFunction(onAction) {
 
-  isFunction(onEvent, errorMessages.onEventPropIsNotFunction)
+  isFunction(onAction, errorMessages.onActionPropIsNotFunction)
 }
 
 export function stateDoesNotConflictWithProps(state, props, key) {

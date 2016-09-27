@@ -32,9 +32,9 @@ export class Provider extends React.Component {
 
   componentWillReceiveProps(next) {
 
-    const { stateDef, onEvent } = this.props
+    const { stateDef, onAction } = this.props
 
-    if ( (stateDef !== next.stateDef) || (onEvent !== next.onEvent) ) {
+    if ( (stateDef !== next.stateDef) || (onAction !== next.onAction) ) {
 
       this.store.setState(Eigenstate(next, this.store))
     }

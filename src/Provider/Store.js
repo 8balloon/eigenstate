@@ -5,7 +5,7 @@ export default function Store() {
     , cbIntervalID = null
     // , updatesBatched = 0
 
-  const getState = () => eigenstate,
+  const getState = () => eigenstate
   const setOnSetStateCallback = (cb) => { onSetStateCallback = cb }
   const setState = (state, callerCallback) => {
 
@@ -27,7 +27,7 @@ export default function Store() {
 
   return {
     getState,
-    setState,
-    setOnSetStateCallback
+    setOnSetStateCallback,
+    setState
   }
 }
