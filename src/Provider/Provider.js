@@ -1,6 +1,7 @@
 import React from 'react'
 import objectAssign from 'object-assign'
 import * as assert from '../validation/assertions'
+import Store from './Store'
 import Eigenstate from './Eigenstate'
 
 export class Provider extends React.Component {
@@ -8,30 +9,24 @@ export class Provider extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    this.__eigenstate = null
-
-    this.stateAccessor = {
-      getState: () => this.__eigenstate,
-      setState: (newState, onUpdateCallback) => {
-        this.__eigenstate = newState
-        this.forceUpdate(onUpdateCallback && onUpdateCallback())
-      }
-    }
-
-    this.__eigenstate = Eigenstate(props, this.stateAccessor)
+    this.store = Store()
+    this.store.setState(Eigenstate(props, this.store))
+    this.store.setOnSetStateCallback((onUpdateCallback) => {
+      this.forceUpdate(onUpdateCallback && onUpdateCallback())
+    })
   }
 
   getChildContext() {
     return {
       providerProps: this.props,
-      eigenstate: this.stateAccessor.getState()
+      eigenstate: this.store.getState()
     }
   }
 
   componentDidMount() {
 
     if (this.props.eigenstate) {
-      this.props.eigenstate(() => this.stateAccessor.getState())
+      this.props.eigenstate(() => this.store.getState())
     }
   }
 
@@ -41,15 +36,17 @@ export class Provider extends React.Component {
 
     if ( (stateDef !== next.stateDef) || (onEvent !== next.onEvent) ) {
 
-      this.stateAccessor.setState(Eigenstate(next, this.stateAccessor))
+      this.store.setState(Eigenstate(next, this.store))
     }
   }
 
   render() {
 
-    assert.stateDoesNotConflictWithProps(this.__eigenstate, this.props)
+    const eigenstate = this.store.getState()
 
-    const childProps = objectAssign({}, this.__eigenstate, this.props)
+    assert.stateDoesNotConflictWithProps(eigenstate, this.props)
+
+    const childProps = objectAssign({}, eigenstate, this.props)
 
     return React.cloneElement(this.props.children, childProps)
   }

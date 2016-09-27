@@ -2,21 +2,19 @@ import objectAssign from 'object-assign'
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
 
-export default function Eigenstate(props, stateAccessor) {
+export default function Eigenstate(props, store) {
 
   const { stateDef, onEvent, onUpdate } = props
-  const { getState, setState } = stateAccessor
+  const { getState, setState } = store
 
   assert.stateDefIsObject(stateDef)
   onEvent && assert.onEventPropIsFunction(onEvent)
 
   var latestInvocationID = 0
   var setStateTimeout = undefined
-  // var updatesBatched = 0
 
   var eigenstate = mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
-    // Not a method -- just a value. So no "arming" required.
     if (!(property instanceof Function)) return property
     const method = property
 
@@ -43,15 +41,9 @@ export default function Eigenstate(props, stateAccessor) {
 
         eigenstate = mutSetValueByPath(contextState, path, newLocalState)
 
-        // clearTimeout(setStateTimeout)
-        // setStateTimeout = setTimeout(() => {
-          // console.log("!!!UPDATES BATCHED:", updatesBatched)
-          // updatesBatched = 0
-          setState(eigenstate, () => onUpdate && onUpdate({
-            state: getState()
-          }))
-        // }, 0)
-        // updatesBatched++
+        setState(eigenstate, () => onUpdate && onUpdate({
+          state: getState()
+        }))
       }
 
       onEvent && onEvent({
