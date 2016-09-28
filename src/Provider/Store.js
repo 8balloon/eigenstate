@@ -27,12 +27,17 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateCallback) 
     // updatesBatched++
   }
 
-  const store = {
-    getState,
-    setState
+  const updateStateDef = (newStateDef) => {
+    eigenstate = Eigenstate(newStateDef, onAction, setState)
   }
 
-  eigenstate = Eigenstate({stateDef, onAction}, setState)
+  const store = {
+    getState,
+    setState,
+    updateStateDef
+  }
+
+  eigenstate = Eigenstate(stateDef, onAction, setState)
 
   return store
 }

@@ -6,17 +6,21 @@ function nextCounterStateDef() {
 
   const thisIncAmount = incAmount
   incAmount++
+  console.log("NEXT WAS GOT", thisIncAmount)
 
   return {
     count: 0,
-    increment: (amount, state) => ({ count: state.count + thisIncAmount })
+    increment: (_, state) => {
+      console.log("THIS INC AMOUNT:", thisIncAmount)
+      return { count: state.count + thisIncAmount }
+    }
   }
 }
 
 const CounterView = (props) => (
   <div className="simpleCounter">
     <div className="count">{ props.count }</div>
-    <div className="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
+    <div className="incrementer" onClick={props.increment}> INCREMENT </div>
   </div>
 )
 

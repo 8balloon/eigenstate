@@ -2,7 +2,6 @@ import React from 'react'
 import objectAssign from 'object-assign'
 import * as assert from '../validation/assertions'
 import Store from './Store'
-import Eigenstate from './Eigenstate'
 
 const noop = () => {}
 
@@ -47,8 +46,7 @@ export class Provider extends React.Component {
 
     if (this.props.stateDef !== next.stateDef) {
 
-      // this.store.updateStateDef(next.stateDef)
-      this.store.setState(Eigenstate(next, this.store))
+      this.store.updateStateDef(next.stateDef)
     }
   }
 
