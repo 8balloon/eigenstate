@@ -4,9 +4,9 @@
   "description": "React state methods",
   "main": "lib/index.js",
   "scripts": {
-    "build": "webpack",
-    "testApp": "cd testApp && webpack-dev-server -d --hot --inline --progress --colors",
-    "test": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
+    "build": "babel src --out-dir lib",
+    "test": "cd testApp && webpack-dev-server -d --hot --inline --progress --colors",
+    "test:notYetImplemented": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
   },
   "dependencies": {
     "object-assign": "^4.1.0",

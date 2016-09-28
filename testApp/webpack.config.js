@@ -7,25 +7,21 @@ module.exports = {
     js: './index.jsx',
     html: './index.html'
   },
-  output: {
-      path: './build',
-      filename: 'bundle.js'
-  },
   module: {
-      loaders: [
-          {
-              test: /\.jsx?$/,
-              exclude: /node_modules/,
-              loader: 'babel',
-              query: {
-                  presets: ['react', 'es2015']
-              }
-          },
-          {
-              test: /index\.html$/,
-              loader: 'file?name=[name].[ext]'
-          }
-      ]
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ['react', 'es2015']
+        }
+      },
+      {
+        test: /index\.html$/,
+        loader: 'file?name=[name].[ext]'
+      }
+    ]
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
