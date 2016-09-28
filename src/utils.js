@@ -13,6 +13,8 @@ export function isFunction(value) {
 function mapObjectValues(obj, mapFunction) {
 
   if (obj instanceof Array) return obj.map(mapFunction)
+  
+  if (Object.keys(obj).length === 0) return obj //error below if no keys
 
   return objectAssign.apply({},
     Object.keys(obj).map(key => ({
