@@ -1,4 +1,4 @@
-import { Provider, logVerbosely } from '../../src'
+import { Provider, logAction } from '../../src'
 
 const newTodo = "new todo"
 
@@ -87,7 +87,7 @@ const TodoList = (props) => (
 
 export default function Todos() {
   return (
-    <Provider stateDef={stateDef} onAction={logVerbosely}>
+    <Provider stateDef={stateDef} onAction={logAction}>
       <TodoList />
     </Provider>
   )

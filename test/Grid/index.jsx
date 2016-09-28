@@ -1,4 +1,4 @@
-import { Provider, logVerbosely} from '../../src'
+import { Provider, logAction} from '../../src'
 
 const stateDef = {
 
@@ -58,7 +58,7 @@ const Grid = (props) => {
 
 export default function GridApp() {
   return (
-    <Provider stateDef={stateDef} onAction={logVerbosely}>
+    <Provider stateDef={stateDef} onAction={logAction}>
       <Grid />
     </Provider>
   )

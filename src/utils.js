@@ -5,15 +5,10 @@ export function isObject(value) {
   return typeof value === 'object' && value !== null
 }
 
-export function isFunction(value) {
-
-  return value instanceof Function
-}
-
 function mapObjectValues(obj, mapFunction) {
 
   if (obj instanceof Array) return obj.map(mapFunction)
-  
+
   if (Object.keys(obj).length === 0) return obj //error below if no keys
 
   return objectAssign.apply({},

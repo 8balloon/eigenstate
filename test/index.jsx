@@ -6,7 +6,7 @@ import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { Provider, logVerbosely } from '../src'
+import { Provider, logAction } from '../src'
 
 import GeneratedStateDef from './GeneratedStateDef'
 import SimpleCounter from './SimpleCounter'

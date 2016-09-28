@@ -1,11 +1,11 @@
-import { Provider, logVerbosely } from '../../src'
+import { Provider, logAction } from '../../src'
 import stateDef from './stateDef'
 import View from './View'
 
 export default function ErroringCounter() {
   return (
     <Provider stateDef={stateDef}
-      onAction={logVerbosely}
+      onAction={logAction}
       onUpdate={(state) => {console.log("!!!UPDATE OCCURRED:", state)}}
       testProviderProp={9000}>
       <View />

@@ -1,4 +1,4 @@
-import { isObject, isFunction, mapObjectTreeLeaves } from '../utils'
+import { isObject, mapObjectTreeLeaves } from '../utils'
 import * as errorMessages from './errorMessages'
 
 export function leavesAreFunctions(objTree, errorMessage) {
@@ -20,7 +20,7 @@ export function stateDefIsObject(stateDef) {
 
 export function onActionPropIsFunction(onAction) {
 
-  if (!isFunction(onAction)) {
+  if (!(onAction instanceof Function)) {
     throw new Error(errorMessages.onActionPropIsNotFunction)
   }
 }
