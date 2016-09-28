@@ -1,21 +1,5 @@
-import { mapObjectTreeLeaves } from '../utils'
+import { isObject, isFunction, mapObjectTreeLeaves } from '../utils'
 import * as errorMessages from './errorMessages'
-
-// js assertions
-
-export function isObject(value, errorMessage) {
-
-  if (!(value instanceof Object) || (value instanceof Function) || (value === null)) {
-    throw new Error(errorMessage)
-  }
-}
-
-export function isFunction(value, errorMessage) {
-
-  if (!(value instanceof Function)) {
-    throw new Error(errorMessage)
-  }
-}
 
 export function leavesAreFunctions(objTree, errorMessage) {
 
@@ -27,19 +11,18 @@ export function leavesAreFunctions(objTree, errorMessage) {
   })
 }
 
-// validation assertions
-
 export function stateDefIsObject(stateDef) {
 
-  if ( !(stateDef instanceof Object) || (stateDef instanceof Function) || (stateDef === null) ) {
+  if (!(isObject(stateDef))) {
     throw new Error(errorMessages.stateDefIsNotObject)
   }
 }
 
-
 export function onActionPropIsFunction(onAction) {
 
-  isFunction(onAction, errorMessages.onActionPropIsNotFunction)
+  if (!isFunction(onAction)) {
+    throw new Error(errorMessages.onActionPropIsNotFunction)
+  }
 }
 
 export function stateDoesNotConflictWithProps(state, props, key) {

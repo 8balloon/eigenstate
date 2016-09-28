@@ -1,5 +1,15 @@
 import objectAssign from 'object-assign'
 
+export function isObject(value) {
+
+  return (value instanceof Object) && !(value instanceof Function) && !(value === null)
+}
+
+export function isFunction(value) {
+
+  return value instanceof Function
+}
+
 function mapObjectValues(obj, mapFunction) {
 
   if (obj instanceof Array) return obj.map(mapFunction)
@@ -16,7 +26,7 @@ export function mapObjectTreeLeaves(obj, mapFunction, keyPath) {
   const path = keyPath || []
 
   return mapObjectValues(obj, (val, key) => {
-    if ( (val instanceof Object) && !(val instanceof Function) && !(val === null)) {
+    if ( isObject(val) ) {
       return mapObjectTreeLeaves(val, mapFunction, [].concat(path, key))
     }
     else {
@@ -53,4 +63,25 @@ export function mutSetValueByPath(obj, path, value) {
   parent[keyOf] = value
 
   return obj
+}
+
+export function graftState(novelTree, stateTree) {
+
+  for (var stateKey in stateTree) {
+    if (stateKey in novelTree) {
+
+      var novelVal = novelTree[stateKey]
+      if (novelVal instanceof Function) continue
+      var stateVal = stateTree[stateKey]
+
+      if (novelVal.constructor === stateVal.constructor) {
+        if (typeof novelVal === 'object' && novelVal !== null) {
+          graftState(novelVal, stateVal)
+        }
+        else {
+          novelTree[stateKey] = stateVal
+        }
+      }
+    }
+  }
 }

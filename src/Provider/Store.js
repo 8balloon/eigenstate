@@ -1,3 +1,4 @@
+import { graftState } from '../utils'
 import Eigenstate from './Eigenstate'
 
 export default function Store({stateDef, onAction, onUpdate}, onUpdateCallback) {
@@ -28,7 +29,10 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateCallback) 
   }
 
   const updateStateDef = (newStateDef) => {
+
+    const lastEigenstate = eigenstate
     eigenstate = Eigenstate(newStateDef, onAction, setState)
+    graftState(eigenstate, lastEigenstate)
   }
 
   const store = {

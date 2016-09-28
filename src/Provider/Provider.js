@@ -45,7 +45,6 @@ export class Provider extends React.Component {
     this.onUpdate = next.onUpdate
 
     if (this.props.stateDef !== next.stateDef) {
-
       this.store.updateStateDef(next.stateDef)
     }
   }
