@@ -48,7 +48,7 @@ ReactDOM.render(
 )
 ```
 
-As demonstrated in the example above, a state definition is a simple object. It's made up of ```key: value``` and ```key: method``` pairs.
+As shown in the example above, a state definition is a simple object. It's made up of ```key: value``` and ```key: method``` pairs.
 
 **Values** are your application data in JSON form. This means that they can be objects, arrays, numbers, strings, Booleans, or null. Values are passed to the child of a ```Provider``` by their keys, as demonstrated above; the "count" value is accessed in the "counter" div via "props.count".
 

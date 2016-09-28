@@ -20,8 +20,7 @@ const stateDef = {
 
     return { todos: newTodos }
   },
-  editTodo: (payload, state) => {
-    const { index, text } = payload
+  editTodo: ({ index, text }, state) => {
 
     var newTodos = state.todos.slice()
     newTodos[index] = Object.assign({}, newTodos[index], { text })
@@ -44,10 +43,7 @@ const stateDef = {
   setPotentialTodo: (text, state) => ({
     potentialTodo: text
   }),
-  considerTodo: (text, state) => ({
-    potentialTodo: text
-  }),
-  acceptTodo: (_, state) => {
+  acceptPotentialTodo: (_, state) => {
     state.addTodo({
       text: state.potentialTodo,
       complete: false
@@ -61,7 +57,7 @@ const stateDef = {
 
 const TodoList = (props) => (
   <div className="todoList">
-    <div>TO DO:</div>
+    <div>TO DO LIST</div>
     <div>
       {
         props.todos.map((todo, index) => (
@@ -78,7 +74,7 @@ const TodoList = (props) => (
     </div>
     <div>
       <input className="todoInput" value={props.potentialTodo} onChange={(event) => props.setPotentialTodo(event.target.value)} />
-      <div onClick={props.acceptTodo}>
+      <div onClick={props.acceptPotentialTodo}>
         Add Todo
       </div>
     </div>
