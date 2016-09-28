@@ -53,7 +53,7 @@ function containsNoFunctions(obj, errorMessage) {
     throw new Error(errorMessage)
   }
 
-  if ( !(obj instanceof Object) || (obj === null) ) return
+  if ( typeof Object !== 'object' || obj === null ) return
 
   mapObjectTreeLeaves(obj, (val) => {
     if (val instanceof Function) {

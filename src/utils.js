@@ -2,7 +2,7 @@ import objectAssign from 'object-assign'
 
 export function isObject(value) {
 
-  return (value instanceof Object) && !(value instanceof Function) && !(value === null)
+  return typeof value === 'object' && value !== null
 }
 
 export function isFunction(value) {
