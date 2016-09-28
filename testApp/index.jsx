@@ -8,10 +8,10 @@ import ReactDOM from 'react-dom'
 
 import { Provider, logVerbosely } from '../src'
 
+import GeneratedStateDef from './GeneratedStateDef'
 import SimpleCounter from './SimpleCounter'
 import Counters from './Counters'
 import Grid from './Grid'
-
 import ErroringCounter from './ErroringCounter'
 import ConnectComparison from './ConnectComparison'
 import Todos from './Todos'
@@ -19,10 +19,10 @@ import Todos from './Todos'
 ReactDOM.render(
   <div className="apps">
 
+    <GeneratedStateDef />
     <SimpleCounter />
     <Grid />
     <Counters />
-
     <ErroringCounter />
     <ConnectComparison />
     <Todos />

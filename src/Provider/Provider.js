@@ -4,12 +4,24 @@ import * as assert from '../validation/assertions'
 import Store from './Store'
 import Eigenstate from './Eigenstate'
 
+const noop = () => {}
+
 export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
 
-    this.store = Store(props, (callOnUpdateWithState) => {
+    const { stateDef, onAction, onUpdate } = props
+    this.onAction = onAction
+    this.onUpdate = onUpdate
+
+    const storeParams = {
+      onAction: (event) => this.onAction && this.onAction(event),
+      onUpdate: (update) => this.onUpdate && this.onUpdate(update),
+      stateDef
+    }
+
+    this.store = Store(storeParams, (callOnUpdateWithState) => {
       this.forceUpdate(callOnUpdateWithState)
     })
   }
@@ -30,10 +42,12 @@ export class Provider extends React.Component {
 
   componentWillReceiveProps(next) {
 
-    const { stateDef, onAction } = this.props
+    this.onAction = next.onAction
+    this.onUpdate = next.onUpdate
 
-    if ( (stateDef !== next.stateDef) || (onAction !== next.onAction) ) {
+    if (this.props.stateDef !== next.stateDef) {
 
+      // this.store.updateStateDef(next.stateDef)
       this.store.setState(Eigenstate(next, this.store))
     }
   }
