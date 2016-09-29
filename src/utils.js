@@ -62,23 +62,26 @@ export function mutSetValueByPath(obj, path, value) {
   return obj
 }
 
+//does not currently handle undefined values
 export function graftState(novelTree, stateTree) {
 
   for (var stateKey in stateTree) {
-    if (stateKey in novelTree) {
 
-      var novelVal = novelTree[stateKey]
-      if (novelVal instanceof Function) continue
-      var stateVal = stateTree[stateKey]
+    if (!(stateKey in novelTree)) {
+      novelTree[stateKey] = stateTree[stateKey]
+      continue
+    }
 
-      if (novelVal.constructor === stateVal.constructor) {
-        if (typeof novelVal === 'object' && novelVal !== null) {
-          graftState(novelVal, stateVal)
-        }
-        else {
-          novelTree[stateKey] = stateVal
-        }
+    const novelVal = novelTree[stateKey]
+    if (novelVal instanceof Function) continue
+
+    const stateVal = stateTree[stateKey]
+
+    if (novelVal.constructor === stateVal.constructor) {
+      if (typeof novelVal !== 'object' || novelVal === null) {
+        novelTree[stateKey] = stateVal
       }
+      else graftState(novelVal, stateVal)
     }
   }
 }
