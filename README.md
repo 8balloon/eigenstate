@@ -1,10 +1,10 @@
 # Eigenstate
 
-Eigenstate is a [Flux](https://facebook.github.io/flux/) alternative. It facilitates consistent and complete control over application state via state objects and state methods.
+Eigenstate is a [Flux](https://facebook.github.io/flux/) alternative. It provides application state control via state objects and state methods which are easy to define and reason about.
 
-Eigenstate provides complete React application state management without requiring you to learn other libraries. It takes almost no wiring to set up, debug, or embed, and is simple and intuitive to use.
+Eigenstate has a much smaller, simpler API than comparable libraries, such as Redux + React Redux + Redux Thunk. It has no dependencies beyond React, and its file size is also significantly smaller than comparable libraries.
 
-Eigenstate has a much smaller API than comparable libraries, such as Redux + React Redux + Redux Thunk. It also requires less repetitive code, and has a smaller file size.
+Eigenstate applications require less repetitive code, and are easy to set up, debug, and embed. 
 
 ## features
 
