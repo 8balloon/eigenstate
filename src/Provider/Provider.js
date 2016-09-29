@@ -3,8 +3,6 @@ import objectAssign from 'object-assign'
 import * as assert from '../validation/assertions'
 import Store from './Store'
 
-const noop = () => {}
-
 export class Provider extends React.Component {
 
   constructor(props, context) {
