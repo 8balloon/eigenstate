@@ -1,7 +1,7 @@
 {
   "name": "eigenstate",
   "version": "0.6.3",
-  "description": "React state methods",
+  "description": "state methods for React",
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src --out-dir lib",

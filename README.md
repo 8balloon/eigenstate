@@ -1,17 +1,17 @@
 # Eigenstate
 
-Eigenstate is a [Flux](https://facebook.github.io/flux/) alternative.
+Eigenstate is a [Flux](https://facebook.github.io/flux/) alternative. It facilitates consistent and complete control over application state via state objects and state methods.
 
-It was written to provide the complete functionality of the [Redux](https://github.com/reactjs/redux) ecosystem with almost no API.
+Eigenstate provides complete React application state management without requiring you to learn other libraries. It takes almost no wiring to set up, debug, or embed, and is simple and intuitive to use.
+
+Eigenstate has a much smaller API than comparable libraries, such as Redux + React Redux + Redux Thunk. It also requires less repetitive code, and has a smaller file size.
 
 ## features
 
-* Simple, composable state objects
+* Composable state objects
 * Pure functional / asynchronous state methods
-* Auto-generated "action" and "update" events
-* Virtual state + automatic update batching
-
-Sound like a lot to handle? It isn't -- Eigenstate is **really easy**. What's more, it requires almost no wiring to set up, debug, or embed. It is also pre-configured for React, and requires no other libraries or packages to work.
+* Listenable "action" and "update" events
+* Synchronous update batching (so it's fast)
 
 ## how to use + examples
 
@@ -20,7 +20,7 @@ Define application state *methods* and *values* in an object, and pass that to a
 Here's a tiny example application that uses Eigenstate. (If you've already read the examples, the concepts are [here](https://github.com/8balloon/eigenstate#architecture-overview).)
 
 ```js
-// simple React + Eigenstate counter application
+// minimal React + Eigenstate counter application
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'eigenstate'
@@ -148,6 +148,17 @@ ACTION vs UPDATE
 ADDRESS SIDE EFFECTS (maybe: procedures vs updates?)
 eigenstate for redux users? (focus on actions)
 React-router example
+"Synchronous updates will be batched"
+
+API
+Provider
+  * stateDef
+    * values
+    * methods
+  * onAction
+  * onUpdate
+logAction
+connect
 
 ### @connect
 
