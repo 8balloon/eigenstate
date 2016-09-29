@@ -1,4 +1,3 @@
-import objectAssign from 'object-assign'
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
 
@@ -33,7 +32,7 @@ export default function Eigenstate(stateDef, onAction, setState) {
         assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
         assert.methodReturnFitsStateDef(localMethodReturn, localStateDef, key, path)
 
-        nextLocalState = objectAssign({}, localState, localMethodReturn)
+        nextLocalState = Object.assign({}, localState, localMethodReturn)
 
         eigenstate = mutSetValueByPath(eigenstate, path, nextLocalState)
 

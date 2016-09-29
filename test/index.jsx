@@ -5,8 +5,9 @@ requireAll(require.context('./', true, /s?css$/));
 import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Router, Route, hashHistory, Link } from 'react-router'
 
-import { Provider, logAction } from '../src'
+import { Provider, logAction, connect } from '../src'
 
 import GeneratedStateDef from './GeneratedStateDef'
 import SimpleCounter from './SimpleCounter'
@@ -16,9 +17,25 @@ import ErroringCounter from './ErroringCounter'
 import ConnectComparison from './ConnectComparison'
 import Todos from './Todos'
 
-ReactDOM.render(
-  <div className="apps">
+const indexStateDef = {
+  hw: null,
+  armHelloWorld: (_, state) => ({hw: 'hello, world'})
+}
 
+const ReactRouterTester = (props) => (
+  <div className="reactRouterTester">
+    ROUTE TEST ({props.hw})
+    <Link to="/kids">Link to children</Link>
+    <Link to="/">Link away from children</Link>
+    <div onClick={props.armHelloWorld}>arm hello world</div>
+    {props.children}
+  </div>
+)
+
+const Kids = () => <div>KIDS</div>
+
+const Apps = (props) => (
+  <div className="apps">
     <GeneratedStateDef />
     <SimpleCounter />
     <Grid />
@@ -26,7 +43,19 @@ ReactDOM.render(
     <ErroringCounter />
     <ConnectComparison />
     <Todos />
+    <ReactRouterTester {...props} />
+  </div>
+)
 
-  </div>,
+const StatefulApps = connect(Apps)
+
+ReactDOM.render(
+  <Provider stateDef={indexStateDef}>
+    <Router history={hashHistory}>
+      <Route path="/" component={StatefulApps}>
+        <Route path="kids" component={Kids} />
+      </Route>
+    </Router>
+  </Provider>,
   document.getElementById('react-root')
 )

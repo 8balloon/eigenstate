@@ -26,7 +26,6 @@ export function onActionPropIsFunction(onAction) {
 }
 
 export function stateDoesNotConflictWithProps(state, props, key) {
-  //props is likely (hopefully) smaller
   for (var key in props) {
     if (key in state) {
       console.warn(errorMessages.statePropConflict(key))

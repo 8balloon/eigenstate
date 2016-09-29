@@ -1,5 +1,3 @@
-import objectAssign from 'object-assign'
-
 export function isObject(value) {
 
   return typeof value === 'object' && value !== null
@@ -11,7 +9,7 @@ function mapObjectValues(obj, mapFunction) {
 
   if (Object.keys(obj).length === 0) return obj //error below if no keys
 
-  return objectAssign.apply({},
+  return Object.assign.apply({},
     Object.keys(obj).map(key => ({
       [key]: mapFunction(obj[key], key, obj)
     }))

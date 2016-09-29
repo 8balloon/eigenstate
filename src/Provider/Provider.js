@@ -1,5 +1,4 @@
 import React from 'react'
-import objectAssign from 'object-assign'
 import * as assert from '../validation/assertions'
 import Store from './Store'
 
@@ -13,9 +12,9 @@ export class Provider extends React.Component {
     this.onUpdate = onUpdate
 
     const storeParams = {
+      stateDef,
       onAction: (event) => this.onAction && this.onAction(event),
-      onUpdate: (update) => this.onUpdate && this.onUpdate(update),
-      stateDef
+      onUpdate: (update) => this.onUpdate && this.onUpdate(update)
     }
 
     this.store = Store(storeParams, (callOnUpdateWithState) => {
@@ -53,7 +52,7 @@ export class Provider extends React.Component {
 
     assert.stateDoesNotConflictWithProps(eigenstate, this.props)
 
-    const childProps = objectAssign({}, eigenstate, this.props)
+    var childProps = Object.assign({}, eigenstate, this.props)
 
     return React.cloneElement(this.props.children, childProps)
   }

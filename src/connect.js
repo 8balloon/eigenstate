@@ -1,5 +1,4 @@
 import React from 'react'
-import objectAssign from 'object-assign'
 import * as assert from './validation/assertions'
 
 export function connect(Component) {
@@ -14,7 +13,7 @@ export function connect(Component) {
 
       assert.stateDoesNotConflictWithProps(this.context.eigenstate, this.props)
 
-      const componentProps = objectAssign({},
+      const componentProps = Object.assign({},
         this.context.providerProps,
         this.context.eigenstate,
         this.props
