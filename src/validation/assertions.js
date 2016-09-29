@@ -36,7 +36,7 @@ export function stateDoesNotConflictWithProps(state, props, key) {
 
 export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
 
-  if (illegalSecondArgument !== undefined) {
+  if (typeof illegalSecondArgument !== 'undefined') {
     throw new Error(errorMessages.tooManyMethodArguments(key))
   }
 }

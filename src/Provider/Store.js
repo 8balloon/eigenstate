@@ -1,14 +1,17 @@
 import { graftState } from '../utils'
 import Eigenstate from './Eigenstate'
 
-export default function Store({stateDef, onAction, onUpdate}, onUpdateCallback) {
+export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware) {
 
   var eigenstate = null
     , cbIntervalID = null
     // , updatesBatched = 0
 
   const noop = () => {}
-  const callOnUpdateWithState = !onUpdate ? noop : () => onUpdate(eigenstate)
+  const callOnUpdateWithState = onUpdate === undefined ? noop : () => onUpdate(eigenstate)
+  const callOnUpdate = typeof onUpdateMiddleWare === 'undefined' ?
+    () => onUpdateMiddleware(callOnUpdateWithState) :
+    () => callOnUpdateWithState()
 
   const getState = () => eigenstate
   const setState = (state, callerCallback) => {
@@ -18,7 +21,7 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateCallback) 
     cbIntervalID && clearInterval(cbIntervalID)
     cbIntervalID = setInterval(() => {
 
-      onUpdateCallback(callOnUpdateWithState)
+      callOnUpdate()
 
       clearInterval(cbIntervalID)
       cbIntervalID = null

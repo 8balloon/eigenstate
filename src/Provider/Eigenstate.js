@@ -8,7 +8,7 @@ export default function Eigenstate(stateDef, onAction, setState) {
   onAction && assert.onActionPropIsFunction(onAction)
 
   var latestInvocationID = 0
-  var setStateTimeout = undefined
+  var setStateTimeout = null
 
   var eigenstate = mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
