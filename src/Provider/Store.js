@@ -4,22 +4,26 @@ import Eigenstate from './Eigenstate'
 export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware) {
 
   var eigenstate = null
-    , cbIntervalID = null
-    , actionCache = []
+  var actionCache = []
 
-  const callOnAction = (action) => {
-    actionCache.push(action)
-    onAction(action)
-  }
 
-  const noop = () => {}
-  const callOnUpdateWithState = onUpdate === undefined ? noop : () => {
+  const callOnAction = onUpdate === undefined ? onAction :
+    (action) => {
+      actionCache.push(action)
+      onAction(action)
+    }
+
+
+  let noop = () => {}
+  let callOnUpdateWithParams = onUpdate === undefined ? noop : () => {
     onUpdate(eigenstate, actionCache)
     actionCache = []
   }
-  const callOnUpdate = () => onUpdateMiddleware(callOnUpdateWithState)
+  const callOnUpdate = () => onUpdateMiddleware(callOnUpdateWithParams)
 
-  const getState = () => eigenstate
+
+
+  var cbIntervalID = null
   const setState = (state, callerCallback) => {
 
     eigenstate = state
@@ -34,20 +38,20 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware
     }, 0)
   }
 
+
   const updateStateDef = (newStateDef) => {
 
-    const lastEigenstate = eigenstate
+    let lastEigenstate = eigenstate
     eigenstate = Eigenstate(newStateDef, onAction, setState)
     graftState(eigenstate, lastEigenstate)
   }
 
-  const store = {
-    getState,
-    setState,
-    updateStateDef
-  }
 
   eigenstate = Eigenstate(stateDef, callOnAction, setState)
 
-  return store
+  return {
+    getState: () => eigenstate,
+    setState,
+    updateStateDef
+  }
 }

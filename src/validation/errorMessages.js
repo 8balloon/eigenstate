@@ -13,19 +13,19 @@ export function providerPropLocalPropConflict(key) {
 }
 
 export function tooManyMethodArguments(key, path) {
-  return `Method "${key}" at path "${path}" was called with multiple arguments. Methods may only be invoked with a single argument. See ${documentationURL}`
+  return `The method "${path.join('.') + '.' + key}" was called with multiple arguments. Methods may only be invoked with a single argument. See ${documentationURL}`
 }
 
 export function methodDidNotReturnObject(key, path) {
-  return `Method "${key}" at path "${path}" did not return an object. Values must be returned via { key: value } objects. See ${documentationURL}`
+  return `The method "${path.join('.') + '.' + key}" did not return an object. Values must be returned via { key: value } objects. See ${documentationURL}`
 }
 
 export function methodWasOverwritten(key, path, localKey) {
-  return `Method "${key}" at path "${path}" returned a value which overwrote a method at key "${localKey}". Methods may not be overwritten.`
+  return `The method "${path.join('.') + '.' + key}" returned a value with key "${localKey}", which is the key of a method. Methods can not be overridden by values.`
 }
 
 export function operationInvokedOtherMethod(key, path) {
-  return `Method ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Methods should return a value XOR call other methods. See ${documentationURL}`
+  return `The method "${path.join('.') + '.' + key}" invoked another method before returning. This will result in an inconsistent application state. Methods must return a value XOR call other methods. See ${documentationURL}`
 }
 
 export function methodReturnIsNotJSON(key, path) {
