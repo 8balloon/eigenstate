@@ -1,6 +1,6 @@
 import { Provider, logAction} from '../../src'
 
-const isMinSize = ({rows, columns}) => rows.length === 1 && columns.length === 1
+const isMinSize = ({rows, columns}) => rows.length <= 1 && columns.length <= 1
 
 const stateDef = {
 

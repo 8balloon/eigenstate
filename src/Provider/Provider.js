@@ -23,8 +23,12 @@ export class Provider extends React.Component {
   }
 
   getChildContext() {
+
+    var providerProps = Object.assign({}, this.props)
+    delete providerProps.children
+
     return {
-      providerProps: this.props,
+      providerProps,
       eigenstate: this.store.getState()
     }
   }
@@ -53,8 +57,12 @@ export class Provider extends React.Component {
     assert.eigenstateDoesNotConflictWithProps(eigenstate, this.props)
 
     var childProps = Object.assign({}, eigenstate, this.props)
+    delete childProps.children //so we don't pass children to themselves
 
-    return React.cloneElement(this.props.children, childProps)
+    return React.cloneElement(
+      React.Children.only(this.props.children),
+      childProps
+    )
   }
 }
 
