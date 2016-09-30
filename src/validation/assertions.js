@@ -71,3 +71,12 @@ export function methodReturnFitsStateDef(newState, stateDefinitions, key, path) 
     containsNoFunctions(statePropertyDefinition, errorMessages.methodWasOverwritten(key, path, localKey))
   }
 }
+
+export function isJSON(value, key, path) {
+  try {
+    JSON.stringify(value)
+  }
+  catch (err) {
+    throw new Error(errorMessages.methodReturnIsNotJSON(key, path))
+  }
+}

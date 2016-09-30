@@ -23,3 +23,7 @@ export function methodWasOverwritten(key, path, localKey) {
 export function operationInvokedOtherMethod(key, path) {
   return `Method ${key} at path ${path} is incorrectly composed, and will result in an inconsistent state when used. Methods should return a value XOR call other methods. See ${documentationURL}`
 }
+
+export function methodReturnIsNotJSON(key, path) {
+  return `Method ${key} at path ${path} returned a non-JSON value. Eigentreee does not support non-JSON values. See ${documentationURL}`
+}

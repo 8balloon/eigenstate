@@ -9,7 +9,6 @@ export function logAction(action) {
     nextLocalState
   } = action
 
-  console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- METHOD CALLED`)
-  console.log('payload / return:', payload, returnValue)
+  console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- METHOD CALLED with payload / return:`, payload, returnValue)
   console.log('local state before / after:', localState, nextLocalState)
 }

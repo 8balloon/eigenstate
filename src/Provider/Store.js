@@ -9,9 +9,7 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware
 
   const noop = () => {}
   const callOnUpdateWithState = onUpdate === undefined ? noop : () => onUpdate(eigenstate)
-  const callOnUpdate = typeof onUpdateMiddleWare === 'undefined' ?
-    () => onUpdateMiddleware(callOnUpdateWithState) :
-    () => callOnUpdateWithState()
+  const callOnUpdate = () => onUpdateMiddleware(callOnUpdateWithState)
 
   const getState = () => eigenstate
   const setState = (state, callerCallback) => {
