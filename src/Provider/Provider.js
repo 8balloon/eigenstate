@@ -50,7 +50,7 @@ export class Provider extends React.Component {
 
     const eigenstate = this.store.getState()
 
-    assert.stateDoesNotConflictWithProps(eigenstate, this.props)
+    assert.eigenstateDoesNotConflictWithProps(eigenstate, this.props)
 
     var childProps = Object.assign({}, eigenstate, this.props)
 

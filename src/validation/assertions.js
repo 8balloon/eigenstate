@@ -25,10 +25,18 @@ export function onActionPropIsFunction(onAction) {
   }
 }
 
-export function stateDoesNotConflictWithProps(state, props, key) {
+export function eigenstateDoesNotConflictWithProps(state, props) {
   for (var key in props) {
     if (key in state) {
-      console.warn(errorMessages.statePropConflict(key))
+      console.warn(errorMessages.eigenstatePropConflict(key))
+    }
+  }
+}
+
+export function providerPropsDoesNotConflictWithProps(providerProps, props) {
+  for (var key in providerProps) {
+    if (key in props) {
+      console.warn(errorMessages.providerPropLocalPropConflict(key))
     }
   }
 }

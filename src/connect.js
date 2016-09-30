@@ -11,11 +11,12 @@ export function connect(Component) {
 
     render() {
 
-      assert.stateDoesNotConflictWithProps(this.context.eigenstate, this.props)
+      assert.eigenstateDoesNotConflictWithProps(this.context.eigenstate, this.props)
+      assert.providerPropsDoesNotConflictWithProps(this.context.providerProps, this.props)
 
       const componentProps = Object.assign({},
-        this.context.providerProps,
         this.context.eigenstate,
+        this.context.providerProps,
         this.props
       )
 
