@@ -44,7 +44,10 @@ const Grid = (props) => {
 
 export default function GridApp() {
   return (
-    <Provider stateDef={stateDef} onAction={logAction}>
+    <Provider stateDef={stateDef} onAction={logAction}
+      onUpdate={(state, actions) => {
+        console.log("GRID ONUPDATE STATE/ACTIONS:", state, actions)
+      }}>
       <Grid />
     </Provider>
   )

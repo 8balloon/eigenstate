@@ -5,10 +5,18 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware
 
   var eigenstate = null
     , cbIntervalID = null
-    // , updatesBatched = 0
+    , actionCache = []
+
+  const callOnAction = (action) => {
+    actionCache.push(action)
+    onAction(action)
+  }
 
   const noop = () => {}
-  const callOnUpdateWithState = onUpdate === undefined ? noop : () => onUpdate(eigenstate)
+  const callOnUpdateWithState = onUpdate === undefined ? noop : () => {
+    onUpdate(eigenstate, actionCache)
+    actionCache = []
+  }
   const callOnUpdate = () => onUpdateMiddleware(callOnUpdateWithState)
 
   const getState = () => eigenstate
@@ -23,10 +31,7 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware
 
       clearInterval(cbIntervalID)
       cbIntervalID = null
-      // console.log("!!!UPDATES BATCHED:", updatesBatched)
-      // updatesBatched = 0
     }, 0)
-    // updatesBatched++
   }
 
   const updateStateDef = (newStateDef) => {
@@ -42,7 +47,7 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware
     updateStateDef
   }
 
-  eigenstate = Eigenstate(stateDef, onAction, setState)
+  eigenstate = Eigenstate(stateDef, callOnAction, setState)
 
   return store
 }

@@ -14,7 +14,7 @@ export class Provider extends React.Component {
     const storeParams = {
       stateDef,
       onAction: (event) => this.onAction && this.onAction(event),
-      onUpdate: (update) => this.onUpdate && this.onUpdate(update)
+      onUpdate: (update, actions) => this.onUpdate && this.onUpdate(update, actions)
     }
 
     this.store = Store(storeParams, (callOnUpdateWithState) => {
