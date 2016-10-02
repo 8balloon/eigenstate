@@ -18,13 +18,13 @@ import ConnectComparison from './ConnectComparison'
 import Todos from './Todos'
 
 const indexStateDef = {
-  hw: null,
-  armHelloWorld: (_, state) => ({hw: 'hello, world'})
+  helloWorld: null,
+  armHelloWorld: (_, state) => ({helloWorld: 'hello, world'})
 }
 
 const ReactRouterTester = (props) => (
   <div className="reactRouterTester">
-    ROUTE TEST ({props.hw})
+    ROUTE TEST ({props.helloWorld})
     <Link to="/kids">Link to children</Link>
     <Link to="/">Link away from children</Link>
     <div onClick={props.armHelloWorld}>arm hello world</div>
@@ -32,7 +32,11 @@ const ReactRouterTester = (props) => (
   </div>
 )
 
-const Kids = () => <div>KIDS</div>
+const Kids = (props) => {
+  return (
+    <div>KIDS</div>
+  )
+}
 
 const Apps = (props) => (
   <div className="apps">

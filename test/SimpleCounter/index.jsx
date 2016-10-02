@@ -5,6 +5,7 @@ Your application's state definition.
 This state definition has 1 value and 1 method.
 */
 const counterStateDef = {
+  helloWorld: 'FromNearestAncestor',
   count: 0,
   increment: (amount, state) => ({ count: state.count + amount }),
   delayedIncrement: (payload, state) => {
@@ -17,15 +18,20 @@ const counterStateDef = {
 Your application's view component.
 When used as a child of the Eigenstate Provider, it will have access to your state values and methods via "props"
 */
-const CounterView = (props) => (
-  <div className="simpleCounter" style={{backgroundColor: 'orange'}}>
-    { props.count }
-    <div onClick={() => props.increment(1)}> INCREMENT </div>
-    <div onClick={() => props.delayedIncrement({ amount: 5, delay: 1000 })}>
-      DELAYED INCREMENT
+const CounterView = (props) => {
+
+  console.log("HELLO WORLD RESULT:", props.helloWorld)
+
+  return (
+    <div className="simpleCounter" style={{backgroundColor: 'orange'}}>
+      { props.count }
+      <div onClick={() => props.increment(1)}> INCREMENT </div>
+      <div onClick={() => props.delayedIncrement({ amount: 5, delay: 1000 })}>
+        DELAYED INCREMENT
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 /*
 Eigenstate's Provider creates your state object for you.
