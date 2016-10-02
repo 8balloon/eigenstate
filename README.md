@@ -1,14 +1,14 @@
 # Eigenstate
 
-Eigenstate is a [Flux](https://facebook.github.io/flux/) alternative. Eigenstate supports *methods*, which are flexible, user-defined functions that transform application state.
+Eigenstate is a [Redux](https://github.com/reactjs/redux) alternative. 
 
-Eigenstate methods require less repetitive code than analogous state-control mechanisms, such as [Redux](https://github.com/reactjs/redux) actions. Methods can be used synchronously or asynchronously, no setup required.
+Redux requires you to explicitly create actions, handle them through middleware, and parse them via a root reducer. Eigenstate does all of this for you, letting you call reducers and asynchronous procedures directly via *methods*.
 
-Eigenstate comes pre-configured for React, and has no other dependencies. It is easy to set up, debug, and embed.
+Besides being simpler, this allow you to organize your application by concept rather than sync/async distinctions.
 
 ## features
 
-* Asynchronous / pure functional state changes
+* Pure functional / asynchronous state changes
 * Listenable "action" and "update" events
 * Synchronous update batching (so it's fast)
 * Composable state objects and methods
