@@ -20,6 +20,11 @@ export class Provider extends React.Component {
     this.store = Store(storeParams, (callOnUpdateWithState) => {
       this.forceUpdate(callOnUpdateWithState)
     })
+
+    assert.eigenstateDoesNotOverrideParentContext(
+      this.store.getState(),
+      context.eigenstate
+    )
   }
 
   getChildContext() {
@@ -55,6 +60,10 @@ export class Provider extends React.Component {
       eigenstate
     )
   }
+}
+
+Provider.contextTypes = {
+  eigenstate: React.PropTypes.object
 }
 
 Provider.childContextTypes = {

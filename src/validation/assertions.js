@@ -65,10 +65,25 @@ export function methodReturnFitsStateDef(newState, stateDefinitions, key, path) 
 }
 
 export function isJSON(value, key, path) {
+
   try {
     JSON.stringify(value)
   }
   catch (err) {
     throw new Error(errorMessages.methodReturnIsNotJSON(key, path))
+  }
+}
+
+export function eigenstateDoesNotOverrideParentContext(eigenstate, parentEigenstate) {
+
+  if (parentEigenstate === undefined) {
+    return
+  }
+  else {
+    for (var localKey in eigenstate) {
+      if (localKey in parentEigenstate) {
+        throw new Error(errorMessages.eigenstateConflictsWithParentContext(localKey))
+      }
+    }
   }
 }
