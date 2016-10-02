@@ -25,7 +25,7 @@ export default function Eigenstate(stateDef, onAction, setState) {
 
       const localMethodReturn = method(payload, localState)
 
-      localMethodReturn && assert.isJSON(localMethodReturn, key, path)
+      localMethodReturn && assert.returnIsJSON(localMethodReturn, key, path)
 
       var nextLocalState = undefined
 

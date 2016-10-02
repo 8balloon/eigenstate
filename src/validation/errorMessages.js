@@ -1,19 +1,17 @@
 const documentationURL = 'https://github.com/8balloon/switchless/blob/master/README.md'
 
-export const stateDefIsNotObject = "A stateDef object is required by the Eigenstate Provider"
-export const methodsLeavesNotFunctions = 'Switchless Provider.props.methods must contain values that are Functions'
-export const onMethodPropIsNotFunction = 'Switchless Provider onMethod must be a Function'
+export const stateDefIsNotObject = "No stateDef prop was detected by the Eigenstate Provider. Did you provide a stateDef via <Provider stateDef={yourStateDef}> ?"
 
 export function tooManyMethodArguments(key, path) {
-  return `The method "${path.join('.') + '.' + key}" was called with multiple arguments. Methods may only be invoked with a single argument. See ${documentationURL}`
+  return `Multiple arguments were passed to "${path.join('.') + '.' + key}". Eigenstate provides a second argument automatically, so passing multiple arguments is not supported. Did you remember to pass only a single argument?`
 }
 
 export function methodDidNotReturnObject(key, path) {
-  return `The method "${path.join('.') + '.' + key}" did not return an object. Values must be returned via { key: value } objects. See ${documentationURL}`
+  return `The method "${path.join('.') + '.' + key}" did not return an object. Did you remember to wrap your return values in a { key: value } object? See ${documentationURL}`
 }
 
 export function methodWasOverwritten(key, path, localKey) {
-  return `The method "${path.join('.') + '.' + key}" returned a value with key "${localKey}", which is the key of a method. Methods can not be overridden by values.`
+  return `The method "${path.join('.') + '.' + key}" returned a value with key "${localKey}", which appears to be a method. Did you make sure that your { key: value } keys do not conflict with method keys?`
 }
 
 export function operationInvokedOtherMethod(key, path) {

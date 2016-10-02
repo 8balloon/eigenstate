@@ -1,16 +1,6 @@
 import { isObject, mapObjectTreeLeaves } from '../utils'
 import * as errorMessages from './errorMessages'
 
-export function leavesAreFunctions(objTree, errorMessage) {
-
-  mapObjectTreeLeaves(objTree, (val, key, path) => {
-
-    if (!(val instanceof Function)) {
-      throw new Error(errorMessage + '(At: ' + path.join('.') + '.' + key + ')')
-    }
-  })
-}
-
 export function stateDefIsObject(stateDef) {
 
   if (!(isObject(stateDef))) {
@@ -64,7 +54,8 @@ export function methodReturnFitsStateDef(newState, stateDefinitions, key, path) 
   }
 }
 
-export function isJSON(value, key, path) {
+export function returnIsJSON(value, key, path) {
+
   try {
     JSON.stringify(value)
   }
