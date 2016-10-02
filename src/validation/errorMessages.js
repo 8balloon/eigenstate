@@ -4,10 +4,6 @@ export const stateDefIsNotObject = "A stateDef object is required by the Eigenst
 export const methodsLeavesNotFunctions = 'Switchless Provider.props.methods must contain values that are Functions'
 export const onMethodPropIsNotFunction = 'Switchless Provider onMethod must be a Function'
 
-export function eigenstatePropConflict(key) {
-  return `There was a conflict between state "${key}" and prop "${key}" on an Eigenstate <Provider> child or an Eigenstate connect()ed component. You are encouraged to avoid state/prop conflicts. State is being overridden by props.`
-}
-
 export function tooManyMethodArguments(key, path) {
   return `The method "${path.join('.') + '.' + key}" was called with multiple arguments. Methods may only be invoked with a single argument. See ${documentationURL}`
 }

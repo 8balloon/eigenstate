@@ -25,14 +25,6 @@ export function onActionPropIsFunction(onAction) {
   }
 }
 
-export function eigenstateDoesNotConflictWithProps(state, props) {
-  for (var key in props) {
-    if (key in state) {
-      console.warn(errorMessages.eigenstatePropConflict(key))
-    }
-  }
-}
-
 export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
 
   if (typeof illegalSecondArgument !== 'undefined') {

@@ -50,14 +50,9 @@ export class Provider extends React.Component {
 
     const eigenstate = this.store.getState()
 
-    assert.eigenstateDoesNotConflictWithProps(eigenstate, this.props)
-
-    var childProps = Object.assign({}, eigenstate, this.props)
-    delete childProps.children //so we don't pass children to themselves
-
     return React.cloneElement(
       React.Children.only(this.props.children),
-      childProps
+      eigenstate
     )
   }
 }

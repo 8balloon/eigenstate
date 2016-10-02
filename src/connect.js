@@ -11,8 +11,6 @@ export function connect(Component) {
 
     render() {
 
-      assert.eigenstateDoesNotConflictWithProps(this.context.eigenstate, this.props)
-
       const componentProps = Object.assign({},
         this.context.eigenstate,
         this.props //children good, since it's children of what we're creating
