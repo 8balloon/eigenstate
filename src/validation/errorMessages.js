@@ -8,10 +8,6 @@ export function eigenstatePropConflict(key) {
   return `There was a conflict between state "${key}" and prop "${key}" on an Eigenstate <Provider> child or an Eigenstate connect()ed component. You are encouraged to avoid state/prop conflicts. State is being overridden by props.`
 }
 
-export function providerPropLocalPropConflict(key) {
-  return `There was a conflict between Provider property "${key}" and local property "${key}" on a connect()ed component. You are encouraged to avoid Provider/local prop conflicts. Provider prop is being is being overridden by local prop.`
-}
-
 export function tooManyMethodArguments(key, path) {
   return `The method "${path.join('.') + '.' + key}" was called with multiple arguments. Methods may only be invoked with a single argument. See ${documentationURL}`
 }

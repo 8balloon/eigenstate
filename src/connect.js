@@ -12,11 +12,9 @@ export function connect(Component) {
     render() {
 
       assert.eigenstateDoesNotConflictWithProps(this.context.eigenstate, this.props)
-      assert.providerPropsDoesNotConflictWithProps(this.context.providerProps, this.props)
 
       const componentProps = Object.assign({},
         this.context.eigenstate,
-        this.context.providerProps,
         this.props //children good, since it's children of what we're creating
       )
 
@@ -25,7 +23,6 @@ export function connect(Component) {
   }
 
   Connect.contextTypes = {
-    providerProps: React.PropTypes.object.isRequired,
     eigenstate: React.PropTypes.object.isRequired
   }
 

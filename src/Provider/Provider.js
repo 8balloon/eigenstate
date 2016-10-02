@@ -24,11 +24,7 @@ export class Provider extends React.Component {
 
   getChildContext() {
 
-    var providerProps = Object.assign({}, this.props)
-    delete providerProps.children
-
     return {
-      providerProps,
       eigenstate: this.store.getState()
     }
   }
@@ -67,6 +63,5 @@ export class Provider extends React.Component {
 }
 
 Provider.childContextTypes = {
-  providerProps: React.PropTypes.object.isRequired,
   eigenstate: React.PropTypes.object.isRequired
 }

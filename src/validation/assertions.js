@@ -33,14 +33,6 @@ export function eigenstateDoesNotConflictWithProps(state, props) {
   }
 }
 
-export function providerPropsDoesNotConflictWithProps(providerProps, props) {
-  for (var key in providerProps) {
-    if (key in props) {
-      console.warn(errorMessages.providerPropLocalPropConflict(key))
-    }
-  }
-}
-
 export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
 
   if (typeof illegalSecondArgument !== 'undefined') {
