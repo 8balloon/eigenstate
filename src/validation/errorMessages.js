@@ -23,7 +23,3 @@ export function operationInvokedOtherMethod(key, path) {
 export function methodReturnIsNotJSON(key, path) {
   return `Method ${key} at path ${path} returned a non-JSON value. Eigentreee does not support non-JSON values. See ${documentationURL}`
 }
-
-export function eigenstateConflictsWithParentContext(key) {
-  return `The state property "${key}" in a Provider conflicts with a key in an ancestor Provider. Eigenstate does not support conflicting state between Providers. Please change one of the keys you are using.`
-}
