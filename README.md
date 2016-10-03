@@ -1,10 +1,10 @@
 # Eigenstate
 
-Eigenstate is a [Redux](https://github.com/reactjs/redux) alternative. 
+Eigenstate is a [Redux](https://github.com/reactjs/redux) alternative.
 
-Redux requires you to explicitly create actions, handle them through middleware, and parse them via a root reducer. Eigenstate does all of this for you, letting you call reducers and asynchronous procedures directly via *methods*.
+Redux requires you to explicitly create actions, pass them through middleware for asynchronous effects, and parse them via a root reducer to trigger state changes. Eigenstate does all of this for you, letting you call reducers and asynchronous procedures directly via *methods*.
 
-Besides being simpler, this allow you to organize your application by concept rather than sync/async distinctions.
+Besides being simpler, this allows you to organize your code by concept rather than sync/async distinctions.
 
 ## features
 
@@ -13,39 +13,28 @@ Besides being simpler, this allow you to organize your application by concept ra
 * Synchronous update batching (so it's fast)
 * Composable state objects and methods
 
-## how to use
+## how to use + example 1
 
-Define application state *methods* and *values* in an object, and pass that to a ```Provider```. ```Provider``` will give your view component access to values and methods via ```props```, as shown in the example below.
+Define your state's *methods* and *values* in an object, and pass that to a ```Provider```. The ```Provider``` provides access to these methods and values via ```props```, as shown in the example below.
 
-This the heart of Eigenstate. If you need to extend control of your application state, you can do so via a few other properties and exports, as detailed in the section on Eigenstate's complete [API](https://github.com/8balloon/eigenstate#API).
-
-## example
+See if you can understand the example before reading the explanation underneath.
 
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'eigenstate'
 
-/*
-Your application's state definition.
-Application state is automatically passed to methods via their second parameter.
-*/
+// 1
 const stateDef = {
-  // a value
   count: 0,
-  // a pure functional method
   increment: (amount, state) => ({ count: state.count + amount }),
-  // an asynchronous method that calls another method
   delayedIncrement: (payload, state) => {
     const { amount, delay } = payload
     setTimeout(() => state.increment(amount), delay)
   }
 }
 
-/*
-Your application's view component.
-It will be provided access to state via "props", as shown next
-*/
+// 2
 const View = (props) => (
   <div className="counter">
     { props.count }
@@ -56,10 +45,7 @@ const View = (props) => (
   </div>
 )
 
-/*
-This is a real example of a working application.
-See if you can add a "reset count" feature!
-*/
+// 3
 ReactDOM.render(
   <Provider stateDef={stateDef}>
     <View />
@@ -68,25 +54,37 @@ ReactDOM.render(
 )
 ```
 
-As shown in the example above, a state definition is a simple object. It's made up of ```key: value``` and ```key: method``` pairs.
+1. This is your state definition. It has 1 value (stateDef.count), 1 pure method (stateDef.increment) and 1 impure method (stateDef.delayedIncrement).
 
-**Values** are your application data in JSON form. This means that they can be objects, arrays, numbers, strings, Booleans, or null. Values are passed to the child of a ```Provider``` by their keys, as demonstrated above; the "count" value is accessed in the "counter" div via "props.count".
+2. This is the view component. It is wrapped with an Eigenstate ```Provider``` in 3, and uses the state value (props.count) and state methods (props.increment and props.delayedIncrement).
 
-**Methods** are functions you can call to update your state's values. Like values, you can use methods in your view components via ```props.<key>```. This is demonstrated above: the "increment" method is used in the onClick handler in the div with the content "COUNT UP".
+3. This is how state information is passed to the view component.
 
-Methods can work two ways; they can work as shown above (returning updated state values), or they can do things that have side effects, like calling other methods, or performing asynchronous actions. Here is an example which demonstrates both capacities:
+Notice how the view calls methods using only a single argument. This is because Eigenstate supports only one invocation argument; the second argument (```state```) is provided automatically. The ```state``` a method sees is always the most recent application state.
 
-## advanced example
+## methods in-depth
+
+Methods are how you change your state. They come in two flavors.
+
+  * **pure method** : Methods that return a value, and do nothing else. These are how transform state.
+
+  * **impure methods** : Methods that do other things, like making AJAX calls and calling pure methods with the results of those calls. They should never return a state value.
+
+**Methods must be pure XOR impure.** If Eigenstate detects that a method returns a value but has a side effect, it will throw an error.
+
+**Methods may only be called with a single argument.** Eigenstate will pass the second argument for you. You can fit as much data as you want in a single argument object, so this should never be an issue. (You can see this in example 1, in the onClick handler on the "DELAYED INCREMENT" button.)
+
+## example 2
+
+This example is a grid that you can add rows or columns to, and can shrink down to 1x1 with a shrink animation.
 
 ```js
-/*
-State definition for a "multiple counters" application.
-A count is displayed across a variable number of counters.
-*/
-import { Provider, logVerbosely} from '../../src'
+// 1
+import { Provider, logVerbosely } from 'eigenstate'
 
 const isMinSize = ({rows, columns}) => rows.length <= 1 && columns.length <= 1
 
+// 2
 const gridStateDef = {
 
   rows: [null, null, null],
@@ -94,17 +92,17 @@ const gridStateDef = {
 
   addRow: (_, state) => ({ rows: [].concat(state.rows, [null]) }),
   addColumn: (_, state) => ({ columns:[].concat(state.columns, [null]) }),
-  gridClearTick: (_, state) => ({
+  clearTick: (_, state) => ({
     rows: state.rows.slice(0, -1),
     columns: state.columns.slice(0, -1)
   }),
-
-  gridClear: (_, state) => {
-    state.gridClearTick()
-    if ( !isMinSize(state) ) setTimeout(() => state.gridClear(), 100)
+  clear: (_, state) => {
+    state.clearTick()
+    if ( !isMinSize(state) ) setTimeout(() => state.clear(), 100)
   }
 }
 
+// 3
 const GridView = (props) => {
   return (
     <div className="grid">
@@ -117,40 +115,28 @@ const GridView = (props) => {
           </div>
         ))
       }
-      <div onClick={props.addRow}>Add row</div>
-      <div onClick={props.addColumn}>Add column</div>
-      <div onClick={props.gridClear}>Clear grid</div>
+      <div onClick={props.addRow}> ADD ROW </div>
+      <div onClick={props.addColumn}> ADD COLUMN </div>
+      <div onClick={props.clear}> CLEAR GRID </div>
     </div>
   )
 }
 
+// 4
 ReactDOM.render(
-  <Provider stateDef={gridStateDef} onAction={logVerbosely}>
+  <Provider stateDef={gridStateDef} onUpdate={logVerbosely}>
     <GridView />
   </Provider>,
   document.getElementById('react-root')  
 )
 ```
 
-underscores
-
-*incrementCount*: This method returns the new count value given a numeric parameter. It is important to note that it returns **ONLY** the values it wants to update: *count*. Since it doesn't affect the value of *numCounters*, *numCounters* is left out of the return value. (Redux users: take note.)
-
-*removeCounter*: If the value of *numCounters* is already zero, this method returns nothing, since there's no update that needs to happen.
-
-*delayedIncrement*: This method is illustrates the asynchronous capacity of Eigenstate; it waits *delayMS* milliseconds, and then calls the *incrementCount* method with *incrementAmount*. It could call other methods if it wanted, but here we have reason to.
-
-Note that the arguments to *delayedIncrement* are wrapped in a single *payload* parameter. This is because Eigenstate methods only support being called with a single parameter; the second parameter (*state*) is provided automatically.
-
-## Eigenstate for Redux users
-
-motivation, "action" model differences
-
-Eigenstate was formerly [Switchless](https://github.com/8balloon/switchless).
+1. We're importing Eigenstate's default logger, ```logVerbosely```. We'll use it in 5 to log all updates.
+2. This state definition uses arrays to represent the row count and column count. It has three pure methods and one impure method. You'll notice that the pure methods return new state values; the impure method calls a pure method every 0.1 seconds until the grid is cleared.
+3. Just like in example 1, the view consumes state via ```props``` to show the grid, as well as 3 buttons which allow you to add rows or columns, or to clear the grid using the "gridStateDef.clear" animation.
+4. This is how you use a logger. A logger is just an onUpdate handler. You can see onUpdate detailed in the [API](https://github.com/8balloon/eigenstate#API)
 
 ## API
-
-NOTE: it is recommended that you read the examples before diving into the API directly.
 
 * **Provider** : a React component. A Provider provides state values and methods to its children. It requires the following properties:
 
@@ -177,23 +163,6 @@ nested state (combine first two examples via composition)
 
 ### values
 
-### methods
-  * **pure method** : a function with signature ```(payload, state) => values```, where ```values``` is an object of ```key: value``` pairs.
-ADDRESS SIDE EFFECTS (maybe: procedures vs updates?)
-
-  * **Methods** are functions that update your application state. They can be composed in two ways: as **synchronous operations**, or as **asynchronous procedures**.
-
-  * **Synchronous operations** return updated state values in the form ```{key: updatedValue}```. These values are immediately incorporated into application state, and then passed to your application via Provider children props.
-
-  * **Asynchronous procedures** call other methods via their second parameter (*state*).
-
-  * Methods may only be called with a single argument. Eigenstate provides the second ("state") argument automatically, and will error if you try to provide it yourself.
-
-  * Eigenstate doesn't allow methods to be in a mixed synchronous / asynchronous form. It will throw an error if it detects a method which both calls another method and returns a value
-
-  * Mixed methods are disallowed because they can lead to an inconsistent state. This is possible because the value of *state* in the original method may be inconsistent with the value of *state* in the internal method, which could lead to non-deterministic behavior. Avoid this scenario by ensuring that your methods are either synchronous operations XOR asynchronous procedures.
-
-### onAction
 
 ### onUpdate
 

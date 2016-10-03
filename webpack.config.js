@@ -23,7 +23,6 @@ module.exports = {
     extensions: ['', '.js', '.jsx']
   },
   externals: {
-    react: true,
-    'object-assign': true
+    react: true
   }
 }
