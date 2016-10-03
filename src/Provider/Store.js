@@ -1,10 +1,11 @@
 import { graftState } from '../utils'
 import Eigenstate from './Eigenstate'
 
-export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware) {
+export default function Store({stateDef, onAction, onUpdate}, callAfterUpdate) {
 
   var eigenstate = null
   var actionCache = []
+  var afterEffects = []
 
 
   const callOnAction = onUpdate === undefined ? onAction :
@@ -19,7 +20,7 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware
     onUpdate(eigenstate, actionCache)
     actionCache = []
   }
-  const callOnUpdate = () => onUpdateMiddleware(callOnUpdateWithParams)
+  const callOnUpdate = () => callAfterUpdate(callOnUpdateWithParams)
 
 
 
@@ -33,21 +34,27 @@ export default function Store({stateDef, onAction, onUpdate}, onUpdateMiddleware
 
       callOnUpdate()
 
+      afterEffects.forEach(afterEffect => afterEffect())
+      afterEffects = []
+
       clearInterval(cbIntervalID)
       cbIntervalID = null
     }, 0)
   }
 
 
+  const enqueueAfterEffect = (afterEffect) => afterEffects.push(afterEffect)
+
+
   const updateStateDef = (newStateDef) => {
 
     let lastEigenstate = eigenstate
-    eigenstate = Eigenstate(newStateDef, onAction, setState)
+    eigenstate = Eigenstate(newStateDef, onAction, setState, enqueueAfterEffect)
     graftState(eigenstate, lastEigenstate)
   }
 
 
-  eigenstate = Eigenstate(stateDef, callOnAction, setState)
+  eigenstate = Eigenstate(stateDef, callOnAction, setState, enqueueAfterEffect)
 
   return {
     getState: () => eigenstate,

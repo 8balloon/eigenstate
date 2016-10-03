@@ -1,7 +1,7 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
 
-export default function Eigenstate(stateDef, onAction, setState) {
+export default function Eigenstate(stateDef, onAction, setState, enqueueAfterEffect) {
 
   assert.stateDefIsObject(stateDef)
   onAction && assert.onActionPropIsFunction(onAction)
@@ -25,20 +25,29 @@ export default function Eigenstate(stateDef, onAction, setState) {
 
       const localMethodReturn = method(payload, localState)
 
-      localMethodReturn && assert.returnIsJSON(localMethodReturn, key, path)
-
       var nextLocalState = undefined
 
       if (localMethodReturn !== undefined) { //this method is a synchronous operation
 
-        assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
-        assert.methodReturnFitsStateDef(localMethodReturn, localStateDef, key, path)
+        if (localMethodReturn instanceof Function) {
 
-        nextLocalState = Object.assign({}, localState, localMethodReturn)
+          console.log("WORD")
 
-        eigenstate = mutSetValueByPath(eigenstate, path, nextLocalState)
+          const afterEffect = localMethodReturn
+          enqueueAfterEffect(afterEffect)
+        }
+        else {
 
-        setState(eigenstate)
+          assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
+          assert.returnIsJSON(localMethodReturn, key, path)
+          assert.methodReturnFitsStateDef(localMethodReturn, localStateDef, key, path)
+
+          nextLocalState = Object.assign({}, localState, localMethodReturn)
+
+          eigenstate = mutSetValueByPath(eigenstate, path, nextLocalState)
+
+          setState(eigenstate)
+        }
       }
 
       onAction && onAction({

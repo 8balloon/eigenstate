@@ -17,8 +17,8 @@ export class Provider extends React.Component {
       onUpdate: this.onUpdate || (() => {})
     }
 
-    this.store = Store(storeParams, (callOnUpdateWithState) => {
-      this.forceUpdate(callOnUpdateWithState)
+    this.store = Store(storeParams, (postUpdateCallback) => {
+      this.forceUpdate(postUpdateCallback)
     })
   }
 
