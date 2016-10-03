@@ -1,27 +1,19 @@
 import { graftState } from '../utils'
 import Eigenstate from './Eigenstate'
 
-export default function Store({stateDef, onAction, onUpdate}, callAfterUpdate) {
+export default function Store({stateDef, onUpdate}, callAfterUpdate) {
 
   var eigenstate = null
-  var actionCache = []
+  var changes = []
   var afterEffects = []
 
 
-  const callOnAction = onUpdate === undefined ? onAction :
-    (action) => {
-      actionCache.push(action)
-      onAction(action)
-    }
-
-
   let noop = () => {}
-  let callOnUpdateWithParams = onUpdate === undefined ? noop : () => {
-    onUpdate(eigenstate, actionCache)
-    actionCache = []
+  let callOnUpdateWithChanges = onUpdate === undefined ? noop : () => {
+    onUpdate(changes)
+    changes = []
   }
-  const callOnUpdate = () => callAfterUpdate(callOnUpdateWithParams)
-
+  const callOnUpdate = () => callAfterUpdate(callOnUpdateWithChanges)
 
 
   var cbIntervalID = null
@@ -43,18 +35,24 @@ export default function Store({stateDef, onAction, onUpdate}, callAfterUpdate) {
   }
 
 
+  const recordChange = (change) => changes.push(change)
+
   const enqueueAfterEffect = (afterEffect) => afterEffects.push(afterEffect)
 
 
   const updateStateDef = (newStateDef) => {
 
     let lastEigenstate = eigenstate
-    eigenstate = Eigenstate(newStateDef, onAction, setState, enqueueAfterEffect)
+    eigenstate = Eigenstate({
+      stateDef: newStateDef,
+      setState,
+      recordChange,
+      enqueueAfterEffect
+    })
     graftState(eigenstate, lastEigenstate)
   }
 
-
-  eigenstate = Eigenstate(stateDef, callOnAction, setState, enqueueAfterEffect)
+  eigenstate = Eigenstate({stateDef, setState, recordChange, enqueueAfterEffect})
 
   return {
     getState: () => eigenstate,

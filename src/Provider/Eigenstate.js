@@ -1,10 +1,9 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
 
-export default function Eigenstate(stateDef, onAction, setState, enqueueAfterEffect) {
+export default function Eigenstate({stateDef, setState, recordChange, enqueueAfterEffect} ) {
 
   assert.stateDefIsObject(stateDef)
-  onAction && assert.onActionPropIsFunction(onAction)
 
   var latestInvocationID = 0
   var setStateTimeout = null
@@ -31,8 +30,6 @@ export default function Eigenstate(stateDef, onAction, setState, enqueueAfterEff
 
         if (localMethodReturn instanceof Function) {
 
-          console.log("WORD")
-
           const afterEffect = localMethodReturn
           enqueueAfterEffect(afterEffect)
         }
@@ -50,7 +47,7 @@ export default function Eigenstate(stateDef, onAction, setState, enqueueAfterEff
         }
       }
 
-      onAction && onAction({
+      recordChange({
         methodKey: key,
         methodPath: path,
         payload,

@@ -7,7 +7,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, hashHistory, Link } from 'react-router'
 
-import { Provider, logAction, connect } from '../src'
+import { Provider, logVerbosely, connect } from '../src'
 
 import GeneratedStateDef from './GeneratedStateDef'
 import SimpleCounter from './SimpleCounter'

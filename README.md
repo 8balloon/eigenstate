@@ -83,7 +83,7 @@ Methods can work two ways; they can work as shown above (returning updated state
 State definition for a "multiple counters" application.
 A count is displayed across a variable number of counters.
 */
-import { Provider, logAction} from '../../src'
+import { Provider, logVerbosely} from '../../src'
 
 const isMinSize = ({rows, columns}) => rows.length <= 1 && columns.length <= 1
 
@@ -125,7 +125,7 @@ const GridView = (props) => {
 }
 
 ReactDOM.render(
-  <Provider stateDef={gridStateDef} onAction={logAction}>
+  <Provider stateDef={gridStateDef} onAction={logVerbosely}>
     <GridView />
   </Provider>,
   document.getElementById('react-root')  
@@ -168,7 +168,7 @@ NOTE: it is recommended that you read the examples before diving into the API di
 
 * **connect** : a function that accepts a component class, and returns a version of that class that will have access to an ancestor's state via ```props```. See ["connect"](https://github.com/8balloon/eigenstate#connect).
 
-* **logAction** : a function which will log actions in a verbose, legible way if passed to the Provider as an ```onAction``` property. See ["logAction"](https://github.com/8balloon/eigenstate#logAction).
+* **logVerbosely** : a function which will log actions in a verbose, legible way if passed to the Provider as an ```onAction``` property. See ["logVerbosely"](https://github.com/8balloon/eigenstate#logVerbosely).
 
 
 ### stateDef
@@ -205,4 +205,4 @@ This can be used by parent applications, or for other purposes, and provides an 
 
 ### connect
 
-### logAction
+### logVerbosely

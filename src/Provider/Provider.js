@@ -7,13 +7,12 @@ export class Provider extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    const { stateDef, onAction, onUpdate } = props
-    this.onAction = onAction
+    const { stateDef, onUpdate } = props
     this.onUpdate = onUpdate
+    onUpdate && assert.onUpdatePropIsFunction(onUpdate)
 
     const storeParams = {
       stateDef,
-      onAction: this.onAction || (() => {}),
       onUpdate: this.onUpdate || (() => {})
     }
 
@@ -38,7 +37,6 @@ export class Provider extends React.Component {
 
   componentWillReceiveProps(next) {
 
-    this.onAction = next.onAction
     this.onUpdate = next.onUpdate
 
     if (this.props.stateDef !== next.stateDef) {

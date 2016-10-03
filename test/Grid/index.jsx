@@ -1,4 +1,4 @@
-import { Provider, logAction} from '../../src'
+import { Provider, logVerbosely} from '../../src'
 
 const isMinSize = ({rows, columns}) => rows.length <= 1 && columns.length <= 1
 
@@ -44,7 +44,7 @@ const Grid = (props) => {
 
 export default function GridApp() {
   return (
-    <Provider stateDef={stateDef} onAction={logAction}
+    <Provider stateDef={stateDef} onAction={logVerbosely}
       onUpdate={(state, actions) => {
         console.log("GRID ONUPDATE STATE/ACTIONS:", state, actions)
       }}>
