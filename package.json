@@ -1,6 +1,6 @@
 {
   "name": "eigenstate",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "state methods for React",
   "main": "lib/index.js",
   "scripts": {
@@ -29,7 +29,9 @@
   },
   "keywords": [
     "react",
+    "redux",
     "flux",
+    "async",
     "state",
     "object",
     "oriented"
