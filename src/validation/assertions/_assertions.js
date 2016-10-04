@@ -1,5 +1,5 @@
-import { isObject, mapObjectTreeLeaves } from '../utils'
-import * as errorMessages from './errorMessages'
+import { isObject, mapObjectTreeLeaves } from '../../utils'
+import * as errorMessages from '../errorMessages'
 
 export function stateDefIsObject(stateDef) {
 
@@ -49,11 +49,11 @@ function returnIsJSON(value, key, path) {
     JSON.stringify(value)
   }
   catch (err) {
-    throw new Error(errorMessages.methodReturnIsNotJSON(key, path))
+    throw new Error(errorMessages.returnValueIsNotJSON(key, path))
   }
 }
 
-export function methodReturnFitsStateDef(returnValue, stateDefinitions, key, path) {
+export function returnValueFitsStateDef(returnValue, stateDefinitions, key, path) {
 
   returnIsJSON(returnValue, key, path)
 

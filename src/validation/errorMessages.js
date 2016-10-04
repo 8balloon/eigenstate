@@ -16,10 +16,10 @@ export function methodWasOverwritten(key, path, localKey) {
 }
 
 export function operationInvokedOtherMethod(key, path) {
-  return `The method "${path.join('.') + '.' + key}" invoked another method before returning. This will result in an inconsistent application state. Methods must return a value XOR call other methods. See ${documentationURL}`
+  return `The method "${path.join('.') + '.' + key}" invoked another method before returning. Methods must be pure (return a value and do nothing else) XOR impure (do anything but return a value). See ${documentationURL}`
 }
 
-export function methodReturnIsNotJSON(key, path) {
+export function returnValueIsNotJSON(key, path) {
   return `Method ${key} at path ${path} returned a non-JSON value. Eigentreee does not support non-JSON values. See ${documentationURL}`
 }
 
@@ -31,6 +31,6 @@ export function impureMethodReturnedValue(methodID) {
   return `Impure method "${methodID}" returned a value. Impure methods may not return values.`
 }
 
-export function purityValueInvalid(methodID) {
-  return `The method "${methodID}" has been given an invalid attribute. Please do not manually create methods with a "__purity" value.`
+export function purityValueInvalid(methodID, invalidValue) {
+  return `The method "${methodID}" has been given an invalid attribute value ("${invalidValue}"). Please do not manually create methods with a "__purity" value.`
 }

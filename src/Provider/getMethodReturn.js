@@ -1,5 +1,5 @@
-import { mapObjectTreeLeaves } from '../utils'
-import * as assert from '../validation/assertions'
+import { isProduction, mapObjectTreeLeaves } from '../utils'
+import assert from '../validation/assertions'
 import {
   pureMethodHadSideEffect,
   impureMethodReturnedValue,
@@ -8,13 +8,13 @@ import {
 
 export default function getReturn(method, payload, localState, key, path) {
 
-  const methodID = path.join('.') + '.' + key
+  if (isProduction || method.__purity === undefined) return method(payload, localState)
 
-  if (method.__purity === undefined) return method(payload, localState)
+  const methodID = path.join('.') + '.' + key
 
   if (method.__purity === true) {
 
-    const pureState = mapObjectTreeLeaves(stateDef, (property, localKey, localPath) => {
+    const pureState = mapObjectTreeLeaves(localState, (property, localKey, localPath) => {
 
       if (!(property instanceof Function)) return property
 
@@ -31,9 +31,9 @@ export default function getReturn(method, payload, localState, key, path) {
     return method(payload, pureState)
   }
 
-  if (method.__purity = false) {
+  if (method.__purity === false) {
 
-    const returnValue = method(payload, eigenstate)
+    const returnValue = method(payload, localState)
 
     if ( (returnValue === undefined) || (returnValue instanceof Function) ) {
 
@@ -43,5 +43,5 @@ export default function getReturn(method, payload, localState, key, path) {
     throw new Error(impureMethodReturnedValue(methodID))
   }
 
-  throw new Error(purityValueInvalid(methodID))
+  throw new Error(purityValueInvalid(methodID, method.__purity))
 }

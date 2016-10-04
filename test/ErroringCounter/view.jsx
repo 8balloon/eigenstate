@@ -46,6 +46,15 @@ export default function CounterView(props) {
       <div className="downCount.decrement" onClick={() => downCount.decrement(7)}>
         call nested decrement count
       </div>
+      <div className="safeCount">
+        {props.safeCount}
+      </div>
+      <div className="safeIncrement" onClick={() => props.safeIncrement(10)}>
+        SAFE INCREMENT
+      </div>
+      <div className="safeDoubleIncrement" onClick={props.safeDoubleIncrement}>
+        SAFE DOUBLE INCREMENT
+      </div>
     </div>
   )
 }

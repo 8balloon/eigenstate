@@ -1,3 +1,5 @@
+import { Pure, Impure, Values, Effect } from '../../src'
+
 export default {
 
   count: 0,
@@ -41,12 +43,14 @@ export default {
     })
   },
 
-  cubeCount: {
-    pretentiousNesting: {
-      count: 12321,
-      increment: (payload, state) => ({
-        count: state.count + 1
-      })
-    }
-  }
+  safeCount: 0,
+  safeIncrement: Pure((amount, state) => {
+    return Values({
+      safeCount: state.safeCount + amount
+    })
+  }),
+  safeDoubleIncrement: Impure((_, state) => {
+    state.safeIncrement(10)
+    return Effect(() => state.safeIncrement(1))
+  }),
 }

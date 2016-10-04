@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "test": "cd test && webpack-dev-server -d --hot --inline --progress --colors"
+    "test": "cd test && webpack-dev-server -d --hot --inline --progress --colors",
+    "test:production": "cd test && webpack-dev-server -d --hot --inline --progress --colors --define process.env.NODE_ENV='\"production\"'"
   },
   "peerDependencies": {
     "react": "^15.0.0"

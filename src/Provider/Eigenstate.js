@@ -1,5 +1,5 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
-import * as assert from '../validation/assertions'
+import assert from '../validation/assertions'
 import getMethodReturn from './getMethodReturn'
 
 export default function Eigenstate({stateDef, setState, recordChange, enqueueAfterEffect} ) {
@@ -7,7 +7,6 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueAft
   assert.stateDefIsObject(stateDef)
 
   var latestInvocationID = 0
-  var setStateTimeout = null
 
   var eigenstate = mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
@@ -41,8 +40,6 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueAft
           nextLocalState = Object.assign({}, localState, localMethodReturn)
 
           eigenstate = mutSetValueByPath(eigenstate, path, nextLocalState)
-
-          setState(eigenstate)
         }
       }
 
@@ -54,6 +51,8 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueAft
         localState: localState,
         nextLocalState: nextLocalState || localState
       })
+
+      setState(eigenstate)
     }
   })
 

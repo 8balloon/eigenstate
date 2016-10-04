@@ -1,9 +1,14 @@
+export const isProduction = (
+  typeof process !== 'undefined' && process.env &&
+  process.env.NODE_ENV === 'production'
+)
+
 export function isObject(value) {
 
   return typeof value === 'object' && value !== null
 }
 
-function mapObjectValues(obj, mapFunction) {
+export function mapObjectValues(obj, mapFunction) {
 
   if (obj instanceof Array) return obj.map(mapFunction)
 

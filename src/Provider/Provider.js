@@ -1,5 +1,5 @@
 import React from 'react'
-import * as assert from '../validation/assertions'
+import assert from '../validation/assertions'
 import Store from './Store'
 
 export class Provider extends React.Component {
