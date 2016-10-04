@@ -1,17 +1,17 @@
 # Eigenstate
 
-Eigenstate is a [Redux](https://github.com/reactjs/redux) alternative.
+Eigenstate lets you control your [React.js](https://facebook.github.io/react/) application state via [methods](https://github.com/8balloon/eigenstate#methods).
 
-Redux requires you to explicitly create actions, pass them through middleware for asynchronous effects, and parse them via a root reducer to trigger state changes. Eigenstate does all of this for you, letting you call reducers and asynchronous procedures directly via *methods*.
+Methods give you [Redux](https://github.com/reactjs/redux)-like functionality without boilerplate, switch statements, or special middleware for asynchronous code.
 
-Besides being simpler, this allows you to organize your code by concept rather than sync/async distinctions.
+Eigenstate is pre-configured for React, and has no other dependencies. Eigenstate methods are easy to write and test.
 
 ## features
 
-* Pure functional / asynchronous state changes
-* Listenable "action" and "update" events
+* Pure functional / asynchronous state methods
 * Synchronous update batching (so it's fast)
-* Composable state objects and methods
+* Composable state objects
+* Easy logging and debugging
 
 ## how to use + example 1
 
@@ -62,7 +62,7 @@ ReactDOM.render(
 
 Notice how the view calls methods using only a single argument. This is because Eigenstate supports only one invocation argument; the second argument (```state```) is provided automatically. The ```state``` a method sees is always the most recent application state.
 
-## methods in-depth
+## methods
 
 Methods are how you change your state. They come in two flavors.
 
