@@ -1,5 +1,6 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import * as assert from '../validation/assertions'
+import getMethodReturn from './getMethodReturn'
 
 export default function Eigenstate({stateDef, setState, recordChange, enqueueAfterEffect} ) {
 
@@ -22,22 +23,20 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueAft
       const thisInvocationID = latestInvocationID + 1
       latestInvocationID = thisInvocationID
 
-      const localMethodReturn = method(payload, localState)
+      const localMethodReturn = getMethodReturn(method, payload, localState, key, path)
 
       var nextLocalState = undefined
 
-      if (localMethodReturn !== undefined) { //this method is a synchronous operation
+      if (localMethodReturn) {
 
         if (localMethodReturn instanceof Function) {
 
-          const afterEffect = localMethodReturn
-          enqueueAfterEffect(afterEffect)
+          enqueueAfterEffect(localMethodReturn)
         }
         else {
 
           assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
-          assert.returnIsJSON(localMethodReturn, key, path)
-          assert.methodReturnFitsStateDef(localMethodReturn, localStateDef, key, path)
+          assert.returnValueFitsStateDef(localMethodReturn, localStateDef, key, path)
 
           nextLocalState = Object.assign({}, localState, localMethodReturn)
 
