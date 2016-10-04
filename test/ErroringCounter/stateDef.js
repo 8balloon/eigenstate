@@ -1,5 +1,3 @@
-import { Pure, Impure, Values, Effect } from '../../src'
-
 export default {
 
   count: 0,
@@ -44,13 +42,13 @@ export default {
   },
 
   safeCount: 0,
-  safeIncrement: Pure((amount, state) => {
-    return Values({
+  safeIncrement: (amount, state) => {
+    return {
       safeCount: state.safeCount + amount
-    })
-  }),
-  safeDoubleIncrement: Impure((_, state) => {
+    }
+  },
+  safeDoubleIncrement: (_, state) => {
     state.safeIncrement(10)
-    return Effect(() => state.safeIncrement(1))
-  }),
+    return () => state.safeIncrement(1)
+  }
 }

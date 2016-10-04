@@ -1,6 +1,5 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import assert from '../validation/assertions'
-import getMethodReturn from './getMethodReturn'
 
 export default function Eigenstate({stateDef, setState, recordChange, enqueueAfterEffect} ) {
 
@@ -22,7 +21,7 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueAft
       const thisInvocationID = latestInvocationID + 1
       latestInvocationID = thisInvocationID
 
-      const localMethodReturn = getMethodReturn(method, payload, localState, key, path)
+      const localMethodReturn = method(payload, localState)
 
       var nextLocalState = null
 

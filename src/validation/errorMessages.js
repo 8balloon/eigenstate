@@ -22,15 +22,3 @@ export function operationInvokedOtherMethod(key, path) {
 export function returnValueIsNotJSON(key, path) {
   return `Method ${key} at path ${path} returned a non-JSON value. Eigentreee does not support non-JSON values. See ${documentationURL}`
 }
-
-export function pureMethodHadSideEffect(methodID, sideEffectID) {
-  return `Pure method "${methodID}" created a side effect by invoking method "${sideEffectID}". Pure methods may not create side effects.`
-}
-
-export function impureMethodReturnedValue(methodID) {
-  return `Impure method "${methodID}" returned a value. Impure methods may not return values.`
-}
-
-export function purityValueInvalid(methodID, invalidValue) {
-  return `The method "${methodID}" has been given an invalid attribute value ("${invalidValue}"). Please do not manually create methods with a "__purity" value.`
-}
