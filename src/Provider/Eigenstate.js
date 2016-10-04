@@ -24,7 +24,7 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueAft
 
       const localMethodReturn = getMethodReturn(method, payload, localState, key, path)
 
-      var nextLocalState = undefined
+      var nextLocalState = null
 
       if (localMethodReturn) {
 

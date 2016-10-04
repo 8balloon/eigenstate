@@ -10,7 +10,7 @@ export default function Store({stateDef, onUpdate}, callAfterUpdate) {
 
   let noop = () => {}
   let callOnUpdateWithChanges = onUpdate === undefined ? noop : () => {
-    console.log("DON FIRED:", eigenstate.safeCount, afterEffects)
+
     onUpdate(changes)
     changes = []
 
@@ -30,10 +30,9 @@ export default function Store({stateDef, onUpdate}, callAfterUpdate) {
     clearInterval(cbIntervalID)
     cbIntervalID = setInterval(() => {
 
+      clearInterval(cbIntervalID)
       callOnUpdate()
 
-      clearInterval(cbIntervalID)
-      cbIntervalID = null
     }, 0)
   }
 
