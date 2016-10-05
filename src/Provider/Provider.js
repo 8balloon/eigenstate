@@ -30,8 +30,8 @@ export class Provider extends React.Component {
 
   componentDidMount() {
 
-    if (this.props.eigenstate) {
-      this.props.eigenstate(() => this.store.getState())
+    if (this.props.shareInterface) {
+      this.props.shareInterface(() => this.store.getState())
     }
   }
 
