@@ -18,7 +18,7 @@ export function onUpdatePropIsFunction(onUpdate) {
 export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
 
   if (typeof illegalSecondArgument !== 'undefined') {
-    throw new Error(errorMessages.tooManyMethodArguments(key))
+    throw new Error(errorMessages.tooManyMethodArguments(key, path))
   }
 }
 
@@ -43,23 +43,23 @@ function containsNoFunctions(obj, errorMessage) {
   })
 }
 
-function returnIsJSON(value, key, path) {
+function returnDataIsJSON(returnData, key, path) {
 
   try {
-    JSON.stringify(value)
+    JSON.stringify(returnData)
   }
   catch (err) {
-    throw new Error(errorMessages.returnValueIsNotJSON(key, path))
+    throw new Error(errorMessages.returnedDataIsNotJSON(key, path))
   }
 }
 
-export function returnValueFitsStateDef(returnValue, stateDefinitions, key, path) {
+export function returnDataFitsStateDef(returnData, stateDefinitions, key, path) {
 
-  returnIsJSON(returnValue, key, path)
+  returnDataIsJSON(returnData, key, path)
 
-  isObject(returnValue, errorMessages.methodDidNotReturnObject(key, path))
+  isObject(returnData, errorMessages.returnDataIsNotObject(key, path))
 
-  for (var localKey in returnValue) {
+  for (var localKey in returnData) {
 
     const statePropertyDefinition = stateDefinitions[localKey]
     containsNoFunctions(statePropertyDefinition, errorMessages.methodWasOverwritten(key, path, localKey))

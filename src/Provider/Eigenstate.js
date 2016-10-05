@@ -21,22 +21,22 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueEff
       const thisInvocationID = latestInvocationID + 1
       latestInvocationID = thisInvocationID
 
-      const localMethodReturn = method(payload, localState)
+      const methodReturnValue = method(payload, localState)
 
       var nextLocalState = null
 
-      if (localMethodReturn) {
+      if (methodReturnValue) {
 
-        if (localMethodReturn instanceof Function) {
+        if (methodReturnValue instanceof Function) {
 
-          enqueueEffect(localMethodReturn)
+          enqueueEffect(methodReturnValue)
         }
         else {
 
           assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
-          assert.returnValueFitsStateDef(localMethodReturn, localStateDef, key, path)
+          assert.returnDataFitsStateDef(methodReturnValue, localStateDef, key, path)
 
-          nextLocalState = Object.assign({}, localState, localMethodReturn)
+          nextLocalState = Object.assign({}, localState, methodReturnValue)
 
           eigenstate = mutSetValueByPath(eigenstate, path, nextLocalState)
         }
@@ -46,7 +46,7 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueEff
         methodKey: key,
         methodPath: path,
         payload,
-        returnValue: localMethodReturn,
+        returnValue: methodReturnValue,
         localState: localState,
         nextLocalState: nextLocalState || localState
       })
