@@ -5,7 +5,7 @@ export default function Store({stateDef, onUpdate}, callAfterUpdate) {
 
   var eigenstate = null
   var changes = []
-  var afterEffects = []
+  var effects = []
 
 
   let noop = () => {}
@@ -14,10 +14,10 @@ export default function Store({stateDef, onUpdate}, callAfterUpdate) {
     onUpdate(changes)
     changes = []
 
-    var afterEffectsInExecution = afterEffects
-    afterEffects = []
+    var effectsInExecution = effects
+    effects = []
 
-    afterEffectsInExecution.forEach(afterEffect => afterEffect())
+    effectsInExecution.forEach(effect => effect())
   }
   const callOnUpdate = () => callAfterUpdate(callOnUpdateWithChanges)
 
@@ -39,7 +39,7 @@ export default function Store({stateDef, onUpdate}, callAfterUpdate) {
 
   const recordChange = (change) => changes.push(change)
 
-  const enqueueAfterEffect = (afterEffect) => afterEffects.push(afterEffect)
+  const enqueueEffect = (effect) => effects.push(effect)
 
 
   const updateStateDef = (newStateDef) => {
@@ -49,12 +49,12 @@ export default function Store({stateDef, onUpdate}, callAfterUpdate) {
       stateDef: newStateDef,
       setState,
       recordChange,
-      enqueueAfterEffect
+      enqueueEffect
     })
     graftState(eigenstate, lastEigenstate)
   }
 
-  eigenstate = Eigenstate({stateDef, setState, recordChange, enqueueAfterEffect})
+  eigenstate = Eigenstate({stateDef, setState, recordChange, enqueueEffect})
 
   return {
     getState: () => eigenstate,

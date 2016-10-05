@@ -1,7 +1,7 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import assert from '../validation/assertions'
 
-export default function Eigenstate({stateDef, setState, recordChange, enqueueAfterEffect} ) {
+export default function Eigenstate({stateDef, setState, recordChange, enqueueEffect} ) {
 
   assert.stateDefIsObject(stateDef)
 
@@ -29,7 +29,7 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueAft
 
         if (localMethodReturn instanceof Function) {
 
-          enqueueAfterEffect(localMethodReturn)
+          enqueueEffect(localMethodReturn)
         }
         else {
 

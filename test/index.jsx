@@ -16,7 +16,7 @@ import Grid from './Grid'
 import ErroringCounter from './ErroringCounter'
 import ConnectComparison from './ConnectComparison'
 import Todos from './Todos'
-import AfterEffectsTest from './AfterEffectsTest'
+import EffectsTest from './EffectsTest'
 
 const indexStateDef = {
   helloWorld: null,
@@ -49,7 +49,7 @@ const Apps = (props) => (
     <ConnectComparison />
     <Todos />
     <ReactRouterTester {...props} />
-    <AfterEffectsTest />
+    <EffectsTest />
   </div>
 )
 
