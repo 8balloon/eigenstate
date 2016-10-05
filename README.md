@@ -30,23 +30,26 @@ import { Provider } from 'eigenstate'
 */
 const stateDef = {
   count: 0,
+  color: 'red',
   increment: (amount, state) => ({ count: state.count + amount }),
   delayedIncrement: (payload, state) => {
     const { amount, delay } = payload
     setTimeout(() => state.increment(amount), delay)
-  }
+  },
+  changeColor: (_, state) => ({ color: state.color === 'red' ? 'blue' : 'red' })
 }
 
 /*
 2
 */
 const View = (props) => (
-  <div className="counter">
+  <div id="counter" style={{backgroundColor: props.color}}>
     { props.count }
     <div onClick={() => props.increment(1)}> INCREMENT </div>
     <div onClick={() => props.delayedIncrement({ amount: 10, delay: 1000 })}>
       DELAYED INCREMENT
     </div>
+    <div onClick={props.changeColor}> CHANGE COLOR </div>
   </div>
 )
 
@@ -83,32 +86,17 @@ In the example above, ```increment``` is a pure method, and ```delayedIncrement`
 
 This is how you structure your Eigenstate application. It is recommended that you annotate your pure methods with a ```// pure``` comment and your impure methods with an ```// impure``` comment. And remember, there is nothing "bad" about impure methods :)
 
-## larger stateDef example
+## complete example
+
+
+* You can compose state definitions. State methods are always passed a ```state``` which corresponds to their local definition state.
+* onUpdate && logVerbosely
+* eigenstate
+* connect
+* effects
 
 ```js
-/*
-stateDef for a grid that can have rows and columns added,
-and can incrementally skrink to a size of 1 x 1.
-*/
 
-const isMinSize = ({rows, columns}) => rows.length <= 1 && columns.length <= 1
-
-const gridStateDef = {
-
-  rows: [null, null, null],
-  columns: [null, null, null],
-
-  addRow: (_, state) => ({ rows: [].concat(state.rows, [null]) }),
-  addColumn: (_, state) => ({ columns:[].concat(state.columns, [null]) }),
-  clearTick: (_, state) => ({
-    rows: state.rows.slice(0, -1),
-    columns: state.columns.slice(0, -1)
-  }),
-  clear: (_, state) => {
-    state.clearTick()
-    if ( !isMinSize(state) ) setTimeout(() => state.clear(), 100)
-  }
-}
 ```
 
 1. We're importing Eigenstate's default logger, ```logVerbosely```. We'll use it in 5 to log all updates.
@@ -118,15 +106,13 @@ const gridStateDef = {
 
 ## API
 
-* **Provider** : a React component. A Provider provides state values and methods to its children. It requires the following properties:
+* **Provider** : a React component. Provides state data and methods to its child via ```props```. Supports the following properties:
 
-  * **stateDef** (required) : an object of ```key: value```, ```key: method```, and/or ```key: <stateDef>``` pairs. The stateDef property is used by the Provider to generate state, which is passed to the children of the Provider. See ["stateDef"](https://github.com/8balloon/eigenstate#stateDef).
+  * **stateDef** (required) : an object of ```key: datum```, ```key: method```, and/or ```key: <stateDef>``` pairs. The stateDef property is used by the Provider to generate state, which is passed to the children of the Provider. See ["stateDef"](https://github.com/8balloon/eigenstate#stateDef).
 
     * **<value>** : any valid JSON. See ["values"](https://github.com/8balloon/eigenstate#values).
 
     * **<method>** : a function, which may be pure or impure, as discussed the section ["methods"](https://github.com/8balloon/eigenstate#methods).
-
-  * **onAction** (optional) : a function to be after every method invocation. ```onAction``` is called before the returned values of the invocation (if any) are applied to state. It is passed an ```action``` object, which contains details of the invocation and its result. See ["onAction"](https://github.com/8balloon/eigenstate#onAction).
 
   * **onUpdate** (optional) : a method that is called after state updates have been passed to the rest of your application via the Provider's children's props. It is passed ```state, actions[]```, where state is the state passed to the Provider's children's props, and actions contains the actions performed since the last update. See ["onUpdate"](https://github.com/8balloon/eigenstate#onUpdate).
 

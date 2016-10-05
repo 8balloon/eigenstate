@@ -11,6 +11,6 @@ export function logVerbosely(changes) {
       nextLocalState
     } = changes[i]
 
-    console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- METHOD CALLED with state / payload / return:`, localState, payload, returnValue)
+    console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- state / payload / return:`, localState, payload, returnValue)
   }
 }
