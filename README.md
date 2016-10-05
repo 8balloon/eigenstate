@@ -90,8 +90,9 @@ This is how you structure your Eigenstate application. It is recommended that yo
 
 
 * You can compose state definitions. State methods are always passed a ```state``` which corresponds to their local definition state.
-* onUpdate && logVerbosely
-* eigenstate
+* onUpdate
+* logVerbosely
+* shareInterface
 * connect
 * effects
 
@@ -116,7 +117,7 @@ This is how you structure your Eigenstate application. It is recommended that yo
 
   * **onUpdate** (optional) : a method that is called after state updates have been passed to the rest of your application via the Provider's children's props. It is passed ```state, actions[]```, where state is the state passed to the Provider's children's props, and actions contains the actions performed since the last update. See ["onUpdate"](https://github.com/8balloon/eigenstate#onUpdate).
 
-  * **eigenstate** (optional) : a method that is called after state has been initialized. It is passed a function, ```getState```, which returns the latest application state when invoked. See ["eigenstate"](https://github.com/8balloon/eigenstate#eigenstate).
+  * **shareInterface** (optional) : a method that is called after state has been initialized. It is passed a function, ```getState```, which returns the latest application state when invoked. See ["shareInterface"](https://github.com/8balloon/eigenstate#shareInterface).
 
 * **connect** : a function that accepts a component class, and returns a version of that class that will have access to an ancestor's state via ```props```. See ["connect"](https://github.com/8balloon/eigenstate#connect).
 
@@ -135,7 +136,7 @@ nested state (combine first two examples via composition)
 Synchronous updates are batched"
 
 
-### eigenstate
+### shareInterface
 This can be used by parent applications, or for other purposes, and provides an interface by which your entire Eigenstate application can act as a singular object.
 
 ### connect
