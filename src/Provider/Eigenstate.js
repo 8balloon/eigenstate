@@ -1,5 +1,5 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
-import assert from '../validation/assertions'
+import assert from '../validation/assert'
 
 export default function Eigenstate({stateDef, setState, recordChange, enqueueEffect} ) {
 
@@ -33,7 +33,7 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueEff
         }
         else {
 
-          assert.operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path)
+          assert.dataReturnerDidNotInvokeMethod(thisInvocationID, latestInvocationID, key, path)
           assert.returnDataFitsStateDef(methodReturnValue, localStateDef, key, path)
 
           nextLocalState = Object.assign({}, localState, methodReturnValue)

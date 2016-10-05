@@ -4,7 +4,7 @@ export const stateDefIsNotObject = "No stateDef prop was detected by the Eigenst
 export const onUpdatePropIsNotFunction = "Provider.props.onUpdate must be a function."
 
 export function tooManyMethodArguments(key, path) {
-  return `Multiple arguments were passed to "${path.join('.') + '.' + key}". Eigenstate provides a second argument automatically, so passing multiple arguments is not supported. Did you remember to pass only a single argument?`
+  return `Multiple arguments were passed to "${path.join('.') + '.' + key}". Eigenstate provides a second argument automatically, so passing multiple arguments is not supported.`
 }
 
 export function returnDataIsNotObject(key, path) {
@@ -15,7 +15,7 @@ export function methodWasOverwritten(key, path, localKey) {
   return `The method "${path.join('.') + '.' + key}" returned an object with key "${localKey}". There appears to be a method with that key. Did you make sure that your { key: value } data object keys do not conflict with method keys?`
 }
 
-export function operationInvokedOtherMethod(key, path) {
+export function dataReturnerInvokedOtherMethod(key, path) {
   return `The method "${path.join('.') + '.' + key}" invoked another method before returning. Methods must be pure (return data and do nothing else) XOR impure (do anything but return data). See ${documentationURL}`
 }
 

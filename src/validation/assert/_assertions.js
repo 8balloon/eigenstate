@@ -22,9 +22,9 @@ export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, pat
   }
 }
 
-export function operationCompletedSynchronously(thisInvocationID, latestInvocationID, key, path) {
+export function dataReturnerDidNotInvokeMethod(thisInvocationID, latestInvocationID, key, path) {
   if (thisInvocationID !== latestInvocationID) {
-    throw new Error(errorMessages.operationInvokedOtherMethod(key, path))
+    throw new Error(errorMessages.dataReturnerInvokedOtherMethod(key, path))
   }
 }
 
