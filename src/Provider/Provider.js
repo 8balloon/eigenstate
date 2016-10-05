@@ -17,7 +17,19 @@ export class Provider extends React.Component {
     }
 
     this.store = Store(storeParams, (postUpdateCallback) => {
-      this.forceUpdate(postUpdateCallback)
+
+      const throwErrFromProvider = (err) => { throw err }
+
+      var wrappedCallback = () => {
+        try {
+          postUpdateCallback()
+        }
+        catch (err) {
+          throwErrFromProvider(err)
+        }
+      }
+
+      this.forceUpdate(wrappedCallback)
     })
   }
 
