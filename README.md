@@ -1,30 +1,33 @@
 # Eigenstate
 
-Eigenstate lets you control your [React.js](https://facebook.github.io/react/) application state via [methods](https://github.com/8balloon/eigenstate#methods).
+Eigenstate is a state-management library for [React.js](https://facebook.github.io/react/) that provides support for *methods*.
 
-Methods give you [Redux](https://github.com/reactjs/redux)-like functionality without boilerplate, switch statements, or special middleware for asynchronous code.
+Methods are analogous to [Redux](https://github.com/reactjs/redux) actions, but without the need for repetitive boilerplate, switch statements, or special middleware for asynchronous code.
 
 Eigenstate is pre-configured for React, and has no other dependencies. Eigenstate methods are easy to write and test.
 
 ## features
 
-* Pure functional / asynchronous state methods
-* Synchronous update batching (so it's fast)
-* Composable state objects
-* Easy logging and debugging
+* Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods)
+* Sequential update batching (so it's fast)
+* Tiny, flexible [API](https://github.com/8balloon/eigenstate#API)
 
-## how to use + example 1
+## easy as 1-2-3
 
-Define your state's *methods* and *values* in an object, and pass that to a ```Provider```. The ```Provider``` provides access to these methods and values via ```props```, as shown in the example below.
+1. Define state data and methods in a ```stateDef``` object.
 
-See if you can understand the example before reading the explanation underneath.
+2. Compose your view component, using data and methods via ```props```.
+
+3. Tie state and view together with the Eigenstate ```Provider```.
 
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'eigenstate'
 
-// 1
+/*
+1
+*/
 const stateDef = {
   count: 0,
   increment: (amount, state) => ({ count: state.count + amount }),
@@ -34,18 +37,22 @@ const stateDef = {
   }
 }
 
-// 2
+/*
+2
+*/
 const View = (props) => (
   <div className="counter">
     { props.count }
     <div onClick={() => props.increment(1)}> INCREMENT </div>
-    <div onClick={() => props.delayedIncrement({ amount: 5, delay: 1000 })}>
+    <div onClick={() => props.delayedIncrement({ amount: 10, delay: 1000 })}>
       DELAYED INCREMENT
     </div>
   </div>
 )
 
-// 3
+/*
+3
+*/
 ReactDOM.render(
   <Provider stateDef={stateDef}>
     <View />
@@ -54,37 +61,38 @@ ReactDOM.render(
 )
 ```
 
-1. This is your state definition. It has 1 value (stateDef.count), 1 pure method (stateDef.increment) and 1 impure method (stateDef.delayedIncrement).
-
-2. This is the view component. It is wrapped with an Eigenstate ```Provider``` in 3, and uses the state value (props.count) and state methods (props.increment and props.delayedIncrement).
-
-3. This is how state information is passed to the view component.
-
-Notice how the view calls methods using only a single argument. This is because Eigenstate supports only one invocation argument; the second argument (```state```) is provided automatically. The ```state``` a method sees is always the most recent application state.
-
 ## methods
 
-Methods are how you change your state. They come in two flavors.
+Methods are how you alter your state data.
 
-  * **pure method** : Methods that return a value, and do nothing else. These are how transform state.
+**Methods are defined with two parameters, and called with one parameter.**
 
-  * **impure methods** : Methods that do other things, like making AJAX calls and calling pure methods with the results of those calls. They should never return a state value.
+* You may provide the first parameter in your method call. The payload may be any JSON value.
 
-**Methods must be pure XOR impure.** If Eigenstate detects that a method returns a value but has a side effect, it will throw an error.
+* The second parameter, ```state```, is provided automatically, and contains all state data and methods.
 
-**Methods may only be called with a single argument.** Eigenstate will pass the second argument for you. You can fit as much data as you want in a single argument object, so this should never be an issue. (You can see this in example 1, in the onClick handler on the "DELAYED INCREMENT" button.)
+**Methods may be pure or impure and not both.**
 
-## example 2
+* *Pure methods* return update state data, and have no side effects.
 
-This example is a grid that you can add rows or columns to, and can shrink down to 1x1 with a shrink animation.
+* Impure methods make asynchronous calls and call pure methods with results.
+
+**Pure methods alter state data, and impure methods call pure methods.**
+
+In the example above, ```increment``` is a pure method, and ```delayedIncrement``` is an impure method. The former works by returning updated state data. The latter works by invoking the former.
+
+This is how you structure your Eigenstate application. It is recommended that you annotate your pure methods with a ```// pure``` comment and your impure methods with an ```// impure``` comment. And remember, there is nothing "bad" about impure methods :)
+
+## larger stateDef example
 
 ```js
-// 1
-import { Provider, logVerbosely } from 'eigenstate'
+/*
+stateDef for a grid that can have rows and columns added,
+and can incrementally skrink to a size of 1 x 1.
+*/
 
 const isMinSize = ({rows, columns}) => rows.length <= 1 && columns.length <= 1
 
-// 2
 const gridStateDef = {
 
   rows: [null, null, null],
@@ -101,34 +109,6 @@ const gridStateDef = {
     if ( !isMinSize(state) ) setTimeout(() => state.clear(), 100)
   }
 }
-
-// 3
-const GridView = (props) => {
-  return (
-    <div className="grid">
-      { props.rows.map((_, rowIndex) => (
-          <div key={rowIndex}>
-            { props.columns.map((_, columnIndex) => (
-                '(' + rowIndex + ':' + columnIndex + ')'
-              )).join(' ')
-            }
-          </div>
-        ))
-      }
-      <div onClick={props.addRow}> ADD ROW </div>
-      <div onClick={props.addColumn}> ADD COLUMN </div>
-      <div onClick={props.clear}> CLEAR GRID </div>
-    </div>
-  )
-}
-
-// 4
-ReactDOM.render(
-  <Provider stateDef={gridStateDef} onUpdate={logVerbosely}>
-    <GridView />
-  </Provider>,
-  document.getElementById('react-root')  
-)
 ```
 
 1. We're importing Eigenstate's default logger, ```logVerbosely```. We'll use it in 5 to log all updates.
@@ -175,3 +155,5 @@ This can be used by parent applications, or for other purposes, and provides an 
 ### connect
 
 ### logVerbosely
+
+### effects
