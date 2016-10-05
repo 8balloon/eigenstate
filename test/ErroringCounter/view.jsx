@@ -55,6 +55,9 @@ export default function CounterView(props) {
       <div className="safeDoubleIncrement" onClick={props.safeDoubleIncrement}>
         SAFE DOUBLE INCREMENT
       </div>
+      <div className="addNewKeyByMethod" onClick={props.addNewKeyByMethod}>
+        addNewKeyByMethod
+      </div>
     </div>
   )
 }

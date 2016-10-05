@@ -50,5 +50,7 @@ export default {
   safeDoubleIncrement: (_, state) => {
     state.safeIncrement(10)
     return () => state.safeIncrement(1)
-  }
+  },
+
+  addNewKeyByMethod: (_, state) => ({ asdf: 'fdsa' })
 }

@@ -22,3 +22,7 @@ export function dataReturnerInvokedOtherMethod(key, path) {
 export function returnedDataIsNotJSON(key, path) {
   return `Method ${key} at path ${path} returned a non-JSON value. State data returned by methods must be valid JSON. See ${documentationURL}`
 }
+
+export function statePropertyNotDefined(key, path, localKey) {
+  return `The method "${path.join('.') + '.' + key}" returned an object with key "${localKey}", which is not a defined data key. Dynamically adding data keys next to method keys will make your application slower and less safe. Did you remember to define this data key in your stateDef?`
+}

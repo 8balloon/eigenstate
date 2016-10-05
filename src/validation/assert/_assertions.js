@@ -53,6 +53,16 @@ function returnDataIsJSON(returnData, key, path) {
   }
 }
 
+function dataKeyIsDefined(statePropertyDefinition, key, path, localKey) {
+
+  console.log("DEFINITION:", statePropertyDefinition)
+
+  if (statePropertyDefinition === undefined) {
+
+    throw new Error(errorMessages.statePropertyNotDefined(key, path, localKey))
+  }
+}
+
 export function returnDataFitsStateDef(returnData, stateDefinitions, key, path) {
 
   returnDataIsJSON(returnData, key, path)
@@ -62,6 +72,9 @@ export function returnDataFitsStateDef(returnData, stateDefinitions, key, path) 
   for (var localKey in returnData) {
 
     const statePropertyDefinition = stateDefinitions[localKey]
+
+    dataKeyIsDefined(statePropertyDefinition, key, path, localKey)
+
     containsNoFunctions(statePropertyDefinition, errorMessages.methodWasOverwritten(key, path, localKey))
   }
 }
