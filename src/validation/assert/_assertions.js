@@ -55,8 +55,6 @@ function returnDataIsJSON(returnData, key, path) {
 
 function dataKeyIsDefined(statePropertyDefinition, key, path, localKey) {
 
-  console.log("DEFINITION:", statePropertyDefinition)
-
   if (statePropertyDefinition === undefined) {
 
     throw new Error(errorMessages.statePropertyNotDefined(key, path, localKey))
