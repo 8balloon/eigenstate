@@ -1,29 +1,22 @@
 import { graftState } from '../utils'
 import Eigenstate from './Eigenstate'
 
-export default function Store({stateDef, onUpdate}, callAfterUpdate) {
+export default function Store(stateDef, executeUpdate) {
 
   var eigenstate = null
   var changes = []
   var effects = []
 
+  const executeEffects = () => {
 
-  let noop = () => {}
-  let callOnUpdateWithChanges = onUpdate === undefined ? noop : () => {
-
-    onUpdate(changes)
-    changes = []
-
-    var effectsInExecution = effects
+    const effectsInExecution = effects
     effects = []
 
     effectsInExecution.forEach(effect => effect())
   }
-  const callOnUpdate = () => callAfterUpdate(callOnUpdateWithChanges)
-
 
   var cbIntervalID = null
-  const setState = (state, callerCallback) => {
+  const setState = (state) => {
 
     eigenstate = state
 
@@ -31,7 +24,10 @@ export default function Store({stateDef, onUpdate}, callAfterUpdate) {
     cbIntervalID = setInterval(() => {
 
       clearInterval(cbIntervalID)
-      callOnUpdate()
+
+      const completedChanges = changes
+      changes = []
+      executeUpdate(completedChanges, executeEffects)
 
     }, 0)
   }

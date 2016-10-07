@@ -5,32 +5,30 @@ import Store from './Store'
 export class Provider extends React.Component {
 
   constructor(props, context) {
+    
     super(props, context)
 
     const { stateDef, onUpdate } = props
-    this.onUpdate = onUpdate
-    onUpdate && assert.onUpdatePropIsFunction(onUpdate)
 
-    const storeParams = {
-      stateDef,
-      onUpdate: this.onUpdate || (() => {})
+    onUpdate && assert.onUpdatePropIsFunction(onUpdate)
+    this.onUpdate = onUpdate || (() => {})
+
+    const throwErrFromProvider = (err) => { throw err }
+
+    const executeUpdate = (changes, callback) => {
+
+      try {
+        this.forceUpdate(() => {
+          this.onUpdate(changes)
+          callback()
+        })
+      }
+      catch (err) {
+        throwErrFromProvider(err)
+      }
     }
 
-    this.store = Store(storeParams, (postUpdateCallback) => {
-
-      const throwErrFromProvider = (err) => { throw err }
-
-      var wrappedCallback = () => {
-        try {
-          postUpdateCallback()
-        }
-        catch (err) {
-          throwErrFromProvider(err)
-        }
-      }
-
-      this.forceUpdate(wrappedCallback)
-    })
+    this.store = Store(stateDef, executeUpdate)
   }
 
   getChildContext() {

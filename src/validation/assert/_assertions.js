@@ -43,7 +43,11 @@ function containsNoFunctions(obj, errorMessage) {
   })
 }
 
-function returnDataIsJSON(returnData, key, path) {
+function returnDataIsJSONObject(returnData, key, path) {
+
+  if (!isObject(returnData)) {
+    throw new Error(errorMessages.returnDataIsNotObject(key, path))
+  }
 
   try {
     JSON.stringify(returnData)
@@ -53,26 +57,14 @@ function returnDataIsJSON(returnData, key, path) {
   }
 }
 
-function dataKeyIsDefined(statePropertyDefinition, key, path, localKey) {
+export function returnDataFitsStateDef(returnData, stateDef, key, path) {
 
-  if (statePropertyDefinition === undefined) {
-
-    throw new Error(errorMessages.statePropertyNotDefined(key, path, localKey))
-  }
-}
-
-export function returnDataFitsStateDef(returnData, stateDefinitions, key, path) {
-
-  returnDataIsJSON(returnData, key, path)
-
-  isObject(returnData, errorMessages.returnDataIsNotObject(key, path))
+  returnDataIsJSONObject(returnData, key, path)
 
   for (var localKey in returnData) {
 
-    const statePropertyDefinition = stateDefinitions[localKey]
+    const stateDefProperty = stateDef[localKey]
 
-    dataKeyIsDefined(statePropertyDefinition, key, path, localKey)
-
-    containsNoFunctions(statePropertyDefinition, errorMessages.methodWasOverwritten(key, path, localKey))
+    containsNoFunctions(stateDefProperty, errorMessages.methodWasOverwritten(key, path, localKey))
   }
 }
