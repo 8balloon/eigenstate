@@ -4,7 +4,7 @@ import View from './View'
 
 export default function ErroringCounter() {
   return (
-    <Provider stateDef={stateDef} onUpdate={logVerbosely}>
+    <Provider stateDef={stateDef} onChange={logVerbosely}>
       <View />
     </Provider>
   )

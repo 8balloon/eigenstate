@@ -38,7 +38,7 @@ export default function Store(stateDef, executeUpdate) {
   const enqueueEffect = (effect) => effects.push(effect)
 
 
-  const updateStateDef = (newStateDef) => {
+  const changeStateDef = (newStateDef) => {
 
     let lastEigenstate = eigenstate
     eigenstate = Eigenstate({
@@ -55,6 +55,6 @@ export default function Store(stateDef, executeUpdate) {
   return {
     getState: () => eigenstate,
     setState,
-    updateStateDef
+    changeStateDef
   }
 }

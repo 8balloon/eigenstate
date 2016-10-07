@@ -7,7 +7,7 @@ Methods, like [Redux](https://github.com/reactjs/redux) actions, are predictable
 ## features
 
 * Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods-in-depth)
-* Sequential update batching (so it's fast)
+* Virtual state + sequential update batching (so it's fast)
 * Tiny, flexible [API](https://github.com/8balloon/eigenstate#API)
 
 ## easy as 1-2-3
@@ -74,13 +74,13 @@ Methods are how you alter your state data.
 
 **Methods may be pure or impure and not both.**
 
-* *Pure methods* return update state data, and have no side effects.
+* *Pure methods* return updated state data, and have no side effects.
 
 * *Impure methods* make asynchronous calls and call pure methods with results.
 
 **Pure methods alter state data, and impure methods call pure methods.**
 
-In the example above, ```increment``` and ```changeColor``` are pure methods, and ```delayedIncrement``` is an impure method. The pure methods accomplish something by returning updated state data. The impure method works by invoking the former.
+In the example above, ```increment``` and ```changeColor``` are pure methods, and ```delayedIncrement``` is an impure method. The pure methods accomplish something through returning updated state data. The impure method works by invoking the former.
 
 This is how Eigenstate applications are structured. It is recommended that you annotate your methods with a ```// pure``` or an ```// impure``` comment to keep them distinct. And remember, there is nothing "bad" about impure methods :)
 
@@ -92,13 +92,13 @@ This is how Eigenstate applications are structured. It is recommended that you a
 
   * **stateDef** (required) : the stateDef property must be an object of ```key: data | method | stateDef``` pairs. State generated from the stateDef object is provided by the Provider to its children. Data is any valid JSON, and methods are described [here](https://github.com/8balloon/eigenstate#methods-in-depth).
 
-  * **onUpdate** (optional) : if you pass a function to the Provider via this property, it will be invoked with a ```changes[]``` argument every time updates have been passed to the children of the Provider. Each change object contains details on a method invocation. The argument is an array because Eigenstate batches synchronous, sequential changes.
+  * **onChange** (optional) : if you pass a function to the Provider via this property, it will be invoked with after every state change. It is passed a ```change``` object which contains details on a method invocation.
 
   * **shareInterface** (optional) : if you pass a function to a Provider with this property, it will be invoked after state has been initialized, and passed a function, ```getState```, which returns the latest application state when called. ```getState``` can be useful when embedding an Eigenstate application in another app.
 
 * **connect** : a function that accepts and returns a React component. A ```connect()```ed component will have access to the nearest ```Provider```'s state via props when it is instantiated.
 
-* **logVerbosely** : a function which will log updates in a verbose, legible way if used like ```<Provider stateDef={whatever} onUpdate={logVerbosely}>```.
+* **logVerbosely** : a function which will log information on state changes if used like this: ```<Provider stateDef={whatever} onChange={logVerbosely}>```.
 
 <!-- TODO; include multiple-routed-pages-in-one-page-example
 ## complete example
@@ -120,7 +120,7 @@ const stateDef = {
 
 /*TO USE:
 * You can compose state definitions. State methods are always passed a ```state``` which corresponds to their local definition state.
-* onUpdate && logVerbosely
+* onChange && logVerbosely
 * eigenstate
 * connect
 * effects

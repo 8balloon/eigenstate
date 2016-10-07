@@ -5,13 +5,18 @@ import Store from './Store'
 export class Provider extends React.Component {
 
   constructor(props, context) {
-    
     super(props, context)
 
-    const { stateDef, onUpdate } = props
+    const { stateDef, onChange } = props
 
-    onUpdate && assert.onUpdatePropIsFunction(onUpdate)
-    this.onUpdate = onUpdate || (() => {})
+    onChange && assert.onChangePropIsFunction(onChange)
+    this.onChange = onChange || (() => {})
+
+    this.onUpdate = (changes) => {
+
+      const callOnChange = this.onChange
+      changes.forEach(change => callOnChange(change))
+    }
 
     const throwErrFromProvider = (err) => { throw err }
 
@@ -47,10 +52,10 @@ export class Provider extends React.Component {
 
   componentWillReceiveProps(next) {
 
-    this.onUpdate = next.onUpdate
+    this.onChange = next.onChange
 
     if (this.props.stateDef !== next.stateDef) {
-      this.store.updateStateDef(next.stateDef)
+      this.store.changeStateDef(next.stateDef)
     }
   }
 

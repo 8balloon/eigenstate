@@ -8,10 +8,10 @@ export function stateDefIsObject(stateDef) {
   }
 }
 
-export function onUpdatePropIsFunction(onUpdate) {
+export function onChangePropIsFunction(onChange) {
 
-  if (!(onUpdate instanceof Function)) {
-    throw new Error(errorMessages.onUpdatePropIsNotFunction)
+  if (!(onChange instanceof Function)) {
+    throw new Error(errorMessages.onChangePropIsNotFunction)
   }
 }
 

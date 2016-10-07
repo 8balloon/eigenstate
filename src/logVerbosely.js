@@ -1,16 +1,13 @@
-export function logVerbosely(changes) {
+export function logVerbosely(change) {
 
-  for (var i = 0; i < changes.length; i++) {
+  const {
+    methodPath,
+    localState,
+    methodKey,
+    payload,
+    returnValue,
+    nextLocalState
+  } = change
 
-    const {
-      methodKey,
-      methodPath,
-      payload,
-      returnValue,
-      localState,
-      nextLocalState
-    } = changes[i]
-
-    console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- state / payload / return:`, localState, payload, returnValue)
-  }
+  console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- state / payload / return:`, localState, payload, returnValue)
 }
