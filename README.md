@@ -2,23 +2,21 @@
 
 Eigenstate is a state-management library for [React.js](https://facebook.github.io/react/) that provides support for *methods*.
 
-Methods are analogous to [Redux](https://github.com/reactjs/redux) actions, but without the need for repetitive boilerplate, switch statements, or special middleware for asynchronous code.
-
-Eigenstate is pre-configured for React, and has no other dependencies. Eigenstate methods are easy to write and test.
+Methods, like [Redux](https://github.com/reactjs/redux) actions, are predictable and easy to test. The advantage is that they require no boilerplate, switch statements, special middleware, or sync/async code-splitting to provide complete functionality.
 
 ## features
 
-* Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods)
+* Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods-in-depth)
 * Sequential update batching (so it's fast)
 * Tiny, flexible [API](https://github.com/8balloon/eigenstate#API)
 
 ## easy as 1-2-3
 
-1. Define state data and methods in a ```stateDef``` object.
+1. Define your state's data and methods in a ```stateDef``` object.
 
-2. Compose your view component, using data and methods via ```props```.
+2. Compose your view component as usual, using state data and methods via ```props```.
 
-3. Tie state and view together with the Eigenstate ```Provider```.
+3. Tie state and view together with the ```Provider```.
 
 ```js
 import React from 'react'
@@ -64,83 +62,69 @@ ReactDOM.render(
 )
 ```
 
-## methods
+## methods in-depth
 
 Methods are how you alter your state data.
 
 **Methods are defined with two parameters, and called with one parameter.**
 
-* You may provide the first parameter in your method call. The payload may be any JSON value.
-
 * The second parameter, ```state```, is provided automatically, and contains all state data and methods.
+
+* You may provide the first parameter in your method call.
 
 **Methods may be pure or impure and not both.**
 
 * *Pure methods* return update state data, and have no side effects.
 
-* Impure methods make asynchronous calls and call pure methods with results.
+* *Impure methods* make asynchronous calls and call pure methods with results.
 
 **Pure methods alter state data, and impure methods call pure methods.**
 
-In the example above, ```increment``` is a pure method, and ```delayedIncrement``` is an impure method. The former works by returning updated state data. The latter works by invoking the former.
+In the example above, ```increment``` and ```changeColor``` are pure methods, and ```delayedIncrement``` is an impure method. The pure methods accomplish something by returning updated state data. The impure method works by invoking the former.
 
-This is how you structure your Eigenstate application. It is recommended that you annotate your pure methods with a ```// pure``` comment and your impure methods with an ```// impure``` comment. And remember, there is nothing "bad" about impure methods :)
+This is how Eigenstate applications are structured. It is recommended that you annotate your methods with a ```// pure``` or an ```// impure``` comment to keep them distinct. And remember, there is nothing "bad" about impure methods :)
 
-## complete example
-
-
-* You can compose state definitions. State methods are always passed a ```state``` which corresponds to their local definition state.
-* onUpdate
-* logVerbosely
-* shareInterface
-* connect
-* effects
-
-```js
-
-```
-
-1. We're importing Eigenstate's default logger, ```logVerbosely```. We'll use it in 5 to log all updates.
-2. This state definition uses arrays to represent the row count and column count. It has three pure methods and one impure method. You'll notice that the pure methods return new state values; the impure method calls a pure method every 0.1 seconds until the grid is cleared.
-3. Just like in example 1, the view consumes state via ```props``` to show the grid, as well as 3 buttons which allow you to add rows or columns, or to clear the grid using the "gridStateDef.clear" animation.
-4. This is how you use a logger. A logger is just an onUpdate handler. You can see onUpdate detailed in the [API](https://github.com/8balloon/eigenstate#API)
+*MAGIC FEATURE*: If a method returns a function, 1) it is still an impure method, because that function won't be incorporated into state, and 2) that function will be executed AFTER your view component's update has completed.
 
 ## API
 
 * **Provider** : a React component. Provides state data and methods to its child via ```props```. Supports the following properties:
 
-  * **stateDef** (required) : an object of ```key: datum```, ```key: method```, and/or ```key: <stateDef>``` pairs. The stateDef property is used by the Provider to generate state, which is passed to the children of the Provider. See ["stateDef"](https://github.com/8balloon/eigenstate#stateDef).
+  * **stateDef** (required) : the stateDef property must be an object of ```key: data | method | stateDef``` pairs. State generated from the stateDef object is provided by the Provider to its children. Data is any valid JSON, and methods are described [here](https://github.com/8balloon/eigenstate#methods-in-depth).
 
-    * **<value>** : any valid JSON. See ["values"](https://github.com/8balloon/eigenstate#values).
+  * **onUpdate** (optional) : if you pass a function to the Provider via this property, it will be invoked with a ```changes[]``` argument every time updates have been passed to the children of the Provider. Each change object contains details on a method invocation. The argument is an array because Eigenstate batches synchronous, sequential changes.
 
-    * **<method>** : a function, which may be pure or impure, as discussed the section ["methods"](https://github.com/8balloon/eigenstate#methods).
+  * **shareInterface** (optional) : if you pass a function to a Provider with this property, it will be invoked after state has been initialized, and passed a function, ```getState```, which returns the latest application state when called. ```getState``` can be useful when embedding an Eigenstate application in another app.
 
-  * **onUpdate** (optional) : a method that is called after state updates have been passed to the rest of your application via the Provider's children's props. It is passed ```state, actions[]```, where state is the state passed to the Provider's children's props, and actions contains the actions performed since the last update. See ["onUpdate"](https://github.com/8balloon/eigenstate#onUpdate).
+* **connect** : a function that accepts and returns a React component. A ```connect()```ed component will have access to the nearest ```Provider```'s state via props when it is instantiated.
 
-  * **shareInterface** (optional) : a method that is called after state has been initialized. It is passed a function, ```getState```, which returns the latest application state when invoked. See ["shareInterface"](https://github.com/8balloon/eigenstate#shareInterface).
+* **logVerbosely** : a function which will log updates in a verbose, legible way if used like ```<Provider stateDef={whatever} onUpdate={logVerbosely}>```.
 
-* **connect** : a function that accepts a component class, and returns a version of that class that will have access to an ancestor's state via ```props```. See ["connect"](https://github.com/8balloon/eigenstate#connect).
+<!-- TODO; include multiple-routed-pages-in-one-page-example
+## complete example
 
-* **logVerbosely** : a function which will log actions in a verbose, legible way if passed to the Provider as an ```onAction``` property. See ["logVerbosely"](https://github.com/8balloon/eigenstate#logVerbosely).
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider, logVerbosely } from 'eigenstate'
+import { Router, Route, browserHistory, Link } from 'react-router'
+import { colorCounterStateDef, ColorCounterView } from './README.md/1-2-3-example'
+
+const stateDef = {
+
+  counter: colorCounterStateDef,
+
+  currentRouteLocation: null
 
 
-### stateDef
 
-nested state (combine first two examples via composition)
+/*TO USE:
+* You can compose state definitions. State methods are always passed a ```state``` which corresponds to their local definition state.
+* onUpdate && logVerbosely
+* eigenstate
+* connect
+* effects
+*/
 
-### values
-
-
-### onUpdate
-
-Synchronous updates are batched"
-
-
-### shareInterface
-This can be used by parent applications, or for other purposes, and provides an interface by which your entire Eigenstate application can act as a singular object.
-
-### connect
-
-### logVerbosely
-
-### effects
+```
+-->
