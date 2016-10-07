@@ -92,13 +92,13 @@ This is how Eigenstate applications are structured. It is recommended that you a
 
   * **stateDef** (required) : the stateDef property must be an object of ```key: data | method | stateDef``` pairs. State generated from the stateDef object is provided by the Provider to its children. Data is any valid JSON, and methods are described [here](https://github.com/8balloon/eigenstate#methods-in-depth).
 
-  * **onChange** (optional) : if you pass a function to the Provider via this property, it will be invoked with after every state change. It is passed a ```change``` object which contains details on a method invocation.
+  * **onInvoke** (optional) : if you pass a function to the Provider via this property, it will be called with after every state change. It is passed a ```change``` object which contains details on a method invocation.
 
-  * **shareInterface** (optional) : if you pass a function to a Provider with this property, it will be invoked after state has been initialized, and passed a function, ```getState```, which returns the latest application state when called. ```getState``` can be useful when embedding an Eigenstate application in another app.
+  * **interface** (optional) : if you pass a function to a Provider with this property, it will be called after state has been initialized. It is passed a ```stateInterface``` object which can be used to access state and call methods. Example: ```console.log(stateInterface.count); stateInterface.increment(); console.log(stateInterface.count)```
 
 * **connect** : a function that accepts and returns a React component. A ```connect()```ed component will have access to the nearest ```Provider```'s state via props when it is instantiated.
 
-* **logVerbosely** : a function which will log information on state changes if used like this: ```<Provider stateDef={whatever} onChange={logVerbosely}>```.
+* **logVerbosely** : a function which will log information on state method invocations if used like this: ```<Provider stateDef={whatever} onInvoke={logVerbosely}>```.
 
 <!-- TODO; include multiple-routed-pages-in-one-page-example
 ## complete example
@@ -120,7 +120,7 @@ const stateDef = {
 
 /*TO USE:
 * You can compose state definitions. State methods are always passed a ```state``` which corresponds to their local definition state.
-* onChange && logVerbosely
+* onInvoke && logVerbosely
 * eigenstate
 * connect
 * effects

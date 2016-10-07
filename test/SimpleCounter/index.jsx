@@ -1,4 +1,4 @@
-import { Provider } from '../../src'
+import { Provider, logVerbosely } from '../../src'
 
 /*
 Your application's state definition.
@@ -35,7 +35,8 @@ It passes access to your state methods and values via "props"
 */
 export default function SimpleCounter() {
   return (
-    <Provider stateDef={counterStateDef}>
+    <Provider stateDef={counterStateDef} onInvoke={logVerbosely}
+      interface={s => {console.log(s); s.increment(2); console.log(s)}}>
       <CounterView />
     </Provider>
   )

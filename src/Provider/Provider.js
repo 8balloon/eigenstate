@@ -1,30 +1,27 @@
 import React from 'react'
 import assert from '../validation/assert'
-import Store from './Store'
+import Eigenstate from './Eigenstate'
 
 export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
 
-    const { stateDef, onChange } = props
+    const { stateDef, onInvoke } = props
 
-    onChange && assert.onChangePropIsFunction(onChange)
-    this.onChange = onChange || (() => {})
+    assert.stateDefIsObject(stateDef)
 
-    this.onUpdate = (changes) => {
-
-      const callOnChange = this.onChange
-      changes.forEach(change => callOnChange(change))
-    }
+    onInvoke && assert.onInvokePropIsFunction(onInvoke);
+    const onInvocations = !onInvoke ? (() => {}) :
+      ((invocations) => invocations.forEach(change => onInvoke(change)))
 
     const throwErrFromProvider = (err) => { throw err }
 
-    const executeUpdate = (changes, callback) => {
+    const executeUpdate = (invocations, callback) => {
 
       try {
         this.forceUpdate(() => {
-          this.onUpdate(changes)
+          onInvocations(invocations)
           callback()
         })
       }
@@ -33,39 +30,35 @@ export class Provider extends React.Component {
       }
     }
 
-    this.store = Store(stateDef, executeUpdate)
+    this.eigenstate = Eigenstate(stateDef, executeUpdate)
   }
 
   getChildContext() {
 
     return {
-      eigenstate: this.store.getState()
+      eigenstate: this.eigenstate
     }
   }
 
   componentDidMount() {
 
-    if (this.props.shareInterface) {
-      this.props.shareInterface(() => this.store.getState())
+    if (this.props.interface) {
+      this.props.interface(this.eigenstate)
     }
   }
 
-  componentWillReceiveProps(next) {
+  componentWillReceiveProps(nextProps) {
 
-    this.onChange = next.onChange
-
-    if (this.props.stateDef !== next.stateDef) {
-      this.store.changeStateDef(next.stateDef)
+    if ( this.props !== nextProps ) {
+      throw new Error("The Eigenstate Provider does not support dynamic props.")
     }
   }
 
   render() {
 
-    const eigenstate = this.store.getState()
-
     return React.cloneElement(
       React.Children.only(this.props.children),
-      eigenstate
+      this.eigenstate
     )
   }
 }

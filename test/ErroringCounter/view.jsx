@@ -10,7 +10,6 @@ export default function CounterView(props) {
     erringSlowIncrementProcedure,
     implBadIncrementCount,
     methodThatRemovesOtherMethod,
-    erringChangeSwapper,
     downCount
   } = props
 

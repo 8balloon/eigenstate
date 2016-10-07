@@ -64,26 +64,3 @@ export function mutSetValueByPath(obj, path, value) {
 
   return obj
 }
-
-export function graftState(pureTree, stateTree) {
-
-  for (var stateKey in stateTree) {
-
-    if (!(stateKey in pureTree)) {
-      pureTree[stateKey] = stateTree[stateKey]
-      continue
-    }
-
-    const pureVal = pureTree[stateKey]
-    if (pureVal instanceof Function) continue
-
-    const stateVal = stateTree[stateKey]
-
-    if (pureVal.constructor === stateVal.constructor) {
-      if (typeof pureVal !== 'object' || pureVal === null) {
-        pureTree[stateKey] = stateVal
-      }
-      else graftState(pureVal, stateVal)
-    }
-  }
-}

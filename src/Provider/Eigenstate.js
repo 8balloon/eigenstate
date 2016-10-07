@@ -1,9 +1,35 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import assert from '../validation/assert'
 
-export default function Eigenstate({stateDef, setState, recordChange, enqueueEffect} ) {
+export default function Eigenstate(stateDef, executeUpdate) {
 
-  assert.stateDefIsObject(stateDef)
+  var effects = []
+  const enqueueEffect = (effect) => effects.push(effect)
+  const executeEffects = () => {
+
+    const effectsInExecution = effects
+    effects = []
+
+    effectsInExecution.forEach(effect => effect())
+  }
+
+  var invocations = []
+  var cbIntervalID = null
+  const acknowledgeInvocation = (change) => {
+
+    invocations.push(change)
+
+    clearInterval(cbIntervalID)
+    cbIntervalID = setInterval(() => {
+
+      clearInterval(cbIntervalID)
+
+      const completedInvocations = invocations
+      invocations = []
+      executeUpdate(completedInvocations, executeEffects)
+
+    }, 0)
+  }
 
   var latestInvocationID = 0
 
@@ -27,7 +53,7 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueEff
 
       if (methodReturnValue) {
 
-        if (methodReturnValue instanceof Function) {
+        if (methodReturnValue instanceof Function) { // isEffect
 
           enqueueEffect(methodReturnValue)
         }
@@ -38,11 +64,11 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueEff
 
           nextLocalState = Object.assign({}, localState, methodReturnValue)
 
-          eigenstate = mutSetValueByPath(eigenstate, path, nextLocalState)
+          Object.assign(eigenstate, mutSetValueByPath(eigenstate, path, nextLocalState))
         }
       }
 
-      recordChange({
+      acknowledgeInvocation({
         methodKey: key,
         methodPath: path,
         payload,
@@ -50,8 +76,6 @@ export default function Eigenstate({stateDef, setState, recordChange, enqueueEff
         localState: localState,
         nextLocalState: nextLocalState || localState
       })
-
-      setState(eigenstate)
     }
   })
 

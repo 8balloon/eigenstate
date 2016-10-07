@@ -6,7 +6,7 @@ export function logVerbosely(change) {
     methodKey,
     payload,
     returnValue,
-    nextLocalState
+    // nextLocalState
   } = change
 
   console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- state / payload / return:`, localState, payload, returnValue)

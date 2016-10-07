@@ -1,7 +1,7 @@
 const documentationURL = 'https://github.com/8balloon/switchless/blob/master/README.md'
 
 export const stateDefIsNotObject = "No stateDef prop was detected by the Eigenstate Provider. Did you provide a stateDef via <Provider stateDef={yourStateDef}> ?"
-export const onChangePropIsNotFunction = "Provider.props.onChange must be a function."
+export const onInvokePropIsNotFunction = "Provider.props.onInvoke must be a function."
 
 export function tooManyMethodArguments(key, path) {
   return `Multiple arguments were passed to "${path.join('.') + '.' + key}". Eigenstate provides a second argument automatically, so passing multiple arguments is not supported.`

@@ -13,7 +13,7 @@ export function connect(Component) {
 
       const componentProps = Object.assign({},
         this.context.eigenstate,
-        this.props //children good, since it's children of what we're creating
+        this.props // including children, since they're the children of what we're creating
       )
 
       return React.createElement(Component, componentProps)
