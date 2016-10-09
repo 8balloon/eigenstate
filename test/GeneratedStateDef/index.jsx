@@ -8,25 +8,25 @@ function nextCounterStateDef() {
   incAmount++
 
   return {
-    count: {
+    generatedCount: {
       number: 0
     },
     increment: (_, state) => {
-      return { count: { number: state.count.number + thisIncAmount } }
+      return { generatedCount: { number: state.generatedCount.number + thisIncAmount } }
     }
   }
 }
 
 const CounterView = (props) => (
   <div className="simpleCounter">
-    <div className="count">{ props.count.number }</div>
+    <div className="generatedCount">{ props.generatedCount.number }</div>
     <div className="incrementer" onClick={props.increment}> INCREMENT </div>
   </div>
 )
 
 function SimpleCounter(props) {
   return (
-    <Provider stateDef={props.counterStateDef}>
+    <Provider stateDef={props.generatedCounterStateDef}>
       <CounterView />
     </Provider>
   )
@@ -39,7 +39,7 @@ const controllerStateDef = {
 
 const Controller = (props) => (
   <div className="controller">
-    <SimpleCounter counterStateDef={nextCounterStateDef()} />
+    <SimpleCounter generatedCounterStateDef={nextCounterStateDef()} />
     <div onClick={props.rerender}> RE RENDER </div>
   </div>
 )

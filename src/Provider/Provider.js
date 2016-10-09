@@ -6,6 +6,10 @@ export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
+    this.initialize(props)
+  }
+
+  initialize(props) {
 
     const { stateDef, onInvoke } = props
 
@@ -47,10 +51,17 @@ export class Provider extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(next) {
 
-    if ( this.props !== nextProps ) {
-      throw new Error("The Eigenstate Provider does not support dynamic props.")
+    const props = this.props
+
+    if (
+      (props.stateDef !== next.stateDef) ||
+      (props.onInvoke !== next.onInvoke) ||
+      (props.interface !== next.interface)
+    ) {
+      this.initialize(next)
+      console.warn("An Eigenstate Provider had its props changed. State will be cleared and re-generated. Are you sure you meant to change Provider props? The Provider in question received these new props:", next)
     }
   }
 

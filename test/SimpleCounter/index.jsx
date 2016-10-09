@@ -29,6 +29,8 @@ const CounterView = (props) => (
   </div>
 )
 
+const interfaceHandler = s => {console.log("SIMPLE COUNTER STATE BEFORE INCRMENET VIA INTERFACE:", s); s.increment(2); console.log("STATE AFTER INCREMENT VIA INTERFACE:", s)}
+
 /*
 Eigenstate's Provider creates your state object for you.
 It passes access to your state methods and values via "props"
@@ -36,7 +38,7 @@ It passes access to your state methods and values via "props"
 export default function SimpleCounter() {
   return (
     <Provider stateDef={counterStateDef} onInvoke={logVerbosely}
-      interface={s => {console.log(s); s.increment(2); console.log(s)}}>
+      interface={interfaceHandler}>
       <CounterView />
     </Provider>
   )
