@@ -6,13 +6,13 @@ Eigenstate is a state-management library for [React.js](https://facebook.github.
 
 Methods, like [Redux](https://github.com/reactjs/redux) actions, are predictable and easy to test. The advantage is that they require no boilerplate, switch statements, special middleware, or sync/async code-splitting to provide complete functionality.
 
-## features
+## Features
 
 * Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods-in-depth)
-* Virtual state + sequential update batching (so it's fast)
+* Synchronous-sequential update batching (so it's fast)
 * Tiny, flexible [API](https://github.com/8balloon/eigenstate#API)
 
-## easy as 1-2-3
+## 3 Easy Steps (but seriously)
 
 1. Define your state's data and methods in a ```stateDef``` object.
 
@@ -21,6 +21,9 @@ Methods, like [Redux](https://github.com/reactjs/redux) actions, are predictable
 3. Tie state and view together with the ```Provider```.
 
 ```js
+/*
+A working app to demonstrate sync and async functionality + logging.
+*/
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider, logVerbosely } from 'eigenstate'
@@ -47,7 +50,7 @@ const View = (props) => (
     { props.count }
     <div onClick={() => props.increment(1)}> INCREMENT </div>
     <div onClick={() => props.delayedIncrement({ amount: 10, delay: 1000 })}>
-      DELAYED INCREMENT
+      SLOW INCREMENT
     </div>
     <div onClick={props.changeColor}> CHANGE COLOR </div>
   </div>
@@ -64,69 +67,50 @@ ReactDOM.render(
 )
 ```
 
-## methods in-depth
+## Methods
 
-Methods are how you alter your state data.
+Methods are how you alter your state data. They may be pure xor impure.
 
-**Methods are defined with two parameters, and called with one parameter.**
+**Pure methods alter state and do nothing else.**
 
-* The second parameter, ```state```, is provided automatically, and contains all state data and methods.
+Look at the "increment" and "changeColor" methods in the example above to see how to perform state data updates. You should build your application logic into pure methods.
 
-* You may provide the first parameter in your method call.
+**Impure methods call pure methods with the results of asynchronous actions.**
 
-**Methods may be pure or impure and not both.**
+Look at the method "delayedIncrement" in the example above.
 
-* *Pure methods* return updated state data, and have no side effects.
+**Methods must be defined with two parameters, and called with one or zero parameters.**
 
-* *Impure methods* make asynchronous calls and call pure methods with results.
-
-**Pure methods alter state data, and impure methods call pure methods.**
-
-In the example above, ```increment``` and ```changeColor``` are pure methods, and ```delayedIncrement``` is an impure method. The pure methods accomplish something through returning updated state data. The impure method works by invoking the former.
-
-This is how Eigenstate applications are structured. It is recommended that you annotate your methods with a ```// pure``` or an ```// impure``` comment to keep them distinct. And remember, there is nothing "bad" about impure methods :)
-
-*MAGIC FEATURE*: If a method returns a function, 1) it is still an impure method, because that function won't be incorporated into state, and 2) that function will be executed AFTER your view component's update has completed.
+* The second parameter, ```state```, is provided automatically. Look at all of the example methods above; they all use the ```state``` parameter to do useful stuff.
 
 ## API
 
-* **Provider** : a React component. Provides state data and methods to its child via ```props```. Supports the following properties:
+* **Provider** : a React component. Provides access to state data and methods to its child via ```props```. Supports the following properties:
 
-  * **stateDef** (required) : the stateDef property must be an object of ```key: data | method | stateDef``` pairs. State generated from the stateDef object is provided by the Provider to its children. Data is any valid JSON, and methods are described [here](https://github.com/8balloon/eigenstate#methods-in-depth).
+  * **stateDef** (required) : the ```stateDef``` property must be an object of ```key: data | method | stateDef``` pairs. The Provider uses the ```stateDef``` property to generate state data and methods. Data can be any JSON, and methods are described in the section above.
 
-  * **onInvoke** (optional) : if you pass a function to the Provider via this property, it will be called with after every state change. It is passed a ```change``` object which contains details on a method invocation.
+  * **onInvoke** (optional) : function called with details on every method invocation.
 
-  * **interface** (optional) : if you pass a function to a Provider with this property, it will be called after state has been initialized. It is passed a ```stateInterface``` object which can be used to access state and call methods. Example: ```console.log(stateInterface.count); stateInterface.increment(); console.log(stateInterface.count)```
+  * **interface** (optional) : called once with ```stateInterface```, which will always contain the latest state data and methods.
 
-* **connect** : a function that accepts and returns a React component. A ```connect()```ed component will have access to the nearest ```Provider```'s state via props when it is instantiated.
+* **connect** : a function that accepts and returns a React component. A ```connect()```ed component can use state from the nearest nearest ```Provider``` via props, as if it were that Provider's direct child. This is useful for integrating with [React Router](https://github.com/ReactTraining/react-router).
 
-* **logVerbosely** : a function which will log information on state method invocations if used like this: ```<Provider stateDef={whatever} onInvoke={logVerbosely}>```.
+* **logVerbosely** : logs information on method invocations and state changes in the console. See the example for how to use.
 
-<!-- TODO; include multiple-routed-pages-in-one-page-example
-## complete example
+* **effects** : A function returned from an impure method is an ```effect```. Effects are executed after the view component of your application has completely updated. Use sparingly.
 
-```js
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider, logVerbosely } from 'eigenstate'
-import { Router, Route, browserHistory, Link } from 'react-router'
-import { colorCounterStateDef, ColorCounterView } from './README.md/1-2-3-example'
-
-const stateDef = {
-
-  counter: colorCounterStateDef,
-
-  currentRouteLocation: null
-
-
-
-/*TO USE:
-* You can compose state definitions. State methods are always passed a ```state``` which corresponds to their local definition state.
-* onInvoke && logVerbosely
-* eigenstate
+<!-- TODO: include example with:
+* React router
+* Nested stateDefs
+* interface
 * connect
 * effects
-*/
 
-```
+Maybe react router pages-within-a-page + smart scrolling?
 -->
+
+## Pro tips
+
+* Put your application logic in pure methods. Pure methods are pure functions, so they are easy to test.
+
+* Annotate your methods with a ```// pure``` or an ```// impure``` comment to keep them distinct. 
