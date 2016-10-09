@@ -1,3 +1,5 @@
+![Eigenstate](assets/logo.png)
+
 # Eigenstate
 
 Eigenstate is a state-management library for [React.js](https://facebook.github.io/react/) that provides support for *methods*.
@@ -21,7 +23,7 @@ Methods, like [Redux](https://github.com/reactjs/redux) actions, are predictable
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider } from 'eigenstate'
+import { Provider, logVerbosely } from 'eigenstate'
 
 /*
 1
@@ -55,7 +57,7 @@ const View = (props) => (
 3
 */
 ReactDOM.render(
-  <Provider stateDef={stateDef}>
+  <Provider stateDef={stateDef} onInvoke={logVerbosely}>
     <View />
   </Provider>,
   document.getElementById('react-root')  
