@@ -1,7 +1,10 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import assert from '../validation/assert'
 
-export default function Eigenstate(stateDef, executeUpdate) {
+export default function Eigenstate(stateDef, executeUpdate, optionalOnInvoke) {
+
+  optionalOnInvoke && assert.onInvokeIsFunction(optionalOnInvoke)
+  const onInvoke = optionalOnInvoke || (() => {})
 
   var effects = []
   const enqueueEffect = (effect) => effects.push(effect)
@@ -13,20 +16,16 @@ export default function Eigenstate(stateDef, executeUpdate) {
     effectsInExecution.forEach(effect => effect())
   }
 
-  var invocations = []
   var cbIntervalID = null
-  const acknowledgeInvocation = (change) => {
+  const acknowledgeInvocation = (invocation) => {
 
-    invocations.push(change)
+    onInvoke(invocation)
 
     clearInterval(cbIntervalID)
     cbIntervalID = setInterval(() => {
 
       clearInterval(cbIntervalID)
-
-      const completedInvocations = invocations
-      invocations = []
-      executeUpdate(completedInvocations, executeEffects)
+      executeUpdate(executeEffects)
 
     }, 0)
   }

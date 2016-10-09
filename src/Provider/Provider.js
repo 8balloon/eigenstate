@@ -15,26 +15,17 @@ export class Provider extends React.Component {
 
     assert.stateDefIsObject(stateDef)
 
-    onInvoke && assert.onInvokePropIsFunction(onInvoke);
-    const onInvocations = !onInvoke ? (() => {}) :
-      ((invocations) => invocations.forEach(change => onInvoke(change)))
-
-    const throwErrFromProvider = (err) => { throw err }
-
-    const executeUpdate = (invocations, callback) => {
-
+    let throwErrFromProvider = (err) => { throw err }
+    const executeUpdate = (callback) => {
       try {
-        this.forceUpdate(() => {
-          onInvocations(invocations)
-          callback()
-        })
+        this.forceUpdate(callback)
       }
       catch (err) {
         throwErrFromProvider(err)
       }
     }
 
-    this.eigenstate = Eigenstate(stateDef, executeUpdate)
+    this.eigenstate = Eigenstate(stateDef, executeUpdate, onInvoke)
   }
 
   getChildContext() {

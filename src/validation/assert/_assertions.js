@@ -8,7 +8,7 @@ export function stateDefIsObject(stateDef) {
   }
 }
 
-export function onInvokePropIsFunction(onInvoke) {
+export function onInvokeIsFunction(onInvoke) {
 
   if (!(onInvoke instanceof Function)) {
     throw new Error(errorMessages.onInvokePropIsNotFunction)
