@@ -1,4 +1,4 @@
-![Eigenstate](assets/logo.svg)
+![Eigenstate](assets/logo.png)
 
 # Eigenstate
 
