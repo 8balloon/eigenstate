@@ -8,7 +8,7 @@ Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictabl
 
 ## Features
 
-* Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods-in-depth)
+* Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods)
 * Synchronous-sequential update batching (so it's fast)
 * Tiny, flexible [API](https://github.com/8balloon/eigenstate#API)
 
@@ -73,21 +73,23 @@ Methods are how you alter your state data. They may be pure xor impure.
 
 **Pure methods alter state and do nothing else.**
 
-Look at the "increment" and "changeColor" methods in the example above to see how to perform state data updates. You should build your application logic into pure methods.
+* Look at the "increment" and "changeColor" methods in the example above to see how to perform state data updates. This is where your application logic should live.
 
-**Impure methods call pure methods with the results of asynchronous actions.**
+**Impure methods may _not_ alter state, but they may call pure methods.**
 
-Look at the method "delayedIncrement" in the example above.
+* Impure methods are how Eigenstate provides support for asynchronous actions (like network calls).
+
+* A typical impure method will make async calls (like ```$.ajax```), and invoke pure methods in the callback to incorporate the results into state. Look at ```delayedIncrement``` in the example above. It makes an asyc call (```setTimeout```) and calls a pure method in the callback (```increment```) to update state.
 
 **Methods must be defined with two parameters, and called with one or zero parameters.**
 
-* The second parameter, ```state```, is provided automatically. Look at all of the example methods above; they all use the ```state``` parameter to do useful stuff.
+* The second parameter, ```state```, is provided automatically. Look at each of the example methods above; they all use the ```state``` parameter to do useful stuff.
 
 ## API
 
 * **Provider** : a React component. Provides access to state data and methods to its child via ```props```. Supports the following properties:
 
-  * **stateDef** (required) : the ```stateDef``` property must be an object of ```key: data | method | stateDef``` pairs. The Provider uses the ```stateDef``` property to generate state data and methods. Data can be any JSON, and methods are described in the section above.
+  * **stateDef** (required) : the ```stateDef``` property must be an object of ```key: data | method | stateDef``` pairs. The Provider uses the ```stateDef``` property to generate state data and methods. Data can be any JSON, and [methods](https://github.com/8balloon/eigenstate#methods) are described in the section above.
 
   * **onInvoke** (optional) : function called with details on every method invocation.
 
@@ -113,4 +115,4 @@ Maybe react router pages-within-a-page + smart scrolling?
 
 * Put your application logic in pure methods. Pure methods are pure functions, so they are easy to test.
 
-* Annotate your methods with a ```// pure``` or an ```// impure``` comment to keep them distinct. 
+* Annotate your methods with a ```// pure``` or an ```// impure``` comment to keep them distinct.
