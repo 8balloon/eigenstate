@@ -4,7 +4,7 @@
 
 Eigenstate is a state-management library for [React.js](https://facebook.github.io/react/) that provides support for *methods*.
 
-Methods, like [Redux](https://github.com/reactjs/redux) actions, are predictable and easy to test. The advantage is that they require no boilerplate, switch statements, special middleware, or sync/async code-splitting to provide complete functionality.
+Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictable and easy to test. The advantage is that they require no boilerplate, switch statements, special middleware, or sync/async code-splitting to provide complete functionality.
 
 ## Features
 
