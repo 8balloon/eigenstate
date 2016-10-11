@@ -111,7 +111,7 @@ Methods are how you alter your state data. They may be pure xor impure.
 Maybe react router pages-within-a-page + smart scrolling?
 -->
 
-## Pro tips
+## Pro Tips
 
 * Put your application logic in pure methods. Pure methods are pure functions, so they are easy to test.
 
