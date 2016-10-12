@@ -1,8 +1,8 @@
 import { Provider, logVerbosely} from '../../src'
 
-const isMinSize = ({rows, columns}) => rows.length <= 1 && columns.length <= 1
+const isMinSize = ({rows, columns}) => rows.length <= 1 || columns.length <= 1
 
-const stateDef = {
+export const gridState = {
 
   //values
   rows: [null, null, null],
@@ -18,14 +18,18 @@ const stateDef = {
 
   //asyncronous method
   gridClear: (_, state) => {
-    state.gridClearTick()
-    if ( !isMinSize(state) ) setTimeout(() => state.gridClear(), 100)
+
+    if ( !isMinSize(state) ) {
+
+      state.gridClearTick()
+      setTimeout(() => state.gridClear(), 100)
+    }
   }
 }
 
-const Grid = (props) => {
+export const GridView = (props) => {
   return (
-    <div className="grid">
+    <div id="grid">
       <div onClick={props.addRow}>Add row</div>
       <div onClick={props.addColumn}>Add column</div>
       <div onClick={props.gridClear}>Clear grid</div>
@@ -42,10 +46,10 @@ const Grid = (props) => {
   )
 }
 
-export default function GridApp() {
+export default function Grid() {
   return (
-    <Provider stateDef={stateDef} onInvoke={logVerbosely}>
-      <Grid />
+    <Provider stateDef={gridState} onInvoke={logVerbosely}>
+      <GridView />
     </Provider>
   )
 }

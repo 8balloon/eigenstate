@@ -4,11 +4,12 @@ import { Provider, logVerbosely } from '../../src'
 Your application's state definition.
 This state definition has 1 value and 1 method.
 */
-const counterStateDef = {
+export const counterState = {
   count: 0,
   color: 'red',
   increment: (amount, state) => ({ count: state.count + amount }),
   delayedIncrement: (payload, state) => {
+    2
     const { amount, delay } = payload
     setTimeout(() => state.increment(amount), delay)
   },
@@ -16,9 +17,8 @@ const counterStateDef = {
 }
 
 /*
-2
 */
-const CounterView = (props) => (
+export const CounterView = (props) => (
   <div id="counter" style={{backgroundColor: props.color}}>
     { props.count }
     <div onClick={() => props.increment(1)}> INCREMENT </div>
@@ -29,16 +29,13 @@ const CounterView = (props) => (
   </div>
 )
 
-const interfaceHandler = s => {console.log("SIMPLE COUNTER STATE BEFORE INCRMENET VIA INTERFACE:", s); s.increment(2); console.log("STATE AFTER INCREMENT VIA INTERFACE:", s)}
-
 /*
 Eigenstate's Provider creates your state object for you.
 It passes access to your state methods and values via "props"
 */
-export default function SimpleCounter() {
+export default function Counter() {
   return (
-    <Provider stateDef={counterStateDef} onInvoke={logVerbosely}
-      interface={interfaceHandler}>
+    <Provider stateDef={counterState} onInvoke={logVerbosely}>
       <CounterView />
     </Provider>
   )

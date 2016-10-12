@@ -9,9 +9,10 @@ import { Router, Route, hashHistory, Link } from 'react-router'
 
 import { Provider, logVerbosely, connect } from '../src'
 
+import CompleteExample from './CompleteExample'
+
 import GeneratedStateDef from './GeneratedStateDef'
-import SimpleCounter from './SimpleCounter'
-import Counters from './Counters'
+import Counter from './Counter'
 import Grid from './Grid'
 import ErroringCounter from './ErroringCounter'
 import ConnectComparison from './ConnectComparison'
@@ -42,9 +43,8 @@ const Kids = (props) => {
 const Apps = (props) => (
   <div className="apps">
     <GeneratedStateDef />
-    <SimpleCounter />
+    <Counter />
     <Grid />
-    <Counters />
     <ErroringCounter />
     <ConnectComparison />
     <Todos />
@@ -63,5 +63,7 @@ ReactDOM.render(
       </Route>
     </Router>
   </Provider>,
-  document.getElementById('react-root')
+  document.getElementById('react-tests')
 )
+
+// CompleteExample()
