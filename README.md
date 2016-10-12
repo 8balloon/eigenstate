@@ -103,97 +103,10 @@ Methods are how you alter your state data. They may be pure xor impure.
 
 ## Advanced Example
 
+See [here](https://github.com/8balloon/eigenstate/blob/master/test/CompleteExample/index.jsx).
+
 This is a React Router setup that implements multiple routes in a single page.
 It shows how to compose state objects and views into larger state objects and views via composition.
 On route change, it scrolls to the route's corresponding element on the page.
 
 The purpose of this example is to demonstrate the Eigenstate API and give an idea as to how you can incorporate Eigenstate into a larger architecture. It is not well-factored in itself.
-
-```js
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { browserHistory, Router, Route, Link } from 'react-router'
-import { Provider, connect } from 'eigenstate'
-import { counterState, CounterView } from 'eigenstateRepo/examples/Counter'
-import { gridState, GridView } from 'eigenstateRepo/examples/Grid'
-
-/*
-This state object is composed using a counter state object and a grid state object,
-which will be passed to CounterView and GridView (see CompleteExampleView)
-*/
-const completeExampleState = {
-
-  // stateDefs
-  counter: counterState,
-  grid: gridState,
-
-  location: null, //data
-
-  //pure
-  storeLocation: (location, state) => ({ location }),
-
-  //impure
-  handleNewLocation: (nextLocation, state) => {
-
-    // the && is in case location has not yet been initialized
-    if ( state.location === null || ( state.location.key !== nextLocation.key ) ) {
-
-      state.storeLocation(nextLocation)
-
-      // reset scrolling on every route change
-      window.scrollTo(0, 0)
-
-      return () => { // an Effect to be executed after the View has updated.
-        switch (nextLocation.pathname) {
-          case '/counter':
-            document.getElementById('counter').scrollIntoView(true)
-            break;
-          case '/grid':
-            document.getElementById('grid').scrollIntoView(true)
-            break;
-        }
-      }
-    }
-  }
-}
-
-const CompleteExampleView = connect((props) => (
-  <div id="root">
-    <div id="navigation">
-      <Link to="/home">Home</Link>
-      <Link to="/counter">Counter Example</Link>
-      <Link to="/grid">Grid Example</Link>
-    </div>
-    <div id="home" style={{paddingTop: '100%', paddingBottom: '100%'}}>
-      <img id="banner" src="http://fakeCDN.com/fakeHeroBanner" />
-      <CounterView {...props.counter} />
-      <GridView {...props.grid} />
-    </div>
-  </div>
-))
-
-// Passing new route location info into state via a method.
-const handleLocationChanges = (stateInterface) => {
-  browserHistory.listen((location) => {
-    stateInterface.handleNewLocation(location)
-  })
-}
-
-/*
-We are creating /home, /counter, and /grid routes so React Router knows what to
-do when a Link is clicked. Since their components are part of
-CompleteExmapleView, we don't have to give the routes components.
-*/
-ReactDOM.render(
-  <Provider stateDef={completeExampleState} interface={handleLocationChanges}>
-    <Router history={browserHistory}>
-      <Route path="/" component={CompleteExampleView}>
-        <Route path="/home" />
-        <Route path="/counter" />
-        <Route path="/grid" />
-      </Route>
-    </Router>
-  </Provider>,
-  document.getElementById('react-root')
-)
-```
