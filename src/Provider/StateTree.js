@@ -1,3 +1,4 @@
+import Immutable from 'seamless-immutable'
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import assert from '../validation/assert'
 
@@ -32,7 +33,7 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
 
   var lastInvocationId = 0
 
-  var stateTree = mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
+  var stateTree = Immutable(mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
     if (!(property instanceof Function)) return property
     const method = property
@@ -63,7 +64,7 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
 
           nextLocalState = Object.assign({}, localState, methodReturnValue)
 
-          stateTree = mutSetValueByPath(stateTree, path, nextLocalState)
+          stateTree = Immutable(mutSetValueByPath(stateTree, path, nextLocalState))
         }
       }
 
@@ -76,7 +77,7 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
         nextLocalState: nextLocalState || localState
       })
     }
-  })
+  }))
 
   return stateTree
 }
