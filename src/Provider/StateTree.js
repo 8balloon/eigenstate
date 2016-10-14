@@ -39,7 +39,6 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
           assert.returnDataFitsStateDef(methodReturnValue, localStateDef, key, path)
 
           nextLocalState = localState.merge(methodReturnValue)
-          console.log("YEH")
 
           if (path.length === 0) {
             stateTree = stateTree.merge(nextLocalState)
