@@ -67,3 +67,9 @@ export function returnDataFitsStateDef(returnData, stateDef, key, path) {
     containsNoFunctions(stateDefProperty, errorMessages.methodWasOverwritten(key, path, localKey))
   }
 }
+
+export function dataReturnerDidNotInvokeMethod(thisInvocationId, lastInvocationId, key, path) {
+  if (thisInvocationId !== lastInvocationId) {
+    console.warn(errorMessages.dataReturnerInvokedOtherMethod(key, path))
+  }
+}

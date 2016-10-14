@@ -9,9 +9,8 @@ export const counterState = {
   color: 'red',
   increment: (amount, state) => ({ count: state.count + amount }),
   delayedIncrement: (payload, state) => {
-    2
     const { amount, delay } = payload
-    setTimeout(() => state.increment(amount), delay)
+    setTimeout(function asyncCallback() { state.increment(amount) }, delay)
   },
   changeColor: (_, state) => ({ color: state.color === 'red' ? 'blue' : 'red' })
 }
@@ -23,7 +22,7 @@ export const CounterView = (props) => (
     { props.count }
     <div onClick={() => props.increment(1)}> INCREMENT </div>
     <div onClick={() => props.delayedIncrement({ amount: 10, delay: 1000 })}>
-      DELAYED INCREMENT
+      SLOW INCREMENT
     </div>
     <div onClick={props.changeColor}> CHANGE COLOR </div>
   </div>

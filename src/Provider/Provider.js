@@ -1,5 +1,6 @@
 import React from 'react'
 import assert from '../validation/assert'
+import { propsDidChange } from '../validation/errorMessages'
 import Eigenstate from './Eigenstate'
 
 export class Provider extends React.Component {
@@ -51,7 +52,7 @@ export class Provider extends React.Component {
       (props.onInvoke !== next.onInvoke) ||
       (props.interface !== next.interface)
     ) {
-      console.warn("An Eigenstate Provider had its props changed. State will be cleared and re-generated. Are you sure you meant to change Provider props? The Provider in question received these new props:", next)
+      console.warn(propsDidChange, next)
       this.initialize(next)
     }
   }

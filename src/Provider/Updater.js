@@ -15,15 +15,15 @@ export default function Updater(executeUpdate, optionalOnInvoke) {
     effectsInExecution.forEach(effect => effect())
   }
 
-  var cbIntervalID = null
+  var cbIntervalId = null
   const acknowledgeInvocation = (invocation) => {
 
     onInvoke(invocation)
 
-    clearInterval(cbIntervalID)
-    cbIntervalID = setInterval(() => {
+    clearInterval(cbIntervalId)
+    cbIntervalId = setInterval(() => {
 
-      clearInterval(cbIntervalID)
+      clearInterval(cbIntervalId)
       executeUpdate(executeEffects)
 
     }, 0)

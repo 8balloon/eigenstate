@@ -8,7 +8,7 @@ Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictabl
 
 ## Features
 
-* Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods)
+* Functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods)
 * Synchronous-sequential update batching (so it's fast)
 * Tiny, flexible [API](https://github.com/8balloon/eigenstate#API)
 
@@ -37,7 +37,7 @@ const stateDef = {
   increment: (amount, state) => ({ count: state.count + amount }),
   delayedIncrement: (payload, state) => {
     const { amount, delay } = payload
-    setTimeout(() => state.increment(amount), delay)
+    setTimeout(function asyncCallback() { state.increment(amount) }, delay)
   },
   changeColor: (_, state) => ({ color: state.color === 'red' ? 'blue' : 'red' })
 }
@@ -69,31 +69,29 @@ ReactDOM.render(
 
 ## Methods
 
-Methods are how you alter your state data.
+Methods are how you alter your state data. They can work with synchronous or asynchronous code.
 
 **Methods must be defined with two parameters, and called with one or zero parameters.**
 
-The second parameter, ```state```, is provided automatically. Look at each of the example methods above; they all use the ```state``` parameter to do useful stuff.
+The second parameter, ```state```, is provided automatically. Look at each of the methods in the example above; they all use the ```state``` parameter to do useful stuff.
 
 **Methods may alter state by returning updated state data.**
 
-If your state contains the data ```{ firstName: 'Hugh', lastName: 'Jackman' }``` and a method returns ```{ lastName: 'Mungus' }```, the your new state data will be ```{ firstName: 'Hugh', lastName: 'Mungus' }```.
-
-The methods ```increment``` and ```changeColor```are examples of methods that alter state data.
+Look at the methods ```increment``` and ```changeColor``` in the example above. Each of them alters state by returning updated state data. Your view component will receive updated state via ```props```.
 
 **Methods may invoke other methods. This is how Eigenstate supports asynchronous code.**
 
-Asynchronous actions like Ajax calls can't return values directly. In order to update state, invoke methods in async action callbacks.
+Asynchronous actions like ```$.ajax``` or ```setTimeout``` can't return values directly, because they use callbacks. In order to update state, invoke methods from within the callback function.
 
-Look at the method ```delayedIncrement``` in the example above to see method invocation in an asynchronous callback. Notice that it does not operate on state directly, which allows it to alter state even though it uses asynchronous code.
+Look at the method ```delayedIncrement``` in the example above. It demonstrates how to asynchronously invoke another method from within a callback.
 
-**Separate methods by purity**
+**Separate methods by purity.**
 
-To use Eigenstate effectively, you should separate your methods by *purity*.
+*Pure methods* alter state by returning updated state data. Do not invoke other methods.
 
-* *Pure methods* operate on state by returning updated state data. They should have no side effects, and invoke no other methods.
+*Impure methods* create side effects by doing things like executing asynchronous code and invoking other methods.
 
-* *Impure methods* handle side-effects, like making async calls and invoking other methods.
+Keeping these methods separate will greatly improve the clarity and reliability of your code. The rationale for this technique is detailed in the section on [optimization](https://github.com/8balloon/eigenstate#optimization)
 
 ## API
 
@@ -120,3 +118,7 @@ It shows how to compose state objects and views into larger state objects and vi
 On route change, it scrolls to the route's corresponding element on the page.
 
 The purpose of this example is to demonstrate the Eigenstate API and give an idea as to how you can incorporate Eigenstate into a larger architecture. It is not well-factored in itself.
+
+## Optimization
+
+TODO

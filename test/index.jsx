@@ -36,7 +36,7 @@ const ReactRouterTester = (props) => (
 
 const Kids = (props) => {
   return (
-    <div>KIDS</div>
+    <div>KIdS</div>
   )
 }
 
