@@ -1,5 +1,5 @@
 import Immutable from 'seamless-immutable'
-import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
+import { mapObjectTreeLeaves, getValueByPath } from '../utils'
 import assert from '../validation/assert'
 import Batcher from './Batcher'
 
@@ -38,7 +38,8 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
           assert.dataReturnerDidNotInvokeMethod(thisInvocationID, lastInvocationId, key, path)
           assert.returnDataFitsStateDef(methodReturnValue, localStateDef, key, path)
 
-          nextLocalState = Object.assign({}, localState, methodReturnValue)
+          nextLocalState = localState.merge(methodReturnValue)
+          console.log("YEH")
 
           if (path.length === 0) {
             stateTree = stateTree.merge(nextLocalState)

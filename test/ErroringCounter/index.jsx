@@ -71,7 +71,7 @@ const View = function CounterView(props) {
       </div>
       <div className="downCount">
         <div>{props.downCount.count}</div>
-        <div>{props.downCount.random + ' <=should remain the same when nested decrement count is called'}</div>
+        <div>{props.downCount.random + ' <=shouldn\'t change'}</div>
       </div>
       <div className="downCount.decrement" onClick={() => props.downCount.decrement(7)}>
         call nested decrement count
