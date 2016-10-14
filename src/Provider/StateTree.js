@@ -1,35 +1,11 @@
 import Immutable from 'seamless-immutable'
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import assert from '../validation/assert'
+import Batcher from './Batcher'
 
 export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
 
-  optionalOnInvoke && assert.onInvokeIsFunction(optionalOnInvoke)
-  const onInvoke = optionalOnInvoke || (() => {})
-
-  var effects = []
-  const enqueueEffect = (effect) => effects.push(effect)
-  let executeEffects = () => {
-
-    const effectsInExecution = effects
-    effects = []
-
-    effectsInExecution.forEach(effect => effect())
-  }
-
-  var cbIntervalId = null
-  const handleInvocatoin = (nextState, invocationDetails) => {
-
-    onInvoke(invocationDetails)
-
-    clearInterval(cbIntervalId)
-    cbIntervalId = setInterval(() => {
-
-      clearInterval(cbIntervalId)
-      executeUpdate(nextState, executeEffects)
-
-    }, 0)
-  }
+  const batcher = Batcher(executeUpdate, optionalOnInvoke)
 
   var lastInvocationId = 0
 
@@ -55,7 +31,7 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
 
         if (methodReturnValue instanceof Function) { // isEffect
 
-          enqueueEffect(methodReturnValue)
+          batcher.enqueueEffect(methodReturnValue)
         }
         else {
 
@@ -73,7 +49,7 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
         }
       }
 
-      handleInvocatoin(stateTree, {
+      batcher.handleInvocation(stateTree, {
         methodKey: key,
         methodPath: path,
         payload,
