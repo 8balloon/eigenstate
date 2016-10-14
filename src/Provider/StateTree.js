@@ -1,11 +1,38 @@
 import { mapObjectTreeLeaves, getValueByPath, mutSetValueByPath } from '../utils'
 import assert from '../validation/assert'
 
-export default function StateTree(stateDef, updater) {
+export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
+
+  optionalOnInvoke && assert.onInvokeIsFunction(optionalOnInvoke)
+  const onInvoke = optionalOnInvoke || (() => {})
+
+  var effects = []
+  const enqueueEffect = (effect) => effects.push(effect)
+  const executeEffects = () => {
+
+    const effectsInExecution = effects
+    effects = []
+
+    effectsInExecution.forEach(effect => effect())
+  }
+
+  var cbIntervalId = null
+  const handleInvocatoin = (nextState, invocationDetails) => {
+
+    onInvoke(invocationDetails)
+
+    clearInterval(cbIntervalId)
+    cbIntervalId = setInterval(() => {
+
+      clearInterval(cbIntervalId)
+      executeUpdate(nextState, executeEffects)
+
+    }, 0)
+  }
 
   var lastInvocationId = 0
 
-  var eigenstate = mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
+  var stateTree = mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
     if (!(property instanceof Function)) return property
     const method = property
@@ -14,7 +41,7 @@ export default function StateTree(stateDef, updater) {
 
       assert.noSecondArgumentWasPassed(illegalSecondArgument, key, path)
 
-      const localState = getValueByPath(eigenstate, path)
+      const localState = getValueByPath(stateTree, path)
 
       const thisInvocationID = lastInvocationId + 1
       lastInvocationId = thisInvocationID
@@ -27,7 +54,7 @@ export default function StateTree(stateDef, updater) {
 
         if (methodReturnValue instanceof Function) { // isEffect
 
-          updater.enqueueEffect(methodReturnValue)
+          enqueueEffect(methodReturnValue)
         }
         else {
 
@@ -36,11 +63,11 @@ export default function StateTree(stateDef, updater) {
 
           nextLocalState = Object.assign({}, localState, methodReturnValue)
 
-          Object.assign(eigenstate, mutSetValueByPath(eigenstate, path, nextLocalState))
+          stateTree = mutSetValueByPath(stateTree, path, nextLocalState)
         }
       }
 
-      updater.acknowledgeInvocation({
+      handleInvocatoin(stateTree, {
         methodKey: key,
         methodPath: path,
         payload,
@@ -51,5 +78,5 @@ export default function StateTree(stateDef, updater) {
     }
   })
 
-  return eigenstate
+  return stateTree
 }

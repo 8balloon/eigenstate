@@ -63,7 +63,7 @@ const CompleteExampleView = connect((props) => (
 // Passing new route location info into state via a method.
 const handleLocationChanges = (stateInterface) => {
   hashHistory.listen((location) => {
-    stateInterface.handleNewLocation(location)
+    stateInterface().handleNewLocation(location)
   })
 }
 

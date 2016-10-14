@@ -1,7 +1,7 @@
 import React from 'react'
 import assert from '../validation/assert'
 import { propsDidChange } from '../validation/errorMessages'
-import Eigenstate from './Eigenstate'
+import StateTree from './StateTree'
 
 export class Provider extends React.Component {
 
@@ -17,7 +17,10 @@ export class Provider extends React.Component {
     assert.stateDefIsObject(stateDef)
 
     let throwErrFromProvider = (err) => { throw err }
-    const executeUpdate = (callback) => {
+    const executeUpdate = (nextState, callback) => {
+
+      this.stateTree = nextState
+
       try {
         this.forceUpdate(callback)
       }
@@ -26,34 +29,34 @@ export class Provider extends React.Component {
       }
     }
 
-    this.eigenstate = Eigenstate(stateDef, executeUpdate, onInvoke)
+    this.stateTree = StateTree(stateDef, executeUpdate, onInvoke)
   }
 
   getChildContext() {
 
     return {
-      eigenstate: this.eigenstate
+      eigenstate: this.stateTree
     }
   }
 
   componentDidMount() {
 
     if (this.props.interface) {
-      this.props.interface(this.eigenstate)
+      this.props.interface(() => this.stateTree)
     }
   }
 
-  componentWillReceiveProps(next) {
+  componentWillReceiveProps(nextProps) {
 
     const props = this.props
 
     if (
-      (props.stateDef !== next.stateDef) ||
-      (props.onInvoke !== next.onInvoke) ||
-      (props.interface !== next.interface)
+      (props.stateDef !== nextProps.stateDef) ||
+      (props.onInvoke !== nextProps.onInvoke) ||
+      (props.interface !== nextProps.interface)
     ) {
-      console.warn(propsDidChange, next)
-      this.initialize(next)
+      console.warn(propsDidChange, nextProps)
+      this.initialize(nextProps)
     }
   }
 
@@ -61,7 +64,7 @@ export class Provider extends React.Component {
 
     return React.cloneElement(
       React.Children.only(this.props.children),
-      this.eigenstate
+      this.stateTree
     )
   }
 }
