@@ -1,29 +1,24 @@
 import Immutable from 'seamless-immutable'
 import { mapObjectTreeLeaves, getValueByPath } from '../utils'
 import assert from '../validation/assert'
+import validMethod from '../validation/validMethod'
 import Batcher from './Batcher'
 
 export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
 
   const batcher = Batcher(executeUpdate, optionalOnInvoke)
 
-  var lastInvocationId = 0
-
   var stateTree = Immutable(mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
     if (!(property instanceof Function)) return property
     const method = property
 
-    return function armedMethod(payload, illegalSecondArgument) {
+    return function armedMethod(payload, illegalSecondArg) {
 
-      assert.noSecondArgumentWasPassed(illegalSecondArgument, key, path)
+      assert.noSecondArgumentWasPassed(illegalSecondArg, key, path)
 
-      const localState = getValueByPath(stateTree, path)
-
-      const thisInvocationID = lastInvocationId + 1
-      lastInvocationId = thisInvocationID
-
-      const methodReturnValue = method(payload, localState)
+      const localStateTree = getValueByPath(stateTree, path)
+      const methodReturnValue = validMethod(method, payload, localStateTree, key, path)
 
       var nextLocalState = null
 
@@ -33,12 +28,11 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
 
           batcher.enqueueEffect(methodReturnValue)
         }
-        else {
+        else { // isData
 
-          assert.dataReturnerDidNotInvokeMethod(thisInvocationID, lastInvocationId, key, path)
           assert.returnDataFitsStateDef(methodReturnValue, localStateDef, key, path)
 
-          nextLocalState = localState.merge(methodReturnValue)
+          nextLocalState = localStateTree.merge(methodReturnValue)
 
           if (path.length === 0) {
             stateTree = stateTree.merge(nextLocalState)
@@ -54,8 +48,8 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
         methodPath: path,
         payload,
         returnValue: methodReturnValue,
-        localState: localState,
-        nextLocalState: nextLocalState || localState
+        localState: localStateTree,
+        nextLocalState: nextLocalState || localStateTree
       })
     }
   }))

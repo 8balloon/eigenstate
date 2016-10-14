@@ -20,14 +20,20 @@ const stateDef = {
     setTimeout(() => state.incrementCount(payload), 1000)
     return 123
   },
-  implBadIncrementCount: (payload, state) => {
+  pureANDImpureIncremenet: (payload, state) => {
     state.incrementCount(1337)
     return {
       count: state.count + payload
     }
   },
+  pureANDImpureAsyncIncrement: ({amount, delay}, state) => {
+    setTimeout(() => state.incrementCount(amount), delay)
+    return {
+      count: state.count + amount
+    }
+  },
   methodThatRemovesOtherMethod: (payload, state) => {
-    return {implBadIncrementCount: null}
+    return {pureANDImpureIncremenet: null}
   },
   downCount: {
     count: 0,
@@ -60,8 +66,14 @@ const View = function CounterView(props) {
       <div className="erringSlowIncrementProcedure" onClick={() => props.erringSlowIncrementProcedure(7)}>
         erringSlowIncrementProcedure
       </div>
-      <div className="implBadIncrementCount" onClick={() => props.implBadIncrementCount(7)}>
-        implBadIncrementCount
+      <div className="pureANDImpureIncremenet" onClick={() => props.pureANDImpureIncremenet(7)}>
+        pureANDImpureIncremenet
+      </div>
+      <div className="pureANDImpureAsyncIncrement" onClick={() => {
+        props.pureANDImpureAsyncIncrement({amount: 101, delay: 0})
+        props.pureANDImpureAsyncIncrement({amount: 505, delay: 100})
+      }}>
+        pureANDImpureAsyncIncrement
       </div>
       <div className="methodThatRemovesOtherMethod" onClick={() => props.methodThatRemovesOtherMethod(7)}>
         methodThatRemovesOtherMethod

@@ -1,4 +1,4 @@
-export function logVerbosely(change) {
+export function logVerbosely(invocationDetails) {
 
   const {
     methodPath,
@@ -6,8 +6,8 @@ export function logVerbosely(change) {
     methodKey,
     payload,
     returnValue,
-    // nextLocalState
-  } = change
+    // "nextLocalState" is available, but not used here.
+  } = invocationDetails
 
   console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- state / payload / return:`, localState, payload, returnValue)
 }
