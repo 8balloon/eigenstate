@@ -1,6 +1,6 @@
 {
   "name": "eigenstate",
-  "version": "0.9.8",
+  "version": "0.10.0",
   "description": "state methods for React",
   "main": "lib/index.js",
   "scripts": {

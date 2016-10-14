@@ -10,7 +10,7 @@ export const counterState = {
   increment: (amount, state) => ({ count: state.count + amount }),
   delayedIncrement: (payload, state) => {
     const { amount, delay } = payload
-    setTimeout(function asyncCallback() { state.increment(amount) }, delay)
+    setTimeout(function callback() { state.increment(amount) }, delay)
   },
   changeColor: (_, state) => ({ color: state.color === 'red' ? 'blue' : 'red' })
 }

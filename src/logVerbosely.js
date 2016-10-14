@@ -1,4 +1,8 @@
+import { isProduction } from './utils'
+
 export function logVerbosely(invocationDetails) {
+
+  if (isProduction) return
 
   const {
     methodPath,
