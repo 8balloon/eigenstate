@@ -69,21 +69,31 @@ ReactDOM.render(
 
 ## Methods
 
-Methods are how you alter your state data. They may be pure xor impure.
-
-**Pure methods alter state and do nothing else.**
-
-* Look at the "increment" and "changeColor" methods in the example above to see how to perform state data updates. This is where your application logic should live.
-
-**Impure methods may _not_ alter state, but they may call pure methods.**
-
-* Impure methods are how Eigenstate provides support for asynchronous actions (like network calls).
-
-* A typical impure method will make async calls (like ```$.ajax```), and invoke pure methods in the callback to incorporate the results into state. Look at ```delayedIncrement``` in the example above. It makes an asyc call (```setTimeout```) and calls a pure method in the callback (```increment```) to update state.
+Methods are how you alter your state data.
 
 **Methods must be defined with two parameters, and called with one or zero parameters.**
 
-* The second parameter, ```state```, is provided automatically. Look at each of the example methods above; they all use the ```state``` parameter to do useful stuff.
+The second parameter, ```state```, is provided automatically. Look at each of the example methods above; they all use the ```state``` parameter to do useful stuff.
+
+**Methods may alter state by returning updated state data.**
+
+If your state contains the data ```{ firstName: 'Hugh', lastName: 'Jackman' }``` and a method returns ```{ lastName: 'Mungus' }```, the your new state data will be ```{ firstName: 'Hugh', lastName: 'Mungus' }```.
+
+The methods ```increment``` and ```changeColor```are examples of methods that alter state data.
+
+**Methods may invoke other methods. This is how Eigenstate supports asynchronous code.**
+
+Asynchronous actions like Ajax calls can't return values directly. In order to update state, invoke methods in async action callbacks.
+
+Look at the method ```delayedIncrement``` in the example above to see method invocation in an asynchronous callback. Notice that it does not operate on state directly, which allows it to alter state even though it uses asynchronous code.
+
+**Separate methods by purity**
+
+To use Eigenstate effectively, you should separate your methods by *purity*.
+
+* *Pure methods* operate on state by returning updated state data. They should have no side effects, and invoke no other methods.
+
+* *Impure methods* handle side-effects, like making async calls and invoking other methods.
 
 ## API
 
@@ -99,7 +109,7 @@ Methods are how you alter your state data. They may be pure xor impure.
 
 * **logVerbosely** : logs information on method invocations and state changes in the console. See the example for how to use.
 
-* **effects** : A function returned from an impure method is an ```effect```. Effects are executed after the view component of your application has completely updated. Use sparingly.
+* **effects** : A function returned from a method is an ```effect```. Effects are executed after the view component of your application has completely updated. You should only use effects if you need to do something after your *view* component has updated, as opposed to after your *state* has updated.
 
 ## Advanced Example
 

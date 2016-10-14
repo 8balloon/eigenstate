@@ -1,11 +1,15 @@
 import { isObject, mapObjectTreeLeaves } from '../../utils'
 import * as errorMessages from '../errorMessages'
 
+function assertIsObject(value, errorMessage) {
+  if (!(isObject(value))) {
+    throw new Error(errorMessage)
+  }
+}
+
 export function stateDefIsObject(stateDef) {
 
-  if (!(isObject(stateDef))) {
-    throw new Error(errorMessages.stateDefIsNotObject)
-  }
+  assertIsObject(stateDef, errorMessages.stateDefIsNotObject)
 }
 
 export function onInvokeIsFunction(onInvoke) {
@@ -15,16 +19,10 @@ export function onInvokeIsFunction(onInvoke) {
   }
 }
 
-export function methodWasNotPassedSecondArgument(illegalSecondArgument, key, path) {
+export function noSecondArgumentWasPassed(illegalSecondArgument, key, path) {
 
   if (typeof illegalSecondArgument !== 'undefined') {
     throw new Error(errorMessages.tooManyMethodArguments(key, path))
-  }
-}
-
-export function dataReturnerDidNotInvokeMethod(thisInvocationID, latestInvocationID, key, path) {
-  if (thisInvocationID !== latestInvocationID) {
-    throw new Error(errorMessages.dataReturnerInvokedOtherMethod(key, path))
   }
 }
 
@@ -43,18 +41,19 @@ function containsNoFunctions(obj, errorMessage) {
   })
 }
 
-function returnDataIsJSONObject(returnData, key, path) {
-
-  if (!isObject(returnData)) {
-    throw new Error(errorMessages.returnDataIsNotObject(key, path))
-  }
-
+function isJSON(value, errorMessage) {
   try {
-    JSON.stringify(returnData)
+    JSON.stringify(value)
   }
   catch (err) {
-    throw new Error(errorMessages.returnedDataIsNotJSON(key, path))
+    throw new Error(errorMessage)
   }
+}
+
+function returnDataIsJSONObject(returnData, key, path) {
+
+  assertIsObject(returnData, errorMessages.returnDataIsNotObject(key, path))
+  isJSON(errorMessages.returnedDataIsNotJSON(key, path))
 }
 
 export function returnDataFitsStateDef(returnData, stateDef, key, path) {

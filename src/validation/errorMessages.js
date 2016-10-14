@@ -15,10 +15,10 @@ export function methodWasOverwritten(key, path, localKey) {
   return `The method "${path.join('.') + '.' + key}" returned an object with key "${localKey}". There appears to be a method with that key. Did you make sure that your { key: value } data object keys do not conflict with method keys?`
 }
 
-export function dataReturnerInvokedOtherMethod(key, path) {
-  return `The method "${path.join('.') + '.' + key}" invoked another method before returning. Methods must be pure (return data and do nothing else) XOR impure (do anything but return data). See ${documentationURL}`
+export function returnedDataIsNotJSON(key, path) {
+  return `The method "${path.join('.') + '.' + key}" returned a non-JSON value. State data returned by methods must be valid JSON. See ${documentationURL}`
 }
 
-export function returnedDataIsNotJSON(key, path) {
-  return `Method ${key} at path ${path} returned a non-JSON value. State data returned by methods must be valid JSON. See ${documentationURL}`
+export function payloadIsNotJSON(key, path) {
+  return `The method "${path.join('.') + '.' + key}" was invoked with a non-JSON argument. Methods should only be called with JSON arguments. If you want to invoke functions in response to method invocations, use Provider.props.onInvoke. See ${documentationURL}`
 }

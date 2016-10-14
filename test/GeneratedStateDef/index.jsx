@@ -17,12 +17,12 @@ function nextCounterStateDef() {
   }
 }
 
-const CounterView = (props) => (
+const CounterView = (props) => {console.log("SIMPLECOUNTERPRPOS:", props); return (
   <div className="simpleCounter">
     <div className="generatedCount">{ props.generatedCount.number }</div>
     <div className="incrementer" onClick={props.increment}> INCREMENT </div>
   </div>
-)
+)}
 
 function SimpleCounter(props) {
   return (

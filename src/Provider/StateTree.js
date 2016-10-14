@@ -3,8 +3,6 @@ import assert from '../validation/assert'
 
 export default function StateTree(stateDef, updater) {
 
-  var latestInvocationID = 0
-
   var eigenstate = mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
     if (!(property instanceof Function)) return property
@@ -12,12 +10,9 @@ export default function StateTree(stateDef, updater) {
 
     return function armedMethod(payload, illegalSecondArgument) {
 
-      assert.methodWasNotPassedSecondArgument(illegalSecondArgument, key, path)
+      assert.noSecondArgumentWasPassed(illegalSecondArgument, key, path)
 
       const localState = getValueByPath(eigenstate, path)
-
-      const thisInvocationID = latestInvocationID + 1
-      latestInvocationID = thisInvocationID
 
       const methodReturnValue = method(payload, localState)
 
@@ -31,7 +26,6 @@ export default function StateTree(stateDef, updater) {
         }
         else {
 
-          assert.dataReturnerDidNotInvokeMethod(thisInvocationID, latestInvocationID, key, path)
           assert.returnDataFitsStateDef(methodReturnValue, localStateDef, key, path)
 
           nextLocalState = Object.assign({}, localState, methodReturnValue)
