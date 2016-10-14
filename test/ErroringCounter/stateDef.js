@@ -36,6 +36,7 @@ export default {
 
   downCount: {
     count: 0,
+    random: Math.random(),
     decrement: (payload, state) => ({
       count: state.count - payload
     })

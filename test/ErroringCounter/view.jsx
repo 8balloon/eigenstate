@@ -40,7 +40,8 @@ export default function CounterView(props) {
         call increment with too many arguments
       </div>
       <div className="downCount">
-        {downCount.count}
+        <div>{downCount.count}</div>
+        <div>{downCount.random + ' <=should remain the same when nested decrement count is called'}</div>
       </div>
       <div className="downCount.decrement" onClick={() => downCount.decrement(7)}>
         call nested decrement count

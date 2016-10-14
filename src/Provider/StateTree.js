@@ -9,7 +9,7 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
 
   var effects = []
   const enqueueEffect = (effect) => effects.push(effect)
-  const executeEffects = () => {
+  let executeEffects = () => {
 
     const effectsInExecution = effects
     effects = []
@@ -64,7 +64,12 @@ export default function StateTree(stateDef, executeUpdate, optionalOnInvoke) {
 
           nextLocalState = Object.assign({}, localState, methodReturnValue)
 
-          stateTree = Immutable(mutSetValueByPath(stateTree, path, nextLocalState))
+          if (path.length === 0) {
+            stateTree = stateTree.merge(nextLocalState)
+          }
+          else {
+            stateTree = stateTree.setIn(path, nextLocalState)
+          }
         }
       }
 
