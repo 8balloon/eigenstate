@@ -9,7 +9,8 @@ Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictabl
 ## Features
 
 * Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods)
-* Synchronous-sequential update batching (so it's fast)
+* Synchronous-sequential update batching
+* Immutable state (always, automatically)
 * Tiny, flexible [API](https://github.com/8balloon/eigenstate#API)
 
 ## 3 Easy Steps (but seriously)
@@ -171,6 +172,6 @@ ReactDOM.render(
 
 #### Optimization
 
-Eigenstate state is immutable. This empowers you to use React's ```shouldComponentUpdate``` to speed up your application.
+Eigenstate state is always immutable. This empowers you to use React's ```shouldComponentUpdate``` to speed up your application.
 
 Eigenstate also batches synchronous-sequential updates, so invoking several pure methods in succession (like ```state.firstPureMethod(); state.secondPureMethod()```) will only trigger a single re-render of your application view.
