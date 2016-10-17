@@ -67,3 +67,15 @@ ReactDOM.render(
 )
 
 // CompleteExample()
+
+
+
+
+
+
+
+import Store from '../src/Provider/Store'
+
+var store = Store(indexStateDef, logVerbosely)
+console.log("STORE s:", store)
+window.s = store
