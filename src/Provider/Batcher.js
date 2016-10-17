@@ -1,8 +1,5 @@
-import assert from '../validation/assert'
-
 export default function Batcher(executeUpdate, optionalOnInvoke) {
-
-  optionalOnInvoke && assert.onInvokeIsFunction(optionalOnInvoke)
+  
   const onInvoke = optionalOnInvoke || (() => {})
 
   var cbIntervalId = null

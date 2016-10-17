@@ -14,8 +14,6 @@ export class Provider extends React.Component {
 
     const { stateDef, onInvoke } = props
 
-    assert.stateDefIsObject(stateDef)
-
     let throwErrFromProvider = (err) => { throw err }
     const executeUpdate = (nextState, callback) => {
 

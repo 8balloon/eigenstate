@@ -2,7 +2,7 @@ const documentationURL = 'https://github.com/8balloon/switchless/blob/master/REA
 
 export const stateDefIsNotObject = "No stateDef prop was detected by the StateTree Provider. Did you provide a stateDef via <Provider stateDef={yourStateDef}> ?"
 export const onInvokePropIsNotFunction = "Provider.props.onInvoke must be a function."
-export const propsDidChange = "An StateTree Provider had its props changed. State will be cleared and re-generated. Are you sure you meant to change Provider props? The Provider in question received these new props:"
+export const propsDidChange = "A StateTree Provider had its props changed. State will be cleared and re-generated. Are you sure you meant to change Provider props? The Provider in question received these new props:"
 
 export function tooManyMethodArguments(key, path) {
   return `Multiple arguments were passed to "${path.join('.') + '.' + key}". StateTree provides a second argument automatically, so passing multiple arguments is not supported.`

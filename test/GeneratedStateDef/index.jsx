@@ -17,6 +17,8 @@ function nextCounterStateDef() {
   }
 }
 
+const s = nextCounterStateDef()
+
 const CounterView = (props) => {console.log("SIMPLECOUNTERPRPOS:", props); return (
   <div className="simpleCounter">
     <div className="generatedCount">{ props.generatedCount.number }</div>
@@ -26,7 +28,7 @@ const CounterView = (props) => {console.log("SIMPLECOUNTERPRPOS:", props); retur
 
 function SimpleCounter(props) {
   return (
-    <Provider stateDef={props.generatedCounterStateDef}>
+    <Provider stateDef={s}>
       <CounterView />
     </Provider>
   )
