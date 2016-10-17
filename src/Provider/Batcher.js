@@ -8,7 +8,7 @@ export default function Batcher(executeUpdate, optionalOnInvoke) {
   var cbIntervalId = null
   var effects = []
 
-  let executeEffects = () => {
+  let invokeEffects = () => {
 
     const effectsInExecution = effects
     effects = []
@@ -23,7 +23,7 @@ export default function Batcher(executeUpdate, optionalOnInvoke) {
     cbIntervalId = setInterval(() => {
 
       clearInterval(cbIntervalId)
-      executeUpdate(nextState, executeEffects)
+      executeUpdate(nextState, invokeEffects)
 
     }, 0)
   }

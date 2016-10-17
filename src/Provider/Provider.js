@@ -1,7 +1,7 @@
 import React from 'react'
 import assert from '../validation/assert'
 import { propsDidChange } from '../validation/errorMessages'
-import StateTree from './StateTree'
+import Store from './Store'
 
 export class Provider extends React.Component {
 
@@ -19,8 +19,6 @@ export class Provider extends React.Component {
     let throwErrFromProvider = (err) => { throw err }
     const executeUpdate = (nextState, callback) => {
 
-      this.stateTree = nextState
-
       try {
         this.forceUpdate(callback)
       }
@@ -29,20 +27,14 @@ export class Provider extends React.Component {
       }
     }
 
-    this.stateTree = StateTree(stateDef, executeUpdate, onInvoke)
+    this.store = Store(stateDef, onInvoke)
+    this.store.subscribe(executeUpdate)
   }
 
   getChildContext() {
 
     return {
-      eigenstate: this.stateTree
-    }
-  }
-
-  componentDidMount() {
-
-    if (this.props.interface) {
-      this.props.interface(() => this.stateTree)
+      eigenstate: this.store()
     }
   }
 
@@ -52,8 +44,7 @@ export class Provider extends React.Component {
 
     if (
       (props.stateDef !== nextProps.stateDef) ||
-      (props.onInvoke !== nextProps.onInvoke) ||
-      (props.interface !== nextProps.interface)
+      (props.onInvoke !== nextProps.onInvoke)
     ) {
       console.warn(propsDidChange, nextProps)
       this.initialize(nextProps)
@@ -64,7 +55,7 @@ export class Provider extends React.Component {
 
     return React.cloneElement(
       React.Children.only(this.props.children),
-      this.stateTree
+      this.store()
     )
   }
 }

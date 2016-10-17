@@ -7,17 +7,15 @@ export default function Store(stateDef, optionalOnInvoke) {
 
   var state = null
 
-  const executeUpdate = (nextState, executeEffects) => {
+  const executeUpdateViaSubscriber = (nextState, executeUpdate) => {
     state = nextState
-    subscribers.forEach(subscriber => subscriber(state, executeEffects))
+    subscribers.forEach(subscriber => subscriber(state, executeUpdate))
   }
 
-  state = StateTree(stateDef, executeUpdate, optionalOnInvoke)
+  state = StateTree(stateDef, executeUpdateViaSubscriber, optionalOnInvoke)
 
   var store = () => state
   store.subscribe = (subscriber) => {
-
-    subscriber(state)
 
     const thisSubscriberIndex = newSubscriberIndex
     newSubscriberIndex++
