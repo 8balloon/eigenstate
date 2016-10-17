@@ -1,7 +1,7 @@
 import assert from '../validation/assert'
 import StateTree from './StateTree'
 
-export default function Store(stateDef, optionalOnInvoke) {
+export function Store(stateDef, optionalOnInvoke) {
 
   assert.stateDefIsObject(stateDef)
   optionalOnInvoke && assert.onInvokeIsFunction(optionalOnInvoke)

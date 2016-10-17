@@ -19,6 +19,12 @@ export function onInvokeIsFunction(onInvoke) {
   }
 }
 
+export function storeIsFunction(store) {
+  if (!(store instanceof Function)) {
+    throw new Error(errorMessages.storeIsNotFunction)
+  }
+}
+
 export function noSecondArgumentWasPassed(illegalSecondArgument, key, path) {
 
   if (typeof illegalSecondArgument !== 'undefined') {
@@ -65,5 +71,12 @@ export function returnDataFitsStateDef(returnData, stateDef, key, path) {
     const stateDefProperty = stateDef[localKey]
 
     containsNoFunctions(stateDefProperty, errorMessages.methodWasOverwritten(key, path, localKey))
+  }
+}
+
+export function storeDidNotChange(store, nextStore) {
+
+  if (store !== nextStore) {
+    throw new Error(errorMessages.storeDidChange)
   }
 }

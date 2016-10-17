@@ -7,7 +7,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, hashHistory, Link } from 'react-router'
 
-import { Provider, logVerbosely, connect } from '../src'
+import { Provider, Store, logVerbosely, connect } from '../src'
 
 import CompleteExample from './CompleteExample'
 
@@ -55,8 +55,10 @@ const Apps = (props) => (
 
 const StatefulApps = connect(Apps)
 
+const store = Store(indexStateDef)
+
 ReactDOM.render(
-  <Provider stateDef={indexStateDef}>
+  <Provider store={store}>
     <Router history={hashHistory}>
       <Route path="/" component={StatefulApps}>
         <Route path="kids" component={Kids} />
@@ -67,15 +69,3 @@ ReactDOM.render(
 )
 
 // CompleteExample()
-
-
-
-
-
-
-
-import Store from '../src/Provider/Store'
-
-var store = Store(indexStateDef, logVerbosely)
-console.log("STORE s:", store)
-window.s = store

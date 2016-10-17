@@ -1,4 +1,4 @@
-import { Provider, logVerbosely} from '../../src'
+import { Provider, Store, logVerbosely} from '../../src'
 
 const isMinSize = ({rows, columns}) => rows.length <= 1 || columns.length <= 1
 
@@ -46,9 +46,11 @@ export const GridView = (props) => {
   )
 }
 
+const gridStore = Store(gridState, logVerbosely)
+
 export default function Grid() {
   return (
-    <Provider stateDef={gridState} onInvoke={logVerbosely}>
+    <Provider store={gridStore}>
       <GridView />
     </Provider>
   )

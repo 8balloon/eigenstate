@@ -1,7 +1,6 @@
 import React from 'react'
 import assert from '../validation/assert'
 import { propsDidChange } from '../validation/errorMessages'
-import Store from './Store'
 
 export class Provider extends React.Component {
 
@@ -12,7 +11,7 @@ export class Provider extends React.Component {
 
   initialize(props) {
 
-    const { stateDef, onInvoke } = props
+    assert.storeIsFunction(props.store)
 
     let throwErrFromProvider = (err) => { throw err }
     const executeUpdate = (nextState, callback) => {
@@ -25,35 +24,26 @@ export class Provider extends React.Component {
       }
     }
 
-    this.store = Store(stateDef, onInvoke)
-    this.store.subscribe(executeUpdate)
+    props.store.subscribe(executeUpdate)
   }
 
   getChildContext() {
 
     return {
-      eigenstate: this.store()
+      eigenstate: this.props.store()
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(next) {
 
-    const props = this.props
-
-    if (
-      (props.stateDef !== nextProps.stateDef) ||
-      (props.onInvoke !== nextProps.onInvoke)
-    ) {
-      console.warn(propsDidChange, nextProps)
-      this.initialize(nextProps)
-    }
+    assert.storeDidNotChange(this.props.store, next.store)
   }
 
   render() {
 
     return React.cloneElement(
       React.Children.only(this.props.children),
-      this.store()
+      this.props.store()
     )
   }
 }

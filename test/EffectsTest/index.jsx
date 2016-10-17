@@ -1,4 +1,4 @@
-import { Provider } from '../../src'
+import { Provider, Store } from '../../src'
 
 const effectsStateDef = {
   count: 0,
@@ -31,8 +31,10 @@ const EffectsView = (props) => (
 
 export default function EffectsTest(props) {
 
+  const effectsTestStore = Store(effectsStateDef)
+
   return (
-    <Provider stateDef={effectsStateDef}>
+    <Provider store={effectsTestStore}>
       <EffectsView />
     </Provider>
   )

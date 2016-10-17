@@ -1,6 +1,6 @@
-import { Provider, connect } from '../../src'
+import { Provider, Store, connect } from '../../src'
 
-const CounterStateDef = {
+const counterStateDef = {
   count: 0,
   increment: (amount, state) => ({ count: state.count + amount })
 }
@@ -21,9 +21,10 @@ const CountersWrapper = (props) => (
   </div>
 )
 
+const store = Store(counterStateDef)
 export default function ConnectComparison() {
   return (
-    <Provider stateDef={CounterStateDef}>
+    <Provider store={store}>
       <CountersWrapper />
     </Provider>
   )

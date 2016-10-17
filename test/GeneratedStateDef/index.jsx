@@ -1,4 +1,4 @@
-import { Provider } from '../../src'
+import { Provider, Store } from '../../src'
 
 var incAmount = 1
 
@@ -17,8 +17,6 @@ function nextCounterStateDef() {
   }
 }
 
-const s = nextCounterStateDef()
-
 const CounterView = (props) => {console.log("SIMPLECOUNTERPRPOS:", props); return (
   <div className="simpleCounter">
     <div className="generatedCount">{ props.generatedCount.number }</div>
@@ -27,8 +25,9 @@ const CounterView = (props) => {console.log("SIMPLECOUNTERPRPOS:", props); retur
 )}
 
 function SimpleCounter(props) {
+  const generatedStore = Store(props.generatedCounterStateDef)
   return (
-    <Provider stateDef={s}>
+    <Provider store={generatedStore}>
       <CounterView />
     </Provider>
   )
@@ -47,8 +46,9 @@ const Controller = (props) => (
 )
 
 export default function CounterController() {
+  const controllerStore = Store(controllerStateDef)
   return (
-    <Provider stateDef={controllerStateDef}>
+    <Provider store={controllerStore}>
       <Controller />
     </Provider>
   )

@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { hashHistory, Router, Route, Link } from 'react-router'
-import { Provider, connect } from '../../src'
+import { Provider, Store, connect } from '../../src'
 import { counterState, CounterView } from '../Counter'
 import { gridState, GridView } from '../Grid'
 
@@ -71,9 +71,10 @@ const handleLocationChanges = (stateInterface) => {
 We are creating /home, /counter, and /grid routes so that handleLocationChanges
 picks up on route location changes and can scroll to corresponding elements.
 */
+const store = Store(completeExampleState)
 const CompleteExample = () => {
   ReactDOM.render(
-    <Provider stateDef={completeExampleState} interface={handleLocationChanges}>
+    <Provider store={store}>
       <Router history={hashHistory}>
         <Route path="/" component={CompleteExampleView}>
           <Route path="/home" />

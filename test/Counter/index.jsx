@@ -1,4 +1,4 @@
-import { Provider, logVerbosely } from '../../src'
+import { Provider, Store, logVerbosely } from '../../src'
 
 /*
 Your application's state definition.
@@ -32,9 +32,10 @@ export const CounterView = (props) => (
 Eigenstate's Provider creates your state object for you.
 It passes access to your state methods and values via "props"
 */
+const counterStore = Store(counterState, logVerbosely)
 export default function Counter() {
   return (
-    <Provider stateDef={counterState} onInvoke={logVerbosely}>
+    <Provider store={counterStore}>
       <CounterView />
     </Provider>
   )

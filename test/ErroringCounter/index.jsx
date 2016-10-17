@@ -1,4 +1,4 @@
-import { Provider, logVerbosely } from '../../src'
+import { Provider, Store, logVerbosely } from '../../src'
 
 const stateDef = {
 
@@ -99,8 +99,9 @@ const View = function CounterView(props) {
 }
 
 export default function ErroringCounter() {
+  const erroringStore = Store(stateDef, logVerbosely)
   return (
-    <Provider stateDef={stateDef} onInvoke={logVerbosely}>
+    <Provider store={erroringStore}>
       <View />
     </Provider>
   )
