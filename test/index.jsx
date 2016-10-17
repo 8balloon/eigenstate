@@ -11,7 +11,6 @@ import { Provider, Store, logVerbosely, connect } from '../src'
 
 import CompleteExample from './CompleteExample'
 
-import GeneratedStateDef from './GeneratedStateDef'
 import Counter from './Counter'
 import Grid from './Grid'
 import ErroringCounter from './ErroringCounter'
@@ -42,7 +41,6 @@ const Kids = (props) => {
 
 const Apps = (props) => (
   <div className="apps">
-    <GeneratedStateDef />
     <Counter />
     <Grid />
     <ErroringCounter />

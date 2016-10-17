@@ -1,6 +1,6 @@
 import React from 'react'
-import assert from '../validation/assert'
-import { propsDidChange } from '../validation/errorMessages'
+import assert from './validation/assert'
+import { propsDidChange } from './validation/errorMessages'
 
 export class Provider extends React.Component {
 

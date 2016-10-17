@@ -98,8 +98,9 @@ const View = function CounterView(props) {
   )
 }
 
+const erroringStore = Store(stateDef, logVerbosely)
+
 export default function ErroringCounter() {
-  const erroringStore = Store(stateDef, logVerbosely)
   return (
     <Provider store={erroringStore}>
       <View />

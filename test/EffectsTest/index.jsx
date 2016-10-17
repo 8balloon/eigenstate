@@ -29,9 +29,9 @@ const EffectsView = (props) => (
   </div>
 )
 
-export default function EffectsTest(props) {
+const effectsTestStore = Store(effectsStateDef)
 
-  const effectsTestStore = Store(effectsStateDef)
+export default function EffectsTest(props) {
 
   return (
     <Provider store={effectsTestStore}>
