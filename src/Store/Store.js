@@ -5,46 +5,42 @@ export function Store(stateDef) {
 
   assert.stateDefIsObject(stateDef)
 
-  var updateSubscribers = []
-  var newUpdateSubscriberIndex = 2
+  var updateSubs = []
+  var methodSubs = []
 
-  var methodSubscribers = []
-  var newMethodSubscriberIndex = 2
   const onInvoke = (invocationDetails) => {
-    methodSubscribers.forEach((subscriber) => {
-      subscriber(invocationDetails)
-    })
+    methodSubs.forEach(sub => sub(invocationDetails))
   }
 
   var state = null
 
   const executeUpdateViaSubscriber = (nextState, executeUpdate) => {
     state = nextState
-    updateSubscribers.forEach(subscriber => subscriber(state, executeUpdate))
+    updateSubs.forEach(sub => sub(state, executeUpdate))
   }
 
   state = StateTree(stateDef, executeUpdateViaSubscriber, onInvoke)
 
   var store = () => state
-  store.onUpdate = (subscriber) => {
+  store.onUpdate = (newUpdateSubscriber) => {
 
-    const thisSubscriberIndex = newUpdateSubscriberIndex
-    newUpdateSubscriberIndex++
-    updateSubscribers[thisSubscriberIndex] = subscriber
+    const thisUpdateSubIndex = updateSubs.length
+    updateSubs[thisUpdateSubIndex] = newUpdateSubscriber
 
     return function unsubscribeFromUpdates() {
-      delete updateSubscribers[thisSubscriberIndex]
+      delete updateSubs[thisUpdateSubIndex]
       return true
     }
   }
-  store.onMethod = (methodSubscriber) => {
+  store.onMethod = (newMethodSubscriber) => {
 
-    const thisMethodSubscriberIndex = newMethodSubscriberIndex
-    newMethodSubscriberIndex++
-    methodSubscribers[thisMethodSubscriberIndex] = methodSubscriber
+    assert.methodSubscriberIsFunction(newMethodSubscriber)
+
+    const thisMethodSubIndex = methodSubs.length
+    methodSubs[thisMethodSubIndex] = newMethodSubscriber
 
     return function unsubscribeFromMethods() {
-      delete methodSubscribers[thisMethodSubscriberIndex]
+      delete methodSubs[thisMethodSubIndex]
       return true
     }
   }

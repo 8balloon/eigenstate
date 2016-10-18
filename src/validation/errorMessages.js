@@ -1,8 +1,9 @@
 const documentationURL = 'https://github.com/8balloon/switchless/blob/master/README.md'
 
-export const stateDefIsNotObject = "No stateDef prop was detected by the StateTree Provider. Did you provide a stateDef as the first argument to your Store constructor?"
-export const onInvokePropIsNotFunction = "The Store onInvoke argument must be a function."
-export const storeIsNotFunction = "Provider.props.store must be a function. Did you remember to create it with Store, imported from 'eigenstate'?"
+export const stateDefIsNotObject = "The Store constructor function requires a stateDef object as an argument."
+export const onUpdateIsNotFunction = "Update listeners must be functions."
+export const onMethodIsNotFunction = "Method listeners must be functions."
+export const storeIsNotFunction = "Provider.props.store must be a function. Did you remember to create it with the Store constructor function, imported from 'eigenstate'?"
 
 export function tooManyMethodArguments(key, path) {
   return `Multiple arguments were passed to "${path.join('.') + '.' + key}". StateTree provides a second argument automatically, so passing multiple arguments is not supported.`
@@ -21,7 +22,7 @@ export function returnedDataIsNotJSON(key, path) {
 }
 
 export function payloadIsNotJSON(key, path) {
-  return `The method "${path.join('.') + '.' + key}" was invoked with a non-JSON argument. Methods should only be called with JSON arguments. If you want to invoke functions in response to method invocations, use Provider.props.onInvoke. See ${documentationURL}`
+  return `The method "${path.join('.') + '.' + key}" was invoked with a non-JSON argument. Methods should only be called with JSON arguments. If you want to invoke functions in response to method invocations, use Provider.props.onMethod. See ${documentationURL}`
 }
 
 export function dataReturnerInvokedOtherMethod(key, path) {

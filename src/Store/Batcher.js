@@ -10,20 +10,21 @@ export default function Batcher(executeUpdate, onInvoke) {
     effectsInExecution.forEach(effect => effect())
   }
 
-  const handleInvocation = (nextState, invocationDetails) => {
-
-    onInvoke(invocationDetails)
+  const executeUpdateWithEffects = (nextState) => {
 
     clearInterval(cbIntervalId)
     cbIntervalId = setInterval(() => {
 
       clearInterval(cbIntervalId)
       executeUpdate(nextState, invokeEffects)
-
     }, 0)
   }
 
   const enqueueEffect = (effect) => effects.push(effect)
 
-  return { handleInvocation, enqueueEffect }
+  return {
+    executeUpdate: executeUpdateWithEffects,
+    handleInvocation: onInvoke,
+    enqueueEffect
+  }
 }

@@ -6,8 +6,15 @@ const erroringStore = Store({
   incrementCount: (payload, state) => ({
     count: state.count + payload
   }),
+  doubleIncrement: (_, state) => {
+    state.incrementCount(1)
+    state.incrementCount(2)
+  },
   slowIncrement: (payload, state) => {
-    setTimeout(() => state.incrementCount(payload), 1000)
+    setTimeout(() => {
+      state.incrementCount(payload / 2)
+      state.incrementCount(payload / 2)
+    }, 1000)
   },
   erringIncrementReducer: (payload, state) => {
     state.incrementCount(payload)
@@ -49,6 +56,7 @@ erroringStore.onMethod(logVerbosely)
 const View = function CounterView(props) {
 
   window.props = props
+  console.log("RENDER")
 
   return (
     <div className="erroringCounter">
@@ -57,6 +65,9 @@ const View = function CounterView(props) {
       </div>
       <div className="fastIncrement" onClick={() => props.incrementCount(1)}>
         small fast increment
+      </div>
+      <div className="doubleIncrement" onClick={props.doubleIncrement}>
+        double increment
       </div>
       <div className="slowIncrement" onClick={() => props.slowIncrement(7)}>
         big slow increment

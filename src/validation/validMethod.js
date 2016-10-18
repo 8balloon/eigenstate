@@ -26,7 +26,7 @@ export default function validMethod(method, payload, stateTree, key, path) {
 
   const methodReturnValue = method(payload, enforcingStateTree)
 
-  if (methodReturnValue && (!(methodReturnValue instanceof Function))) { //Effects ok
+  if (methodReturnValue /* && (!(methodReturnValue instanceof Function)) */) { //Effects not OK
     if (invokedOtherMethod) {
       throw new Error(dataReturnerInvokedOtherMethod(key, path))
     }

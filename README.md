@@ -100,7 +100,7 @@ Just remember that your methods may call other methods XOR return updated state 
 
 * **logVerbosely** : logs information on method invocations and state changes in the console. See the 1-2-3 example for how to use. It's highly recommended :)
 
-* **effects** : A function returned from a method is an ```effect```. Effects are executed after the view component of your application has completely updated. Do not get them mixed up with impure [methods](https://github.com/8balloon/eigenstate#methods), which are how you handle callbacks / asynchronous code.
+* **effects** : A function returned from a method is an ```effect```. Effects are executed after the view component of your application has completely updated. Effects are not allowed to invoke methods, and will error if they attempt to do so. They are intended only for side-effects, like kicking off a non-React animation, or (in the worst case) imperative DOM mutations.
 
 ## Advanced Example
 

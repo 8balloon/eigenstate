@@ -40,10 +40,12 @@ export default function StateTree(stateDef, executeUpdate, onInvoke) {
           else {
             stateTree = stateTree.setIn(path, nextLocalState)
           }
+
+          batcher.executeUpdate(stateTree)
         }
       }
 
-      batcher.handleInvocation(stateTree, {
+      batcher.handleInvocation({
         methodKey: key,
         methodPath: path,
         payload,
