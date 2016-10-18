@@ -1,6 +1,6 @@
 import { Provider, Store, logVerbosely } from '../../src'
 
-const stateDef = {
+const erroringStore = Store({
 
   count: 0,
   incrementCount: (payload, state) => ({
@@ -43,7 +43,8 @@ const stateDef = {
     })
   },
   addNewKeyByMethod: (_, state) => ({ asdf: 'fdsa' })
-}
+},
+logVerbosely)
 
 const View = function CounterView(props) {
 
@@ -97,8 +98,6 @@ const View = function CounterView(props) {
     </div>
   )
 }
-
-const erroringStore = Store(stateDef, logVerbosely)
 
 export default function ErroringCounter() {
   return (

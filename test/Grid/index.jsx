@@ -2,7 +2,7 @@ import { Provider, Store, logVerbosely} from '../../src'
 
 const isMinSize = ({rows, columns}) => rows.length <= 1 || columns.length <= 1
 
-export const gridState = {
+export const gridStore = Store({
 
   //values
   rows: [null, null, null],
@@ -25,7 +25,8 @@ export const gridState = {
       setTimeout(() => state.gridClear(), 100)
     }
   }
-}
+},
+logVerbosely)
 
 export const GridView = (props) => {
   return (
@@ -45,8 +46,6 @@ export const GridView = (props) => {
     </div>
   )
 }
-
-const gridStore = Store(gridState, logVerbosely)
 
 export default function Grid() {
   return (

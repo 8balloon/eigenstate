@@ -27,13 +27,8 @@ export function Store(stateDef, optionalOnInvoke) {
 
     return function unsubscribe() {
       delete subscribers[thisSubscriberIndex]
+      return true
     }
-  }
-  store.destroy = () => {
-    subscribers = null
-    state = null
-    store = null
-    return true
   }
   return store
 }

@@ -9,7 +9,7 @@ import { gridState, GridView } from '../Grid'
 This state object is composed of a counter state object and a grid state object,
 which will be passed to CounterView and GridView (see CompleteExampleView)
 */
-const completeExampleState = {
+const completeExampleStore = Store({
 
   // stateDefs
   counter: counterState,
@@ -43,7 +43,7 @@ const completeExampleState = {
       }
     }
   }
-}
+})
 
 const CompleteExampleView = connect((props) => (
   <div id="root">
@@ -71,10 +71,9 @@ const handleLocationChanges = (stateInterface) => {
 We are creating /home, /counter, and /grid routes so that handleLocationChanges
 picks up on route location changes and can scroll to corresponding elements.
 */
-const store = Store(completeExampleState)
 const CompleteExample = () => {
   ReactDOM.render(
-    <Provider store={store}>
+    <Provider store={completeExampleStore}>
       <Router history={hashHistory}>
         <Route path="/" component={CompleteExampleView}>
           <Route path="/home" />

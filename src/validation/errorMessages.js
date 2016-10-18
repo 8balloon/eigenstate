@@ -3,7 +3,6 @@ const documentationURL = 'https://github.com/8balloon/switchless/blob/master/REA
 export const stateDefIsNotObject = "No stateDef prop was detected by the StateTree Provider. Did you provide a stateDef as the first argument to your Store constructor?"
 export const onInvokePropIsNotFunction = "The Store onInvoke argument must be a function."
 export const storeIsNotFunction = "Provider.props.store must be a function. Did you remember to create it with Store, imported from 'eigenstate'?"
-export const storeDidChange = "You may not change a Provider's store dynamically."
 
 export function tooManyMethodArguments(key, path) {
   return `Multiple arguments were passed to "${path.join('.') + '.' + key}". StateTree provides a second argument automatically, so passing multiple arguments is not supported.`

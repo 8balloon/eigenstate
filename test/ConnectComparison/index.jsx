@@ -1,9 +1,9 @@
 import { Provider, Store, connect } from '../../src'
 
-const counterStateDef = {
+const counterStore = Store({
   count: 0,
   increment: (amount, state) => ({ count: state.count + amount })
-}
+})
 
 const CounterView = (props) => (
   <div className="counter">
@@ -21,10 +21,9 @@ const CountersWrapper = (props) => (
   </div>
 )
 
-const store = Store(counterStateDef)
 export default function ConnectComparison() {
   return (
-    <Provider store={store}>
+    <Provider store={counterStore}>
       <CountersWrapper />
     </Provider>
   )

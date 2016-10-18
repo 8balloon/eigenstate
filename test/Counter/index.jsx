@@ -1,10 +1,10 @@
-import { Provider, Store, logVerbosely } from '../../src'
+import { Provider, Store } from '../../src'
 
 /*
 Your application's state definition.
 This state definition has 1 value and 1 method.
 */
-export const counterState = {
+export const counterStore = Store({
   count: 0,
   color: 'red',
   increment: (amount, state) => ({ count: state.count + amount }),
@@ -13,7 +13,7 @@ export const counterState = {
     setTimeout(function callback() { state.increment(amount) }, delay)
   },
   changeColor: (_, state) => ({ color: state.color === 'red' ? 'blue' : 'red' })
-}
+})
 
 /*
 */
@@ -32,7 +32,6 @@ export const CounterView = (props) => (
 Eigenstate's Provider creates your state object for you.
 It passes access to your state methods and values via "props"
 */
-const counterStore = Store(counterState, logVerbosely)
 export default function Counter() {
   return (
     <Provider store={counterStore}>

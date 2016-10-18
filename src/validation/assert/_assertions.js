@@ -73,10 +73,3 @@ export function returnDataFitsStateDef(returnData, stateDef, key, path) {
     containsNoFunctions(stateDefProperty, errorMessages.methodWasOverwritten(key, path, localKey))
   }
 }
-
-export function storeDidNotChange(store, nextStore) {
-
-  if (store !== nextStore) {
-    throw new Error(errorMessages.storeDidChange)
-  }
-}

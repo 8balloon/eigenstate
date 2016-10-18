@@ -2,7 +2,7 @@ import { Provider, Store, logVerbosely } from '../../src'
 
 const newTodo = "new todo"
 
-const stateDef = {
+const todoStore = Store({
 
   todos: [{
     text: "make Todo list",
@@ -53,7 +53,8 @@ const stateDef = {
   resetPotentialTodo: (_, state) => ({
     potentialTodo: newTodo
   })
-}
+},
+logVerbosely)
 
 const TodoList = (props) => (
   <div className="todoList">
@@ -80,8 +81,6 @@ const TodoList = (props) => (
     </div>
   </div>
 )
-
-const todoStore = Store(stateDef, logVerbosely)
 
 export default function Todos() {
   return (

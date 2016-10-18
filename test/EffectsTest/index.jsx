@@ -1,6 +1,6 @@
 import { Provider, Store } from '../../src'
 
-const effectsStateDef = {
+const effectsTestStore = Store({
   count: 0,
   increment: (_, state) => ({count: state.count + 1}),
   setEffect: (_, state) => {
@@ -17,7 +17,7 @@ const effectsStateDef = {
       document.getElementById("effect2").innerHTML = document.getElementById("effect1").innerHTML
     }
   }
-}
+})
 
 const EffectsView = (props) => (
   <div id="effectsTest">
@@ -28,8 +28,6 @@ const EffectsView = (props) => (
     <div id="effect2" />
   </div>
 )
-
-const effectsTestStore = Store(effectsStateDef)
 
 export default function EffectsTest(props) {
 

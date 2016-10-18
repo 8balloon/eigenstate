@@ -6,16 +6,24 @@ export class Provider extends React.Component {
 
   constructor(props, context) {
     super(props, context)
+
+    this.unsubscribe = null
+
     this.initialize(props)
   }
 
   initialize(props) {
 
+    if (this.unsubscribe !== null) {
+
+      this.unsubscribe()
+      this.unsubscribe = null
+    }
+
     assert.storeIsFunction(props.store)
 
     let throwErrFromProvider = (err) => { throw err }
     const executeUpdate = (nextState, callback) => {
-
       try {
         this.forceUpdate(callback)
       }
@@ -24,7 +32,24 @@ export class Provider extends React.Component {
       }
     }
 
-    props.store.subscribe(executeUpdate)
+    this.unsubscribe = props.store.subscribe(executeUpdate)
+  }
+
+  componentWillReceiveProps(next) {
+
+    if (this.props.store !== next.store) {
+
+      this.initialize(next)
+    }
+  }
+
+  componentWillUnmount() {
+
+    if (this.unsubscribe !== null) {
+
+      this.unsubscribe()
+      this.unsubscribe = null
+    }
   }
 
   getChildContext() {
@@ -32,11 +57,6 @@ export class Provider extends React.Component {
     return {
       eigenstate: this.props.store()
     }
-  }
-
-  componentWillReceiveProps(next) {
-
-    assert.storeDidNotChange(this.props.store, next.store)
   }
 
   render() {

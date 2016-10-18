@@ -3,6 +3,7 @@ function requireAll(r) { r.keys().forEach(r) }
 requireAll(require.context('./', true, /s?css$/));
 
 import 'babel-polyfill'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, hashHistory, Link } from 'react-router'
@@ -10,18 +11,18 @@ import { Router, Route, hashHistory, Link } from 'react-router'
 import { Provider, Store, logVerbosely, connect } from '../src'
 
 import CompleteExample from './CompleteExample'
-
 import Counter from './Counter'
 import Grid from './Grid'
 import ErroringCounter from './ErroringCounter'
 import ConnectComparison from './ConnectComparison'
 import Todos from './Todos'
 import EffectsTest from './EffectsTest'
+import GeneratedStore from './GeneratedStore/GeneratedStore'
 
-const indexStateDef = {
+const indexStore = Store({
   helloWorld: null,
   armHelloWorld: (_, state) => ({helloWorld: 'hello, world'})
-}
+})
 
 const ReactRouterTester = (props) => (
   <div className="reactRouterTester" style={{backgroundColor: 'orange'}}>
@@ -48,15 +49,14 @@ const Apps = (props) => (
     <Todos />
     <ReactRouterTester {...props} />
     <EffectsTest />
+    <GeneratedStore />
   </div>
 )
 
 const StatefulApps = connect(Apps)
 
-const store = Store(indexStateDef)
-
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider store={indexStore}>
     <Router history={hashHistory}>
       <Route path="/" component={StatefulApps}>
         <Route path="kids" component={Kids} />
