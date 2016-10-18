@@ -2,24 +2,23 @@
 
 # Eigenstate
 
-Eigenstate is a state-management library for [React.js](https://facebook.github.io/react/) that provides support for *methods*.
+Eigenstate is a state container for [React.js](https://facebook.github.io/react/) that provides support for *methods*.
 
 Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictable and easy to test. The advantage is that they do not require action creators, switch statements, or middleware to provide complete functionality.
 
 ## Features
 
-* Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods)
-* Tiny, flexible [API](https://github.com/8balloon/eigenstate#API) (1/2 the size of Redux + React Redux)
-* Synchronous-sequential update batching (so it's [fast](https://github.com/8balloon/eigenstate#speed-and-optimization))
-* Automatic immutable state (so it's [optimizable](https://github.com/8balloon/eigenstate#speed-and-optimization))
+* Tiny, flexible [API](https://github.com/8balloon/eigenstate#API) -- about half the size of Redux + React Redux.
+* Support for pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods).
+* Immutable state -- always, automatically.
 
 ## 3 Easy Steps (but seriously)
 
-1. Create a ```Store``` object with state data and methods.
+1. Create a ```Store``` containing state data and methods.
 
 2. Write your React.js view component, using state data and methods via ```props```.
 
-3. Connect your store and your view with the ```Provider```.
+3. Connect store and view with the ```Provider```.
 
 ```js
 /*
@@ -90,7 +89,7 @@ Methods have to be pure or impure. They can't be both. Try to use pure methods a
 
 **Methods may return "effects"**
 
-Functions returned from methods are called "effects", and are executed after the view component of your application has completely updated. Effects may not invoke methods. They are intended only for side-effects, like kicking off a non-React animation, or (in the worst case) imperative DOM mutations.
+Functions returned from methods are called "effects", and are executed after the view component of your application has completely updated.  They are intended only for side-effects, like kicking off a non-React animation, or (in the worst case) imperative DOM mutations. Do not get them mixed up with impure methods, which are how you handle callbacks / asynchronous code.
 
 ## API
 
@@ -98,9 +97,7 @@ Functions returned from methods are called "effects", and are executed after the
 
   * **stateDefinition** (required ```Store``` parameter) : an object of ```key: data | method | stateDefinition``` pairs. Defines the store which is returned by ```Store```. Data can be any JSON, and methods are described [here](https://github.com/8balloon/eigenstate#methods).
 
-  * **<store>.onMethod** (function) : A function that accepts a function, ```onMethodListener```. The ```onMethodListener``` is called on every method invocation with an ```invocationDetails``` object. To unsubscribe an ```onMethodListener```, invoke the function returned by ```<store>.onMethod```
-
-  * **<store>.onUpdate** (function) : A function that accepts a function, ```onUpdateListener```. The ```onUpdateListener``` is called every time the state completes an update, and is passed an immutable ```state``` object. To unsubscribe an ```onUpdateListener```, invoke the function returned by ```<store>.onUpdate```
+  * **<store>.subscribe** (function) : A function that accepts a function, ```subscriber```. The ```subscriber``` is called on every method invocation with an ```invocationDetails``` object. To unsubscribe a ```subscriber```, invoke the function returned by ```<store>.subscribe```
 
 * **Provider** (React component) : Provides store state to its children. Must be passed a ```store``` property to work. Provides state data and methods to its child component via the child component's ```props```.
 

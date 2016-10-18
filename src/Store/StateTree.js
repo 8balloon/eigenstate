@@ -2,11 +2,8 @@ import Immutable from 'seamless-immutable'
 import { mapObjectTreeLeaves, getValueByPath } from '../utils'
 import assert from '../validation/assert'
 import validMethod from '../validation/validMethod'
-import Batcher from './Batcher'
 
-export default function StateTree(stateDef, executeUpdate) {
-
-  const batcher = Batcher(executeUpdate)
+export default function StateTree(stateDef, handleInvocation, enqueueEffect) {
 
   var stateTree = Immutable(mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
@@ -26,7 +23,7 @@ export default function StateTree(stateDef, executeUpdate) {
 
         if (methodReturnValue instanceof Function) { // isEffect
 
-          batcher.enqueueEffect(methodReturnValue)
+          enqueueEffect(methodReturnValue)
         }
         else { // isData
 
@@ -43,7 +40,7 @@ export default function StateTree(stateDef, executeUpdate) {
         }
       }
 
-      batcher.handleInvocation(stateTree, {
+      handleInvocation(stateTree, {
         methodKey: key,
         methodPath: path,
         payload,

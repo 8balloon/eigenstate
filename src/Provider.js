@@ -23,7 +23,7 @@ export class Provider extends React.Component {
     assert.storeIsFunction(props.store)
 
     let throwErrFromProvider = (err) => { throw err }
-    const executeUpdate = (nextState, invocationDetails, callback) => {
+    const executeUpdate = (invocationDetails, callback) => {
       try {
         this.forceUpdate(callback)
       }

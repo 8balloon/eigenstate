@@ -1,17 +1,15 @@
 import { isProduction } from './utils'
 
-export function verboseLogger(nextState, invocationDetails) {
+export function verboseLogger(invocationDetails) {
 
   if (isProduction) return
 
-  const {
-    methodPath,
-    localState,
-    methodKey,
-    payload,
-    returnValue,
-    // "nextLocalState" is available, but not used here.
-  } = invocationDetails
+  const { methodPath, methodKey, returnValue } = invocationDetails
 
-  console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- METHOD CALLED with state / payload / return:`, localState, payload, returnValue)
+  console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- METHOD CALLED.`)
+  console.log('  details:', invocationDetails)
+
+  if ( returnValue !== undefined ) {
+    console.log('  return:', returnValue)
+  }
 }

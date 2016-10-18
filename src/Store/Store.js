@@ -1,5 +1,6 @@
 import assert from '../validation/assert'
 import StateTree from './StateTree'
+import Batcher from './Batcher'
 
 export function Store(stateDef) {
 
@@ -10,10 +11,11 @@ export function Store(stateDef) {
 
   const executeUpdateViaSubscriber = (nextState, invocationDetails, executeUpdate) => {
     state = nextState
-    subscribers.forEach(sub => sub(state, invocationDetails, executeUpdate))
+    subscribers.forEach(sub => sub(invocationDetails, executeUpdate))
   }
 
-  state = StateTree(stateDef, executeUpdateViaSubscriber)
+  var batcher = Batcher(executeUpdateViaSubscriber)
+  state = StateTree(stateDef, batcher.handleInvocation, batcher.enqueueEffect)
 
   var store = () => state
   store.subscribe = (newSub) => {
