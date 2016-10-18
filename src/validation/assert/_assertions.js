@@ -12,10 +12,10 @@ export function stateDefIsObject(stateDef) {
   assertIsObject(stateDef, errorMessages.stateDefIsNotObject)
 }
 
-export function updateSubscriberIsFunction(onUpdate) {
+export function subscriberIsFunction(onUpdate) {
 
   if (!(onUpdate instanceof Function)) {
-    throw new Error(errorMessages.onUpdateIsNotFunction)
+    throw new Error(errorMessages.subscriberIsNotFunction)
   }
 }
 

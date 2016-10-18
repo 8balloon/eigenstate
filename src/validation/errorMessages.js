@@ -1,7 +1,7 @@
 const documentationURL = 'https://github.com/8balloon/switchless/blob/master/README.md'
 
 export const stateDefIsNotObject = "The Store constructor function requires a stateDef object as an argument."
-export const onUpdateIsNotFunction = "Update listeners must be functions."
+export const subscriberIsNotFunction = "Store subscribers must be functions."
 export const storeIsNotFunction = "Provider.props.store must be a function. Did you remember to create it with the Store constructor function, imported from 'eigenstate'?"
 export const effectReturnedValue = "An Effect returned a value. This value will have no effect. The Effect and the returned value are:"
 
