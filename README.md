@@ -106,12 +106,12 @@ Functions returned from methods are called "effects", and are executed after the
 
 * **connect** (function) : accepts a React component, and returns a ```connect()```ed version of that component. The ```connect```ed version has access to state from the nearest ```Provider``` store via its ```props```, as though it was that ```Provider```'s direct child. This is useful for integrating with [React Router](https://github.com/ReactTraining/react-router).
 
-* **logVerbosely** (function) : an ```onMethodListener``` that logs information on method invocations to the console. Use it like this:
+* **verboseLogger** (function) : an ```onMethodListener``` that logs information on method invocations to the console. Use it like this:
 
 ```js
 const yourStore = Store({ ... })
 
-yourStore.onMethod(logVerbosely) // congratulations -- you've set up logging!
+yourStore.onMethod(verboseLogger) // congratulations -- you've set up logging!
 
 ReactDOM.render(<Provider store={yourStore}>...)
 ```

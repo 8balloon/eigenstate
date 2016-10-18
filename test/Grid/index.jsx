@@ -1,4 +1,4 @@
-import { Provider, Store, logVerbosely} from '../../src'
+import { Provider, Store, verboseLogger} from '../../src'
 
 const isMinSize = ({rows, columns}) => rows.length <= 1 || columns.length <= 1
 
@@ -28,7 +28,7 @@ export const gridState = {
 }
 export const gridStore = Store(gridState)
 
-gridStore.subscribe(logVerbosely)
+gridStore.subscribe(verboseLogger)
 
 export const GridView = (props) => {
   return (

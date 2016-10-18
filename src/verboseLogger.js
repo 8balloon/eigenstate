@@ -1,6 +1,6 @@
 import { isProduction } from './utils'
 
-export function logVerbosely(nextState, invocationDetails) {
+export function verboseLogger(nextState, invocationDetails) {
 
   if (isProduction) return
 
@@ -13,5 +13,5 @@ export function logVerbosely(nextState, invocationDetails) {
     // "nextLocalState" is available, but not used here.
   } = invocationDetails
 
-  console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- state / payload / return:`, localState, payload, returnValue)
+  console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- METHOD CALLED with state / payload / return:`, localState, payload, returnValue)
 }

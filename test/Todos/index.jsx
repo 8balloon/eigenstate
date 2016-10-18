@@ -1,4 +1,4 @@
-import { Provider, Store, logVerbosely } from '../../src'
+import { Provider, Store, verboseLogger } from '../../src'
 
 const newTodo = "new todo"
 
@@ -54,7 +54,7 @@ const todoStore = Store({
     potentialTodo: newTodo
   })
 })
-todoStore.subscribe(logVerbosely)
+todoStore.subscribe(verboseLogger)
 
 const TodoList = (props) => (
   <div className="todoList">

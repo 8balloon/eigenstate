@@ -1,4 +1,4 @@
-import { Provider, Store, logVerbosely } from '../../src'
+import { Provider, Store, verboseLogger } from '../../src'
 
 const erroringStore = Store({
 
@@ -55,7 +55,7 @@ const erroringStore = Store({
   },
   addNewKeyByMethod: (_, state) => ({ asdf: 'fdsa' })
 })
-erroringStore.subscribe(logVerbosely)
+erroringStore.subscribe(verboseLogger)
 
 const View = function CounterView(props) {
 
