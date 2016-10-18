@@ -1,8 +1,7 @@
 import assert from '../validation/assert'
 
-export default function Batcher(executeUpdate, onInvoke) {
+export default function Batcher(executeUpdate) {
 
-  var cbIntervalId = null
   var effects = []
 
   let invokeEffects = () => {
@@ -16,21 +15,14 @@ export default function Batcher(executeUpdate, onInvoke) {
       assert.effectReturnsUndefined(effectReturn, effect)
     })
   }
-  const executeUpdateWithEffects = (nextState) => {
-
-    clearInterval(cbIntervalId)
-    cbIntervalId = setInterval(() => {
-
-      clearInterval(cbIntervalId)
-      executeUpdate(nextState, invokeEffects)
-    }, 0)
+  const executeUpdateWithEffects = (nextState, invocationDetails) => {
+    executeUpdate(nextState, invocationDetails, invokeEffects)
   }
 
   const enqueueEffect = (effect) => effects.push(effect)
 
   return {
-    executeUpdate: executeUpdateWithEffects,
-    handleInvocation: onInvoke,
+    handleInvocation: executeUpdateWithEffects,
     enqueueEffect
   }
 }

@@ -28,7 +28,7 @@ export const gridState = {
 }
 export const gridStore = Store(gridState)
 
-gridStore.onMethod(logVerbosely)
+gridStore.subscribe(logVerbosely)
 
 export const GridView = (props) => {
   return (

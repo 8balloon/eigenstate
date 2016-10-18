@@ -54,7 +54,7 @@ const todoStore = Store({
     potentialTodo: newTodo
   })
 })
-todoStore.onMethod(logVerbosely)
+todoStore.subscribe(logVerbosely)
 
 const TodoList = (props) => (
   <div className="todoList">

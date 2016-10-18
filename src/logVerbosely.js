@@ -1,6 +1,6 @@
 import { isProduction } from './utils'
 
-export function logVerbosely(invocationDetails) {
+export function logVerbosely(nextState, invocationDetails) {
 
   if (isProduction) return
 

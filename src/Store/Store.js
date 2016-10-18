@@ -6,23 +6,18 @@ export function Store(stateDef) {
   assert.stateDefIsObject(stateDef)
 
   var updateSubs = []
-  var methodSubs = []
-
-  const onInvoke = (invocationDetails) => {
-    methodSubs.forEach(sub => sub(invocationDetails))
-  }
 
   var state = null
 
-  const executeUpdateViaSubscriber = (nextState, executeUpdate) => {
+  const executeUpdateViaSubscriber = (nextState, invocationDetails, executeUpdate) => {
     state = nextState
-    updateSubs.forEach(sub => sub(state, executeUpdate))
+    updateSubs.forEach(sub => sub(state, invocationDetails, executeUpdate))
   }
 
-  state = StateTree(stateDef, executeUpdateViaSubscriber, onInvoke)
+  state = StateTree(stateDef, executeUpdateViaSubscriber)
 
   var store = () => state
-  store.onUpdate = (newUpdateSubscriber) => {
+  store.subscribe = (newUpdateSubscriber) => {
 
     assert.updateSubscriberIsFunction(newUpdateSubscriber)
 
@@ -31,18 +26,6 @@ export function Store(stateDef) {
 
     return function unsubscribeFromUpdates() {
       delete updateSubs[thisUpdateSubIndex]
-      return true
-    }
-  }
-  store.onMethod = (newMethodSubscriber) => {
-
-    assert.methodSubscriberIsFunction(newMethodSubscriber)
-
-    const thisMethodSubIndex = methodSubs.length
-    methodSubs[thisMethodSubIndex] = newMethodSubscriber
-
-    return function unsubscribeFromMethods() {
-      delete methodSubs[thisMethodSubIndex]
       return true
     }
   }

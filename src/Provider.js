@@ -23,7 +23,7 @@ export class Provider extends React.Component {
     assert.storeIsFunction(props.store)
 
     let throwErrFromProvider = (err) => { throw err }
-    const executeUpdate = (nextState, callback) => {
+    const executeUpdate = (nextState, invocationDetails, callback) => {
       try {
         this.forceUpdate(callback)
       }
@@ -32,7 +32,7 @@ export class Provider extends React.Component {
       }
     }
 
-    this.unsubscribe = props.store.onUpdate(executeUpdate)
+    this.unsubscribe = props.store.subscribe(executeUpdate)
   }
 
   componentWillReceiveProps(next) {

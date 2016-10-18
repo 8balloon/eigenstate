@@ -2,7 +2,6 @@ const documentationURL = 'https://github.com/8balloon/switchless/blob/master/REA
 
 export const stateDefIsNotObject = "The Store constructor function requires a stateDef object as an argument."
 export const onUpdateIsNotFunction = "Update listeners must be functions."
-export const onMethodIsNotFunction = "Method listeners must be functions."
 export const storeIsNotFunction = "Provider.props.store must be a function. Did you remember to create it with the Store constructor function, imported from 'eigenstate'?"
 export const effectReturnedValue = "An Effect returned a value. This value will have no effect. The Effect and the returned value are:"
 
@@ -20,10 +19,6 @@ export function methodWasOverwritten(key, path, localKey) {
 
 export function returnedDataIsNotJSON(key, path) {
   return `The method "${path.join('.') + '.' + key}" returned a non-JSON value. State data returned by methods must be valid JSON. See ${documentationURL}`
-}
-
-export function payloadIsNotJSON(key, path) {
-  return `The method "${path.join('.') + '.' + key}" was invoked with a non-JSON argument. Methods should only be called with JSON arguments. If you want to invoke functions in response to method invocations, use Provider.props.onMethod. See ${documentationURL}`
 }
 
 export function dataReturnerInvokedOtherMethod(key, path) {

@@ -4,9 +4,9 @@ import assert from '../validation/assert'
 import validMethod from '../validation/validMethod'
 import Batcher from './Batcher'
 
-export default function StateTree(stateDef, executeUpdate, onInvoke) {
+export default function StateTree(stateDef, executeUpdate) {
 
-  const batcher = Batcher(executeUpdate, onInvoke)
+  const batcher = Batcher(executeUpdate)
 
   var stateTree = Immutable(mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
@@ -40,12 +40,10 @@ export default function StateTree(stateDef, executeUpdate, onInvoke) {
           else {
             stateTree = stateTree.setIn(path, nextLocalState)
           }
-
-          batcher.executeUpdate(stateTree)
         }
       }
 
-      batcher.handleInvocation({
+      batcher.handleInvocation(stateTree, {
         methodKey: key,
         methodPath: path,
         payload,

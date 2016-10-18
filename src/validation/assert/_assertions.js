@@ -19,13 +19,6 @@ export function updateSubscriberIsFunction(onUpdate) {
   }
 }
 
-export function methodSubscriberIsFunction(onMethod) {
-
-  if (!(onMethod instanceof Function)) {
-    throw new Error(errorMessages.onMethodIsNotFunction)
-  }
-}
-
 export function storeIsFunction(store) {
   if (!(store instanceof Function)) {
     throw new Error(errorMessages.storeIsNotFunction)
