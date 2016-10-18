@@ -9,12 +9,12 @@ export function Store(stateDef) {
   var state = null
   var subscribers = []
 
-  const executeUpdateViaSubscriber = (nextState, invocationDetails, executeUpdate) => {
+  let callSubsWithDeetsAndTrigger = (nextState, invocationDetails, effectsTrigger) => {
     state = nextState
-    subscribers.forEach(sub => sub(invocationDetails, executeUpdate))
+    subscribers.forEach(sub => sub(invocationDetails, effectsTrigger))
   }
+  const batcher = Batcher(callSubsWithDeetsAndTrigger)
 
-  var batcher = Batcher(executeUpdateViaSubscriber)
   state = StateTree(stateDef, batcher.handleInvocation, batcher.enqueueEffect)
 
   var store = () => state

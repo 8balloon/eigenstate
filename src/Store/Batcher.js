@@ -1,13 +1,13 @@
 import assert from '../validation/assert'
 
-export default function Batcher(executeUpdate) {
+export default function Batcher(updateCallback) {
 
-  var effects = []
+  var effectQueue = []
 
-  let invokeEffects = () => {
+  const triggerEffects = () => {
 
-    const effectsInExecution = effects
-    effects = []
+    const effectsInExecution = effectQueue
+    effectQueue = []
 
     effectsInExecution.forEach((effect) => {
 
@@ -15,14 +15,15 @@ export default function Batcher(executeUpdate) {
       assert.effectReturnsUndefined(effectReturn, effect)
     })
   }
-  const executeUpdateWithEffects = (nextState, invocationDetails) => {
-    executeUpdate(nextState, invocationDetails, invokeEffects)
+
+  const passUpdateWithEffectTrigger = (nextState, invocationDetails) => {
+    updateCallback(nextState, invocationDetails, triggerEffects)
   }
 
-  const enqueueEffect = (effect) => effects.push(effect)
+  const enqueueEffect = (effect) => effectQueue.push(effect)
 
   return {
-    handleInvocation: executeUpdateWithEffects,
+    handleInvocation: passUpdateWithEffectTrigger,
     enqueueEffect
   }
 }

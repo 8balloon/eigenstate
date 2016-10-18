@@ -4,7 +4,6 @@ const effectsTestStore = Store({
   count: 0,
   increment: (_, state) => ({count: state.count + 1}),
   sideEffect1: (_, state) => {
-    console.log("BANG")
     document.getElementById('effect1').innerHTML = state.count
   },
   effect1: (_, state) => {
@@ -14,7 +13,6 @@ const effectsTestStore = Store({
   effectWithStateBeforeLastIncrement: (_, state) => {
     state.increment()
     return () => {
-      console.log("BOOM")
       document.getElementById('effect2').innerHTML = state.count
     }
   },
@@ -25,7 +23,7 @@ const effectsTestStore = Store({
   }
 })
 
-const EffectsView = (props) => { console.log("WHIZ"); return (
+const EffectsView = (props) => { return (
   <div id="effectsTest">
     <div onClick={props.effect1}>INCREMENT WITH EFFECT</div>
     <div onClick={props.callEffects}>EFFECT USING STATE BEFORE LAST INC</div>
