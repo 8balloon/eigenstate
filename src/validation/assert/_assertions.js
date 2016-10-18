@@ -81,9 +81,9 @@ export function returnDataFitsStateDef(returnData, stateDef, key, path) {
   }
 }
 
-export function effectReturnIsFunction(effectReturn, effect) {
+export function effectReturnsUndefined(effectReturn, effect) {
 
-  if (effectReturn !== undefined && !(effectReturn instanceof Function)) {
-    throw console.warn(errorMessages.effectReturnIsNotFunction, effect, effectReturn)
+  if (effectReturn !== undefined) {
+    throw console.warn(errorMessages.effectReturnedValue, effect, effectReturn)
   }
 }

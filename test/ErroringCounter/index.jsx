@@ -7,8 +7,12 @@ const erroringStore = Store({
     count: state.count + payload
   }),
   doubleIncrement: (_, state) => {
+    var t1 = performance.now()
     state.incrementCount(1)
     state.incrementCount(2)
+    return () => {
+      console.log("TIME:", performance.now() - t1)
+    }
   },
   slowIncrement: (payload, state) => {
     setTimeout(() => {

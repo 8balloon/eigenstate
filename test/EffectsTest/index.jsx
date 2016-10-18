@@ -4,14 +4,12 @@ const effectsTestStore = Store({
   count: 0,
   increment: (_, state) => ({count: state.count + 1}),
   sideEffect1: (_, state) => {
+    console.log("BANG")
     document.getElementById('effect1').innerHTML = state.count
   },
   effect1: (_, state) => {
     state.increment()
-    return () => {
-      console.log("BANG")
-      return state.sideEffect1
-    }
+    return state.sideEffect1
   },
   effectWithStateBeforeLastIncrement: (_, state) => {
     state.increment()
