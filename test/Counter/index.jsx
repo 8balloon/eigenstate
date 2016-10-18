@@ -4,7 +4,7 @@ import { Provider, Store } from '../../src'
 Your application's state definition.
 This state definition has 1 value and 1 method.
 */
-export const counterStore = Store({
+export const counterState = {
   count: 0,
   color: 'red',
   increment: (amount, state) => ({ count: state.count + amount }),
@@ -13,7 +13,8 @@ export const counterStore = Store({
     setTimeout(function callback() { state.increment(amount) }, delay)
   },
   changeColor: (_, state) => ({ color: state.color === 'red' ? 'blue' : 'red' })
-})
+}
+export const counterStore = Store(counterState)
 
 /*
 */

@@ -4,22 +4,22 @@
 
 Eigenstate is a state-management library for [React.js](https://facebook.github.io/react/) that provides support for *methods*.
 
-Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictable and easy to test. The advantage is that they require no boilerplate, switch statements, or special middleware to provide complete functionality.
+Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictable and easy to test. The advantage is that they do not require action creators, switch statements, or middleware to provide complete functionality.
 
 ## Features
 
 * Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods)
-* Synchronous-sequential update batching
-* Immutable state (always, automatically)
-* Tiny, flexible [API](https://github.com/8balloon/eigenstate#API)
+* Tiny, flexible [API](https://github.com/8balloon/eigenstate#API) (1/2 the size of Redux + React Redux)
+* Synchronous-sequential update batching (so it's [fast](https://github.com/8balloon/eigenstate#how-it-works))
+* Automatic immutable state (so it's [optimizable](https://github.com/8balloon/eigenstate#how-it-works))
 
 ## 3 Easy Steps (but seriously)
 
-1. Define your state's data and methods in a ```stateDef``` object.
+1. Create a ```Store``` object with state data and methods.
 
-2. Compose your view component as usual, using state data and methods via ```props```.
+2. Write your React.js view component, using state data and methods via ```props```.
 
-3. Tie state and view together with the ```Provider```.
+3. Connect your store and your view with the ```Provider```.
 
 ```js
 /*
@@ -27,12 +27,12 @@ A working app to demonstrate sync and async functionality + logging.
 */
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider, logVerbosely } from 'eigenstate'
+import { Store, Provider } from 'eigenstate'
 
 /*
 1
 */
-const stateDef = {
+const store = Store({
   count: 0,
   color: 'red',
   increment: (amount, state) => ({ count: state.count + amount }),
@@ -41,7 +41,7 @@ const stateDef = {
     setTimeout(function callback() { state.increment(amount) }, delay)
   },
   changeColor: (_, state) => ({ color: state.color === 'red' ? 'blue' : 'red' })
-}
+})
 
 /*
 2
@@ -61,7 +61,7 @@ const View = (props) => (
 3
 */
 ReactDOM.render(
-  <Provider stateDef={stateDef} onInvoke={logVerbosely}>
+  <Provider store={store}>
     <View />
   </Provider>,
   document.getElementById('react-root')  
@@ -70,19 +70,19 @@ ReactDOM.render(
 
 ## Methods
 
-Methods are how you alter your state data.
+Methods are how you update your state data.
 
-**Methods must be defined with two parameters, and called with one or zero parameters.**
+**Methods are defined with two parameters, and called with one or zero arguments.**
 
 The second parameter, ```state```, is provided automatically. Look at each of the methods in the example above; they all use the ```state``` parameter to do useful stuff.
 
-**Methods may alter state by returning updated state data.**
+**Methods may update state by returning new state data.**
 
-Look at the methods ```increment``` and ```changeColor``` in the example above. Each of them alters state by returning updated state data. Your view component receives updated state via ```props```.
+Look at the methods ```increment``` and ```changeColor``` in the example above. Each of them updates state by returning updated state data. Your view component receives updated state via ```props```.
 
 **Methods may be pure XOR impure. Put asynchronous code in impure methods.**
 
-Methods may alter state by returning updated state data, or they may invoke other methods. You can use method invocations in asynchronous code, like ```$.ajax``` or ```setTimeout``` callbacks. Look at the method ```delayedIncrement``` in the example above to see this in action.
+Methods may update state by returning updated state data, or they may invoke other methods. You can use method invocations in asynchronous code, like ```$.ajax``` or ```setTimeout``` callbacks. Look at the method ```delayedIncrement``` in the example above to see this in action.
 
 Just remember that your methods may call other methods XOR return updated state data. Attempting to do both will result in an error.
 
@@ -111,6 +111,12 @@ It shows how to compose state objects and views into larger state objects and vi
 On route change, it scrolls to the route's corresponding element on the page.
 
 The purpose of this example is to demonstrate the Eigenstate API and give an idea as to how you can incorporate Eigenstate into a larger architecture. It is not well-factored in itself.
+
+## How it works
+
+Eigenstate state is always immutable. This empowers you to use React's ```shouldComponentUpdate``` to speed up your application.
+
+Eigenstate also batches synchronous-sequential updates, so invoking several pure methods in succession (like ```state.firstPureMethod(); state.secondPureMethod()```) will only trigger a single re-render of your application view.
 
 ## Relevant concepts
 
@@ -169,9 +175,3 @@ ReactDOM.render(
   document.getElementById("eigenstate-form-application")
 )
 ```
-
-#### Optimization
-
-Eigenstate state is always immutable. This empowers you to use React's ```shouldComponentUpdate``` to speed up your application.
-
-Eigenstate also batches synchronous-sequential updates, so invoking several pure methods in succession (like ```state.firstPureMethod(); state.secondPureMethod()```) will only trigger a single re-render of your application view.

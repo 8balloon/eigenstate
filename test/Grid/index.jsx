@@ -2,7 +2,7 @@ import { Provider, Store, logVerbosely} from '../../src'
 
 const isMinSize = ({rows, columns}) => rows.length <= 1 || columns.length <= 1
 
-export const gridStore = Store({
+export const gridState = {
 
   //values
   rows: [null, null, null],
@@ -25,7 +25,8 @@ export const gridStore = Store({
       setTimeout(() => state.gridClear(), 100)
     }
   }
-})
+}
+export const gridStore = Store(gridState)
 
 gridStore.onMethod(logVerbosely)
 
