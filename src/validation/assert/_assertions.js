@@ -80,3 +80,10 @@ export function returnDataFitsStateDef(returnData, stateDef, key, path) {
     containsNoFunctions(stateDefProperty, errorMessages.methodWasOverwritten(key, path, localKey))
   }
 }
+
+export function effectReturnIsFunction(effectReturn, effect) {
+
+  if (effectReturn !== undefined && !(effectReturn instanceof Function)) {
+    throw console.warn(errorMessages.effectReturnIsNotFunction, effect, effectReturn)
+  }
+}

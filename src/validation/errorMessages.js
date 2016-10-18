@@ -4,6 +4,7 @@ export const stateDefIsNotObject = "The Store constructor function requires a st
 export const onUpdateIsNotFunction = "Update listeners must be functions."
 export const onMethodIsNotFunction = "Method listeners must be functions."
 export const storeIsNotFunction = "Provider.props.store must be a function. Did you remember to create it with the Store constructor function, imported from 'eigenstate'?"
+export const effectReturnIsNotFunction = "An Effect returned a value which is not a function. This value will have no effect. The Effect and the returned value are:"
 
 export function tooManyMethodArguments(key, path) {
   return `Multiple arguments were passed to "${path.join('.') + '.' + key}". StateTree provides a second argument automatically, so passing multiple arguments is not supported.`

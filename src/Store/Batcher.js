@@ -1,15 +1,26 @@
+import assert from '../validation/assert'
+
 export default function Batcher(executeUpdate, onInvoke) {
 
   var cbIntervalId = null
   var effects = []
 
+  let invokeEffect = (effect) => { //recursive
+
+    var effectReturn = effect()
+    if (effectReturn !== undefined) {
+
+      assert.effectReturnIsFunction(effectReturn, effect)
+      invokeEffect(effectReturn)
+    }
+  }
   let invokeEffects = () => {
 
     const effectsInExecution = effects
     effects = []
-    effectsInExecution.forEach(effect => effect())
-  }
 
+    effectsInExecution.forEach(invokeEffect)
+  }
   const executeUpdateWithEffects = (nextState) => {
 
     clearInterval(cbIntervalId)
