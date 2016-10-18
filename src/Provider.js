@@ -32,7 +32,7 @@ export class Provider extends React.Component {
       }
     }
 
-    this.unsubscribe = props.store.subscribe(executeUpdate)
+    this.unsubscribe = props.store.onUpdate(executeUpdate)
   }
 
   componentWillReceiveProps(next) {

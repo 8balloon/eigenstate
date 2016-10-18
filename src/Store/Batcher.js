@@ -1,6 +1,4 @@
-export default function Batcher(executeUpdate, optionalOnInvoke) {
-  
-  const onInvoke = optionalOnInvoke || (() => {})
+export default function Batcher(executeUpdate, onInvoke) {
 
   var cbIntervalId = null
   var effects = []

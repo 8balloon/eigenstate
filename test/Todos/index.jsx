@@ -53,8 +53,8 @@ const todoStore = Store({
   resetPotentialTodo: (_, state) => ({
     potentialTodo: newTodo
   })
-},
-logVerbosely)
+})
+todoStore.onMethod(logVerbosely)
 
 const TodoList = (props) => (
   <div className="todoList">

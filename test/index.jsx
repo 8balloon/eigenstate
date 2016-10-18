@@ -8,7 +8,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, hashHistory, Link } from 'react-router'
 
-import { Provider, Store, logVerbosely, connect } from '../src'
+import { Provider, Store, connect } from '../src'
 
 import CompleteExample from './CompleteExample'
 import Counter from './Counter'

@@ -25,8 +25,9 @@ export const gridStore = Store({
       setTimeout(() => state.gridClear(), 100)
     }
   }
-},
-logVerbosely)
+})
+
+gridStore.onMethod(logVerbosely)
 
 export const GridView = (props) => {
   return (

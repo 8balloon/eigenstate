@@ -43,8 +43,8 @@ const erroringStore = Store({
     })
   },
   addNewKeyByMethod: (_, state) => ({ asdf: 'fdsa' })
-},
-logVerbosely)
+})
+erroringStore.onMethod(logVerbosely)
 
 const View = function CounterView(props) {
 
