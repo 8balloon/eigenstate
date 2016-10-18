@@ -24,6 +24,8 @@ export function Store(stateDef) {
   var store = () => state
   store.onUpdate = (newUpdateSubscriber) => {
 
+    assert.updateSubscriberIsFunction(newUpdateSubscriber)
+
     const thisUpdateSubIndex = updateSubs.length
     updateSubs[thisUpdateSubIndex] = newUpdateSubscriber
 
