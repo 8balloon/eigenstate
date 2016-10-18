@@ -10,8 +10,8 @@ Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictabl
 
 * Pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods)
 * Tiny, flexible [API](https://github.com/8balloon/eigenstate#API) (1/2 the size of Redux + React Redux)
-* Synchronous-sequential update batching (so it's [fast](https://github.com/8balloon/eigenstate#how-it-works))
-* Automatic immutable state (so it's [optimizable](https://github.com/8balloon/eigenstate#how-it-works))
+* Synchronous-sequential update batching (so it's [fast](https://github.com/8balloon/eigenstate#speed-and-optimization))
+* Automatic immutable state (so it's [optimizable](https://github.com/8balloon/eigenstate#speed-and-optimization))
 
 ## 3 Easy Steps (but seriously)
 
@@ -78,55 +78,82 @@ The second parameter, ```state```, is provided automatically. Look at each of th
 
 **Methods may update state by returning new state data.**
 
-Look at the methods ```increment``` and ```changeColor``` in the example above. Each of them updates state by returning updated state data. Your view component receives updated state via ```props```.
+Look at the methods ```increment``` and ```changeColor``` in the example above. Each of them updates state by returning new state data. The view component updates accordingly, using state through ```props```.
 
-**Methods may be pure XOR impure. Put asynchronous code in impure methods.**
+**Methods may be pure XOR impure. Async code goes in impure methods.**
 
-Methods may update state by returning updated state data, or they may invoke other methods. You can use method invocations in asynchronous code, like ```$.ajax``` or ```setTimeout``` callbacks. Look at the method ```delayedIncrement``` in the example above to see this in action.
+Methods may update state by returning updated state data. Methods that do this are called *pure* methods. The methods ```increment``` and ```changeColor``` in the example above are pure methods.
 
-Just remember that your methods may call other methods XOR return updated state data. Attempting to do both will result in an error.
+Methods may invoke other methods. Methods that do this are called *impure* methods. The method ```delayedIncrement``` in the example above is an impure method.
+
+Methods have to be pure or impure. They can't be both. Try to use pure methods as much as you can; since they are pure functions, they are easy to test and reason about. You should use impure methods when you have to use asynchronous code (callbacks), like ```$.ajax``` or ```setTimeout``` require you to do.
+
+**Methods may return "effects"**
+
+Functions returned from methods are called "effects", and are executed after the view component of your application has completely updated. Effects may not invoke methods. They are intended only for side-effects, like kicking off a non-React animation, or (in the worst case) imperative DOM mutations.
 
 ## API
 
-* **Provider** : a React component. Provides access to state data and methods to its child via ```props```. Supports the following properties:
+* **Store** (function) : Accepts a ```stateDefinition``` object and returns an Eigenstate store. The Eigenstate store is also a function, which returns an immutable ```state``` object when invoked.
 
-  * **stateDef** (required) : the ```stateDef``` property must be an object of ```key: data | method | stateDef``` pairs. The Provider uses the ```stateDef``` property to generate state data and methods. Data can be any JSON, and [methods](https://github.com/8balloon/eigenstate#methods) are described in the section above.
+  * **stateDefinition** (required ```Store``` parameter) : an object of ```key: data | method | stateDefinition``` pairs. Defines the store which is returned by ```Store```. Data can be any JSON, and methods are described [here](https://github.com/8balloon/eigenstate#methods).
 
-  * **onInvoke** (optional) : function called on every method invocation with ```invocationDetails```.
+  * **<store>.onMethod** (function) : A function that accepts a function, ```onMethodListener```. The ```onMethodListener``` is called on every method invocation with an ```invocationDetails``` object. To unsubscribe an ```onMethodListener```, invoke the function returned by ```<store>.onMethod```
 
-  * **interface** (optional) : function called when Eigenstate initializes. Passed ```stateInterface```, a function which returns an immutable snapshot of the Provider's state object when invoked.
+  * **<store>.onUpdate** (function) : A function that accepts a function, ```onUpdateListener```. The ```onUpdateListener``` is called every time the state completes an update, and is passed an immutable ```state``` object. To unsubscribe an ```onUpdateListener```, invoke the function returned by ```<store>.onUpdate```
 
-* **connect** : a function that accepts and returns a React component. A ```connect()```ed component can use state from the its nearest ```Provider``` ancestor via props, as if it were that Provider's direct child. This is useful for integrating with [React Router](https://github.com/ReactTraining/react-router).
+* **Provider** (React component) : Provides store state to its children. Must be passed a ```store``` property to work. Provides state data and methods to its child component via the child component's ```props```.
 
-* **logVerbosely** : logs information on method invocations and state changes in the console. See the 1-2-3 example for how to use. It's highly recommended :)
+* **connect** (function) : accepts a React component, and returns a ```connect()```ed version of that component. The ```connect```ed version has access to state from the nearest ```Provider``` store via its ```props```, as though it was that ```Provider```'s direct child. This is useful for integrating with [React Router](https://github.com/ReactTraining/react-router).
 
-* **effects** : A function returned from a method is an ```effect```. Effects are executed after the view component of your application has completely updated. Effects are not allowed to invoke methods, and will error if they attempt to do so. They are intended only for side-effects, like kicking off a non-React animation, or (in the worst case) imperative DOM mutations.
+* **logVerbosely** (function) : an ```onMethodListener``` that logs information on method invocations to the console. Use it like this:
+
+```js
+const yourStore = Store({ ... })
+
+yourStore.onMethod(logVerbosely) // congratulations -- you've set up logging!
+
+ReactDOM.render(<Provider store={yourStore}>...)
+```
 
 ## Advanced Example
 
 See [here](https://github.com/8balloon/eigenstate/blob/master/test/CompleteExample/index.jsx).
 
-This is a React Router setup that implements multiple routes in a single page.
-It shows how to compose state objects and views into larger state objects and views via composition.
-On route change, it scrolls to the route's corresponding element on the page.
-
-The purpose of this example is to demonstrate the Eigenstate API and give an idea as to how you can incorporate Eigenstate into a larger architecture. It is not well-factored in itself.
-
-## How it works
-
-Eigenstate state is always immutable. This empowers you to use React's ```shouldComponentUpdate``` to speed up your application.
-
-Eigenstate also batches synchronous-sequential updates, so invoking several pure methods in succession (like ```state.firstPureMethod(); state.secondPureMethod()```) will only trigger a single re-render of your application view.
+This is a React Router setup that implements multiple routes in a single page. It shows how to compose ```stateDefinition```s and views into larger ```stateDefinition```s and views via composition. On route change, it scrolls to the route's corresponding element on the page.
 
 ## Relevant concepts
 
 #### Method purity
 
-The pure/impure distinction is the central dogma of Eigenstate (sort of like React's props/state distinction). If a method invokes another method *and* returns state data, Eigenstate will throw an error. This feature prevents you from mixing functional and procedural code. You are encouraged to annotate your methods with a ```// pure``` or ```// impure``` comment.
+The pure vs impure distinction is the central dogma of Eigenstate. It's sort of like React's props vs state distinction. While you might be able to write your application without the pure XOR impure rule, it will help you structure your state transformations across the lifecycle of your application.
 
-#### Multiple or hierarchical state objects
+There are a few subtle reasons for this distinction, but the big obvious one is that it allows you to have the separate benefits of functional code (for clean application logic) and procedural code (for Ajax calls and animations).
 
-The easiest way to use multiple state objects is to compose them into a larger one, like this:
+Pro tip: annotate your methods with ```// pure``` or ```// impure``` comments to keep them explicitly differentiated :)
+
+#### Speed and Optimization
+
+If an Eigenstate method calls several other methods in a row, like this:
+
+```js
+=> { state.someSyncMethod(); state.anotherSyncMethod() }
+```
+
+...then the updated state will not be passed to the relevant ```Provider```'s child component until all of the updates are completed. This is what is meant by synchronous-sequential update batching; there is no point in triggering a React ```render``` if another state update is going to occur immediately afterwards, so Eigenstate will do all of its calculations before passing along state. This means you should get the best possible unoptimized performance of your application.
+
+If you need (or want) to make your application even faster, Eigenstate's immutable state will help immensely. Every time a method returns new state data, that data is used to construct a new, immutable ```state``` object. This means that you can compare state in your React components' ```shouldComponentUpdate``` functions using the ```===``` operator, like this:
+
+```js
+//TodoList component
+shouldComponentUpdate: function(nextProps) {
+  return this.props.todoItems !== nextProps.todoItems //where todoItems is a complex data structure
+}
+```
+
+#### Store composition <!--revisions stopped here-->
+
+The easiest way to use multiple stores is to compose them into a larger one, like this:
 
 ```js
 const counterStateDef = { ... }
