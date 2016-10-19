@@ -7,18 +7,10 @@ export class Provider extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    this.unsubscribe = null
-
     this.initialize(props)
   }
 
   initialize(props) {
-
-    if (this.unsubscribe !== null) {
-
-      this.unsubscribe()
-      this.unsubscribe = null
-    }
 
     assert.storeIsFunction(props.store)
 
@@ -32,7 +24,7 @@ export class Provider extends React.Component {
       }
     }
 
-    this.unsubscribe = props.store.subscribe(executeUpdate)
+    props.store._setEffectingSubscriber(executeUpdate)
   }
 
   componentWillReceiveProps(next) {
@@ -40,15 +32,6 @@ export class Provider extends React.Component {
     if (this.props.store !== next.store) {
 
       this.initialize(next)
-    }
-  }
-
-  componentWillUnmount() {
-
-    if (this.unsubscribe !== null) {
-
-      this.unsubscribe()
-      this.unsubscribe = null
     }
   }
 

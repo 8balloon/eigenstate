@@ -7,17 +7,20 @@ export function Store(stateDef) {
   assert.stateDefIsObject(stateDef)
 
   var state = null
+  var effectingSubscriber = null
   var subscribers = []
 
   let callSubsWithDeetsAndTrigger = (nextState, invocationDetails, effectsTrigger) => {
     state = nextState
-    subscribers.forEach(sub => sub(invocationDetails, effectsTrigger))
+    effectingSubscriber(invocationDetails, effectsTrigger)
+    subscribers.forEach(sub => sub(invocationDetails))
   }
   const batcher = Batcher(callSubsWithDeetsAndTrigger)
 
   state = StateTree(stateDef, batcher.handleInvocation, batcher.enqueueEffect)
 
   var store = () => state
+  store._setEffectingSubscriber = (headSub) => effectingSubscriber = headSub
   store.subscribe = (newSub) => {
 
     assert.subscriberIsFunction(newSub)
