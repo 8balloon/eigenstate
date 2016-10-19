@@ -109,9 +109,9 @@ Functions returned from methods are called "effects", and are executed after the
 
 ## Advanced Example
 
-See [here](https://github.com/8balloon/eigenstate/blob/master/test/CompleteExample/index.jsx).
+See [here](https://github.com/8balloon/frontend-boilerplate/tree/master/src).
 
-This is a React Router setup that implements multiple routes in a single page. It shows how to compose `stateDefinition`s and views into larger `stateDefinition`s and views via composition. On route change, it scrolls to the route's corresponding element on the page.
+This is a React Router setup that implements multiple routes in a single page. It demonstrates how to compose `stateDefinition`s and views through composition. It is a part of a larger [boilerplate](https://github.com/8balloon/frontend-boilerplate), which also incorporates Webpack and SASS.
 
 ## Relevant concepts
 

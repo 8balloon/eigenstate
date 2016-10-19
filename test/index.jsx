@@ -10,7 +10,6 @@ import { Router, Route, hashHistory, Link } from 'react-router'
 
 import { Provider, Store, connect } from '../src'
 
-import CompleteExample from './CompleteExample'
 import Counter from './Counter'
 import Grid from './Grid'
 import ErroringCounter from './ErroringCounter'
@@ -65,5 +64,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('react-tests')
 )
-
-// CompleteExample()
