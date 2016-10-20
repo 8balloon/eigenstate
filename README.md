@@ -2,13 +2,13 @@
 
 # Eigenstate
 
-Eigenstate is a state container for [React.js](https://facebook.github.io/react/) that provides support for *methods*.
+Eigenstate is a complete, modular state management framework for [React.js](https://facebook.github.io/react/). It provides support for *methods*.
 
-Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictable and easy to test. The advantage is that they do not require action creators, switch statements, or middleware to provide complete functionality.
+Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictable and easy to test. The advantage is that they do not require action creators, switch statements, or middleware to provide complete functionality. They are also very simple to write.
 
 ## Features
 
-* Tiny, flexible [API](https://github.com/8balloon/eigenstate#API) -- about half the size of Redux + React Redux.
+* Tiny, flexible [API](https://github.com/8balloon/eigenstate#API) -- half the size of Redux + React Redux.
 * Support for pure functional / asynchronous [methods](https://github.com/8balloon/eigenstate#methods).
 * Immutable state -- always, automatically.
 
@@ -22,7 +22,7 @@ Methods, like [Redux](https://github.com/reactjs/redux) reducers, are predictabl
 
 ```js
 /*
-A working app to demonstrate sync and async functionality + logging.
+A fully working app demonstrating synchronous and asynchronous functionality.
 */
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -69,70 +69,47 @@ ReactDOM.render(
 
 ## Methods
 
-Methods are how you update your state data.
+Methods are how you update your application's state.
 
 **Methods are defined with two parameters, and called with one or zero arguments.**
 
 The second parameter, `state`, is provided automatically. Look at each of the methods in the example above; they all use the `state` parameter to do useful stuff.
 
-**Methods may update state by returning new state data.**
+**Methods may update state by returning updated state data.**
 
-Look at the methods `increment` and `changeColor` in the example above. Each of them updates state by returning new state data. The view component updates accordingly, using state through `props`.
+Look at the methods `increment` and `changeColor` in the example above. Each of them updates state by returning an updated state data object. The view component updates accordingly, using state through `props`.
+
+Methods that return updated state data (like `increment` and `changeColor`) are called *pure methods*.
 
 **Methods may be pure XOR impure. Async code goes in impure methods.**
 
-Methods may update state by returning updated state data. Methods that do this are called *pure* methods. The methods `increment` and `changeColor` in the example above are pure methods.
+Methods may invoke other methods. Methods that do this are called *impure methods*. Impure methods may not return updated state data, but they may still update state by calling methods which do. Look at `delayedIncrement` above for an example of this.
 
-Methods may invoke other methods. Methods that do this are called *impure* methods. The method `delayedIncrement` in the example above is an impure method.
-
-Methods have to be pure or impure. They can't be both. Try to use pure methods as much as you can; since they are pure functions, they are easy to test and reason about. You should use impure methods when you have to use asynchronous code (callbacks), like `$.ajax` or `setTimeout` require you to do.
-
-**Methods may return "effects"**
-
-Functions returned from methods are called "effects", and are executed after the view component of your application has completely updated. They are meant for kicking off imperative side effects, like a non-React application or (in the worst case) imperative DOM mutations. Do not get them mixed up with impure methods, which are how you handle callbacks / asynchronous code.
+Eigenstate will throw an error it finds you using a method that is pure *and* impure (see [here](https://github.com/8balloon/eigenstate#method-purity) for more explanation). Use impure methods for asynchronous code (callbacks), like `$.ajax` or `setTimeout`.
 
 ## API
 
-* **Store** (function) : Accepts a `stateDefinition` object and returns an Eigenstate store. The Eigenstate store is also a function, which returns an immutable `state` object when invoked.
+* `Store` (function) : Accepts a `stateDefinition` object and returns an Eigenstate store. The Eigenstate store is a function which returns an immutable `state` object when invoked.
 
-  * constructor param: **stateDefinition** (required `Store` parameter) : an object of `key: data | method | stateDefinition` pairs. Defines the store which is returned by `Store`. Data can be any JSON, and methods are described [here](https://github.com/8balloon/eigenstate#methods).
+  * **stateDefinition** (constructor parameter, object) : an object of `key: data | method | stateDefinition` pairs. Defines the Eigenstate store to be returned by `Store`. Data can be any JSON, and methods are described [here](https://github.com/8balloon/eigenstate#methods).
 
-  * store property: **.subscribe** (function) : A function that accepts a function, `subscriber`. The `subscriber` is called on every method invocation with an `invocationDetails` object. To unsubscribe a `subscriber`, invoke the function returned by `<store>.subscribe`
+  * **.subscribe** (store property, function) : A function that accepts a function, `subscriber`. The `subscriber` is called on every method invocation with an `invocationDetails` object. To unsubscribe a `subscriber`, invoke the function returned by `<store>.subscribe`
 
 * **Provider** (React component) : Provides store state to its children. Must be passed a `store` property to work. Provides state data and methods to its child component via the child component's `props`.
 
 * **connect** (function) : accepts a React component, and returns a `connect()`ed version of that component. The `connect`ed version has access to state from the nearest `Provider` store via its `props`, as though it was that `Provider`'s direct child. This is useful for integrating with [React Router](https://github.com/ReactTraining/react-router).
 
-* **verboseLogger** (function) : an `onMethodListener` that logs information on method invocations to the console. Subscribe it to a store to use, like this:
+* **verboseLogger** (function) : an `onMethodListener` that logs useful information about method invocations to the console. Use by subscribing it to a store, like this:
 
   `const yourStore = Store({ ... }); yourStore.subscribe(verboseLogger)`
-
-## Advanced Example
-
-See [here](https://github.com/8balloon/frontend-boilerplate/tree/master/src).
-
-This is a React Router setup that implements multiple routes in a single page. It demonstrates how to compose `stateDefinition`s and views through composition. It is a part of a larger [boilerplate](https://github.com/8balloon/frontend-boilerplate), which also incorporates Webpack and SASS.
 
 ## Relevant concepts
 
 #### Method purity
 
-The pure vs impure distinction is the central dogma of Eigenstate. Being forced to separate these types of method will give you the separate benefits of functional code (for clean application logic) and procedural code (for Ajax calls and animations).
+The pure vs impure distinction is the central dogma of Eigenstate. Being forced to separate methods by purity will give you the separate benefits of functional code (for clean application logic) and procedural code (for Ajax calls, animations, and so forth).
 
-Pro tip: annotate your methods with `// pure` or `// impure` comments to keep them explicitly differentiated :)
-
-#### Optimization
-
-Eigenstate state is always immutable. This means you can use it in your React components' `shouldComponentUpdate` functions using the `===` operator, like this:
-
-```js
-//TodoList component
-shouldComponentUpdate: function(nextProps) {
-  return this.props.todoItems !== nextProps.todoItems //where todoItems is a complex data structure
-}
-```
-
-If you implement this across your application, it will never re-render needlessly.
+It is suggested that you annotate your methods with `/* pure */` or `/* impure */` to keep them explicitly differentiated.
 
 #### Store composition
 
@@ -157,8 +134,31 @@ const ApplicationView = (props) => (
 ReactDOM.render(<Provider store={applicationStore}> <ApplicationView> </Provider>, ...)
 ```
 
-Methods are passed **local state**, that is, state at their level in their state object tree. So in this example, `CounterView` will behave in the same manner if it were used like this:
+Methods are passed **local state**, that is, state at their level in their state object tree. So in the above example, `CounterView` will behave in the same manner if it were used like this:
 
 ```js
 <Provider store={Store(counterStateDef)}> <CounterView /> </Provider>
 ```
+
+#### Optimization
+
+Eigenstate state is always immutable. This means that a `===` comparison will never return true if state has changed. This is useful for your React components' `shouldComponentUpdate` functions. Here is an example `shouldComponentUpdate` that makes use of immutable state:
+
+```js
+//TodoList component
+shouldComponentUpdate: function(nextProps) {
+  return this.props.todoItems !== nextProps.todoItems //where todoItems is a complex data structure
+}
+```
+
+If you implement this across your application, it will never re-render needlessly, making it very fast.
+
+#### Effects
+
+Functions returned from methods are called "effects", and are executed after the view component of your application has completely updated. They are meant for kicking off imperative side effects, like a non-React animation or (in the worst case) imperative DOM mutations. They should be used as sparingly as possible. Do not get them mixed up with impure methods; effects have nothing to do with asynchronous code (callbacks).
+
+## Advanced Example
+
+See [here](https://github.com/8balloon/frontend-boilerplate/tree/master/src).
+
+This is a React Router setup that implements multiple routes in a single page. It demonstrates how to compose `stateDefinition`s and views through composition. It is a part of a larger [boilerplate](https://github.com/8balloon/frontend-boilerplate), which incorporates Webpack and SASS.
