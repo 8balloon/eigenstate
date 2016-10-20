@@ -1,6 +1,6 @@
 import assert from '../validation/assert'
 
-export default function Batcher(updateCallback) {
+export default function Executor(updateCallback) {
 
   var effectQueue = []
   var effectsTimeout = 0

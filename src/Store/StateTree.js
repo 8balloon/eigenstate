@@ -3,7 +3,7 @@ import { mapObjectTreeLeaves, getValueByPath } from '../utils'
 import assert from '../validation/assert'
 import validMethod from '../validation/validMethod'
 
-export default function StateTree(stateDef, handleInvocation, enqueueEffect) {
+export default function StateTree(stateDef, executor) {
 
   var stateTree = Immutable(mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
@@ -23,7 +23,7 @@ export default function StateTree(stateDef, handleInvocation, enqueueEffect) {
 
         if (methodReturnValue instanceof Function) { // isEffect
 
-          enqueueEffect(methodReturnValue)
+          executor.enqueueEffect(methodReturnValue)
         }
         else { // isData
 
@@ -40,7 +40,7 @@ export default function StateTree(stateDef, handleInvocation, enqueueEffect) {
         }
       }
 
-      handleInvocation(stateTree, {
+      executor.handleInvocation(stateTree, {
         methodKey: key,
         methodPath: path,
         payload,

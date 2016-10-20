@@ -1,6 +1,6 @@
 import assert from '../validation/assert'
 import StateTree from './StateTree'
-import Batcher from './Batcher'
+import Executor from './Executor'
 
 export function Store(stateDef) {
 
@@ -25,9 +25,8 @@ export function Store(stateDef) {
       effectsTrigger()
     }
   }
-  const batcher = Batcher(callSubsWithDeetsAndTrigger)
-
-  state = StateTree(stateDef, batcher.handleInvocation, batcher.enqueueEffect)
+  let executor = Executor(callSubsWithDeetsAndTrigger)
+  state = StateTree(stateDef, executor)
 
   var store = () => state
   store._setEffectingSubscriber = (effectingSub) => {
