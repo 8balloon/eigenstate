@@ -2,7 +2,7 @@ const documentationURL = 'https://github.com/8balloon/switchless/blob/master/REA
 
 export const stateDefIsNotObject = "The Store constructor function requires a stateDef object as an argument."
 export const subscriberIsNotFunction = "Store subscribers must be functions."
-export const storeIsNotFunction = "Provider.props.store must be a function. Did you remember to create it with the Store constructor function, imported from 'eigenstateStoreState'?"
+export const storeIsNotFunction = "Provider.props.store must be a function. Did you remember to create it with the Store constructor function, imported from 'eigenstate'?"
 export const effectReturnedValue = "An Effect returned a value. This value will have no effect. The Effect and the returned value are:"
 
 export function tooManyMethodArguments(key, path) {

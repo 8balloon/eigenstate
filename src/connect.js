@@ -3,14 +3,16 @@ import assert from './validation/assert'
 
 export function connect(Component, propTypes) {
 
+  if (propTypes) Component.propTypes = propTypes
+
   class Connect extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
 
       if (!propTypes) return true
 
-      const contextState = this.context.eigenstateStoreState
-      const nextContextState = nextContext.eigenstateStoreState
+      const contextState = this.context.eigenstate
+      const nextContextState = nextContext.eigenstate
 
       for (var propKey in propTypes) {
         if (contextState[propKey] !== nextContextState[propKey])
@@ -22,7 +24,7 @@ export function connect(Component, propTypes) {
     render() {
 
       const componentProps = Object.assign({},
-        this.context.eigenstateStoreState,
+        this.context.eigenstate,
         this.props // including children, since they're the children of what we're creating
       )
 
@@ -31,9 +33,7 @@ export function connect(Component, propTypes) {
   }
 
   Connect.contextTypes = {
-    eigenstateStoreState: propTypes ?
-      React.PropTypes.shape(propTypes) :
-      React.PropTypes.object.isRequired
+    eigenstate: React.PropTypes.object.isRequired
   }
 
   return Connect
