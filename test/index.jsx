@@ -43,12 +43,12 @@ const Apps = (props) => (
   <div className="apps">
     <Counter />
     <Grid />
+    <GeneratedStore />
     <ErroringCounter />
     <ConnectComparison />
     <Todos />
     <ReactRouterTester {...props} />
     <EffectsTest />
-    <GeneratedStore />
   </div>
 )
 

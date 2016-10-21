@@ -40,7 +40,7 @@ const controllerStore = Store({
 const Controller = (props) => {
   const generatedStore = Store(nextCounterStateDef())
   return (
-    <div className="controller">
+    <div className="controller" style={{backgroundColor: 'orange'}}>
       <SimpleCounter store={generatedStore} />
       <div onClick={props.rerender}> RE RENDER </div>
     </div>
