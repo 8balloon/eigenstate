@@ -6,7 +6,7 @@ const counterStore = Store({
   doNothing: () => {}
 })
 
-const CounterView = (props) => { console.log("RENDER"); return (
+const CounterView = (props) => { return (
   <div className="counter">
     <div className="count">{ props.count }</div>
     <div className="incrementer" onClick={() => props.increment(1)}> INCREMENT </div>
@@ -15,16 +15,18 @@ const CounterView = (props) => { console.log("RENDER"); return (
 
 const ConnectedCounterView = connect(CounterView)
 
-const OptimizedCounterView = connect(CounterView, {
-  count: React.PropTypes.number.isRequired,
-  increment: React.PropTypes.func.isRequired
-})
+// const OptimizedCounterView = connect(CounterView, {
+//   count: React.PropTypes.number.isRequired,
+//   increment: React.PropTypes.func.isRequired
+// })
+//
+// console.log("PROPTYPES:", React.PropTypes)
+// window.PropTypes = React.PropTypes
 
 const CountersWrapper = (props) => (
   <div className="connectCounterCompare" style={{backgroundColor: 'orange'}}>
     <CounterView {...props} />
     <ConnectedCounterView />
-    <OptimizedCounterView />
     <div onClick={props.doNothing}>Render Check</div>
   </div>
 )
