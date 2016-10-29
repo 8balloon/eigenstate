@@ -2,8 +2,8 @@ import assert from '../validation/assert'
 
 export default function Executor(updateCallback) {
 
-  var effectQueue = []
-  var effectsTimeout = 0
+  let effectQueue = []
+  let effectsTimeout = 0
 
   const triggerEffects = () => {
 

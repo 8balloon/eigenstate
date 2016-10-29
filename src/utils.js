@@ -37,8 +37,8 @@ export function mapObjectTreeLeaves(obj, mapFunction, keyPath) {
 
 export function getValueByPath(obj, path) {
 
-  var value = obj
-  var keys = path.slice()
+  let value = obj
+  let keys = path.slice()
 
   while (keys.length) {
     value = value[keys.shift()]

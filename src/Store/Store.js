@@ -6,9 +6,9 @@ export function Store(stateDef) {
 
   assert.stateDefIsObject(stateDef)
 
-  var state = null
-  var effectingSubscriber = null
-  var subscribers = []
+  let state = null
+  let effectingSubscriber = null
+  let subscribers = []
 
   let callSubsWithDeetsAndTrigger = (nextState, invocationDetails, effectsTrigger) => {
 
@@ -28,7 +28,7 @@ export function Store(stateDef) {
   let executor = Executor(callSubsWithDeetsAndTrigger)
   state = StateTree(stateDef, executor)
 
-  var store = () => state
+  let store = () => state
   Object.defineProperty(store, '_setEffectingSubscriber', {
     value: (effectingSub) => {
 

@@ -66,7 +66,7 @@ export function returnDataFitsStateDef(returnData, stateDef, key, path) {
 
   returnDataIsJSONObject(returnData, key, path)
 
-  for (var localKey in returnData) {
+  for (let localKey in returnData) {
 
     const stateDefProperty = stateDef[localKey]
 

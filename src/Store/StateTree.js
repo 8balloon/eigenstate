@@ -5,7 +5,7 @@ import validMethod from '../validation/validMethod'
 
 export default function StateTree(stateDef, executor) {
 
-  var stateTree = Immutable(mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
+  let stateTree = Immutable(mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
 
     if (!(property instanceof Function)) return property
     const method = property
@@ -17,7 +17,7 @@ export default function StateTree(stateDef, executor) {
       const localStateTree = getValueByPath(stateTree, path)
       const methodReturnValue = validMethod(method, payload, localStateTree, key, path)
 
-      var nextLocalState = null
+      let nextLocalState = null
 
       if (methodReturnValue) {
 

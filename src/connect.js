@@ -1,4 +1,5 @@
 import React from 'react'
+import Immutable from 'seamless-immutable'
 import { mapObjectTreeLeaves } from './utils'
 import assert from './validation/assert'
 
@@ -47,7 +48,7 @@ export function connect(Component, storeTree) {
 
     getChildContext() {
 
-      var eigenstate = !this.context.eigenstate ? [] :
+      let eigenstate = !this.context.eigenstate ? [] :
         [].concat(this.context.eigenstate)
 
       mapObjectTreeLeaves(storeTree, (storeLeaf) => {
@@ -63,12 +64,11 @@ export function connect(Component, storeTree) {
 
       //assert.propsDon'tconflictWithStore() xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-      const effectiveStore = mapObjectTreeLeaves(storeTree, storeLeaf => storeLeaf())
-
-      let componentProps = Object.assign({},
-        effectiveStore,
-        this.props
+      const storeTreeState = Immutable(
+        mapObjectTreeLeaves(storeTree, storeLeaf => storeLeaf())
       )
+
+      let componentProps = Object.assign({}, storeTreeState, this.props)
 
       return React.createElement(Component, componentProps)
     }

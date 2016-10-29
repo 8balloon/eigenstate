@@ -7,8 +7,8 @@ export default function validMethod(method, payload, stateTree, key, path) {
 
   if (isProduction) return method(payload, stateTree)
 
-  var invokedOtherMethod = false
-  var shouldBePure = false
+  let invokedOtherMethod = false
+  let shouldBePure = false
 
   const enforcingStateTree = Immutable(mapObjectTreeLeaves(stateTree, (localProperty) => {
 
