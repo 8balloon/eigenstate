@@ -1,9 +1,5 @@
-import { Provider, Store } from '../../src'
+import { connect, Store } from '../../src'
 
-/*
-Your application's state definition.
-This state definition has 1 value and 1 method.
-*/
 export const counterState = {
   count: 0,
   color: 'red',
@@ -16,8 +12,6 @@ export const counterState = {
 }
 export const counterStore = Store(counterState)
 
-/*
-*/
 export const CounterView = (props) => (
   <div id="counter" style={{backgroundColor: props.color}}>
     { props.count }
@@ -29,14 +23,4 @@ export const CounterView = (props) => (
   </div>
 )
 
-/*
-Eigenstate's Provider creates your state object for you.
-It passes access to your state methods and values via "props"
-*/
-export default function Counter() {
-  return (
-    <Provider store={counterStore}>
-      <CounterView />
-    </Provider>
-  )
-}
+export default connect(CounterView, counterStore)

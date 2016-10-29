@@ -8,15 +8,15 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, hashHistory, Link } from 'react-router'
 
-import { Provider, Store, connect } from '../src'
+import { Store, connect } from '../src'
 
 import Counter from './Counter'
-import Grid from './Grid'
-import ErroringCounter from './ErroringCounter'
-import ConnectComparison from './ConnectComparison'
-import Todos from './Todos'
-import EffectsTest from './EffectsTest'
-import GeneratedStore from './GeneratedStore/GeneratedStore'
+// import Grid from './Grid'
+// import ErroringCounter from './ErroringCounter'
+// import ConnectComparison from './ConnectComparison'
+// import Todos from './Todos'
+// import EffectsTest from './EffectsTest'
+// import GeneratedStore from './GeneratedStore/GeneratedStore'
 
 const indexStore = Store({
   helloWorld: null,
@@ -42,25 +42,24 @@ const Kids = (props) => {
 const Apps = (props) => (
   <div className="apps">
     <Counter />
+  {/*
     <Grid />
     <GeneratedStore />
     <ErroringCounter />
     <ConnectComparison />
     <Todos />
+    <EffectsTest />*/}
     <ReactRouterTester {...props} />
-    <EffectsTest />
   </div>
 )
 
-const StatefulApps = connect(Apps)
+const StatefulApps = connect(Apps, indexStore)
 
 ReactDOM.render(
-  <Provider store={indexStore}>
     <Router history={hashHistory}>
       <Route path="/" component={StatefulApps}>
         <Route path="kids" component={Kids} />
       </Route>
-    </Router>
-  </Provider>,
+    </Router>,
   document.getElementById('react-tests')
 )
