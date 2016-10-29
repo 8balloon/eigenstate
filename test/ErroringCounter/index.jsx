@@ -1,4 +1,4 @@
-import { Provider, Store, verboseLogger } from '../../src'
+import { Store, verboseLogger, connect } from '../../src'
 
 const erroringStore = Store({
 
@@ -114,10 +114,4 @@ const View = function CounterView(props) {
   )
 }
 
-export default function ErroringCounter() {
-  return (
-    <Provider store={erroringStore}>
-      <View />
-    </Provider>
-  )
-}
+export default connect(View, erroringStore)

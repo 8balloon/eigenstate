@@ -10,10 +10,7 @@ export function connect(Component, storeTree) {
     constructor(props, context) {
       super(props, context)
 
-      this.initialize(props, context)
-    }
-
-    initialize(props, context) {
+      this.effectorUnsetFuncs = []
 
       let throwErrFromConnectComponent = (err) => { throw err }
       const executeUpdate = (invocationDetails, callback) => {
@@ -29,11 +26,6 @@ export function connect(Component, storeTree) {
 
         assert.storeIsFunction(storeLeaf) //rewrite this assert xxxxxxxxxxxxxxxxxx
 
-        if (context.eigenstate === undefined) {
-          storeLeaf._setEffectingSubscriber(executeUpdate)
-          return
-        }
-
         let storeIsInContext = false
         mapObjectTreeLeaves(context.eigenstate, (leaf) => {
           if (leaf === storeLeaf) {
@@ -41,43 +33,49 @@ export function connect(Component, storeTree) {
           }
         })
         if (!storeIsInContext) {
-          storeLeaf._setEffectingSubscriber(executeUpdate)
+          this.effectorUnsetFuncs.push(
+            storeLeaf._setEffector(executeUpdate)
+          )
         }
       })
+    }
+
+    componentWillUnmount() {
+
+      this.effectorUnsetFuncs.forEach(unsub => unsub())
+    }
+
+    render() {
+
+      const storeTreeState = Immutable(
+        mapObjectTreeLeaves(storeTree, storeLeaf => storeLeaf())
+      )
+
+      //assert.propsDon'tconflictWithStoreState() xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+      let componentProps = Object.assign({}, storeTreeState, this.props)
+
+      return React.createElement(Component, componentProps)
     }
 
     getChildContext() {
 
       let eigenstate = !this.context.eigenstate ? [] :
-        [].concat(this.context.eigenstate)
+      [].concat(this.context.eigenstate)
 
       mapObjectTreeLeaves(storeTree, (storeLeaf) => {
-        if (eigenstate.indexOf(storeLeaf) < 0) {
+        if (eigenstate.indexOf(storeLeaf) < 0) { // could be optimizedxxxxxxxxxxxx
           eigenstate.push(storeLeaf)
         }
       })
 
       return { eigenstate }
     }
-
-    render() {
-
-      //assert.propsDon'tconflictWithStore() xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-      const storeTreeState = Immutable(
-        mapObjectTreeLeaves(storeTree, storeLeaf => storeLeaf())
-      )
-
-      let componentProps = Object.assign({}, storeTreeState, this.props)
-
-      return React.createElement(Component, componentProps)
-    }
   }
 
   Connect.contextTypes = {
     eigenstate: React.PropTypes.array
   }
-
   Connect.childContextTypes = {
     eigenstate: React.PropTypes.array.isRequired
   }

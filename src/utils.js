@@ -8,29 +8,31 @@ export function isObject(value) {
   return typeof value === 'object' && value !== null
 }
 
-export function mapObjectValues(obj, mapFunction) {
+export function mapObjectValues(obj, mapFunc) {
 
-  if (obj instanceof Array) return obj.map(mapFunction)
+  if (Object.keys(obj).length === 0) return mapFunc(obj)
 
-  if (Object.keys(obj).length === 0) return mapFunction(obj)
+  if (obj instanceof Array) return obj.map(mapFunc)
 
   return Object.assign.apply({},
     Object.keys(obj).map(key => ({
-      [key]: mapFunction(obj[key], key, obj)
+      [key]: mapFunc(obj[key], key, obj)
     }))
   )
 }
 
-export function mapObjectTreeLeaves(obj, mapFunction, keyPath) {
+export function mapObjectTreeLeaves(obj, mapFunc, keyPath) {
+
+  if (obj === undefined) return
 
   const path = keyPath || []
 
   return mapObjectValues(obj, (val, key) => {
     if ( isObject(val) ) {
-      return mapObjectTreeLeaves(val, mapFunction, [].concat(path, key))
+      return mapObjectTreeLeaves(val, mapFunc, [].concat(path, key))
     }
     else {
-      return mapFunction(val, key, path, obj)
+      return mapFunc(val, key, path, obj)
     }
   })
 }

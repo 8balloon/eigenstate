@@ -7,8 +7,8 @@ export function Store(stateDef) {
   assert.stateDefIsObject(stateDef)
 
   let state = null
-  let effectingSubscriber = null
   let subscribers = []
+  let effectors = []
 
   let callSubsWithDeetsAndTrigger = (nextState, invocationDetails, effectsTrigger) => {
 
@@ -16,9 +16,9 @@ export function Store(stateDef) {
 
     subscribers.forEach(sub => sub(invocationDetails))
 
-    if (effectingSubscriber) {
+    if (effectors.length > 0) {
 
-      effectingSubscriber(invocationDetails, effectsTrigger)
+      effectors.forEach(effector => effector(invocationDetails, effectsTrigger))
     }
     else {
 
@@ -29,13 +29,6 @@ export function Store(stateDef) {
   state = StateTree(stateDef, executor)
 
   let store = () => state
-  Object.defineProperty(store, '_setEffectingSubscriber', {
-    value: (effectingSub) => {
-
-      assert.subscriberIsFunction(effectingSub)
-      effectingSubscriber = effectingSub
-    }
-  })
   Object.defineProperty(store, 'subscribe', {
     value: (newSub) => {
 
@@ -50,6 +43,20 @@ export function Store(stateDef) {
       }
     }
   })
-  
+  Object.defineProperty(store, '_setEffector', {
+    value: (effector) => {
+
+      assert.subscriberIsFunction(effector) // maybe make another assertion for this?
+
+      const thisEffectorIndex = effectors.length
+      effectors[thisEffectorIndex] = effector
+
+      return function unsetEffectingSubscriber() {
+        delete effectors[thisEffectorIndex]
+        return true
+      }
+    }
+  })
+
   return store
 }

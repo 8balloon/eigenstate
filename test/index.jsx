@@ -12,11 +12,11 @@ import { Store, connect } from '../src'
 
 import Counter from './Counter'
 import Grid from './Grid'
-// import ErroringCounter from './ErroringCounter'
+import ErroringCounter from './ErroringCounter'
 // import ConnectComparison from './ConnectComparison'
 // import Todos from './Todos'
 // import EffectsTest from './EffectsTest'
-// import GeneratedStore from './GeneratedStore/GeneratedStore'
+import GeneratedStore from './GeneratedStore/GeneratedStore'
 import NestedApp from './MultipleSameStores/NestedApp'
 
 const indexStore = Store({
@@ -47,9 +47,9 @@ const Apps = (props) => (
   <div className="apps">
     <Counter />
     <Grid />
-  {/*
     <GeneratedStore />
     <ErroringCounter />
+  {/*
     <ConnectComparison />
     <Todos />
     <EffectsTest />*/}
