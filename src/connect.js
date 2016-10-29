@@ -14,52 +14,54 @@ export function connect(Component, storeTree) {
 
     initialize(props, context) {
 
-      let throwErrFromProvider = (err) => { throw err }
+      let throwErrFromConnectComponent = (err) => { throw err }
       const executeUpdate = (invocationDetails, callback) => {
         try {
           this.forceUpdate(callback)
         }
         catch (err) {
-          throwErrFromProvider(err)
+          throwErrFromConnectComponent(err)
         }
       }
 
       mapObjectTreeLeaves(storeTree, (storeLeaf) => {
 
-        assert.storeIsFunction(storeLeaf) //rewrite this assert
+        assert.storeIsFunction(storeLeaf) //rewrite this assert xxxxxxxxxxxxxxxxxx
 
-        if (context.eigenstate) {
-          let storeIsInContext = false
-          mapObjectTreeLeaves(context.eigenstate, (leaf) => {
-            if (leaf === storeLeaf) {
-              storeIsInContext = true
-              console.log("DANGGGG")
-            }
-          })
-          if (!storeIsInContext) {
-            console.log("YAY!", context)
-            storeLeaf._setEffectingSubscriber(executeUpdate)
-          }
+        if (context.eigenstate === undefined) {
+          storeLeaf._setEffectingSubscriber(executeUpdate)
+          return
         }
-        else {
-          console.log("NO CONTEXT!")
+
+        let storeIsInContext = false
+        mapObjectTreeLeaves(context.eigenstate, (leaf) => {
+          if (leaf === storeLeaf) {
+            storeIsInContext = true
+          }
+        })
+        if (!storeIsInContext) {
           storeLeaf._setEffectingSubscriber(executeUpdate)
         }
-
       })
     }
 
     getChildContext() {
 
-      return {
-        eigenstate: !this.context.eigenstate ? [storeTree] :
-          [].concat(this.context.eigenstate, storeTree)
-      }
+      var eigenstate = !this.context.eigenstate ? [] :
+        [].concat(this.context.eigenstate)
+
+      mapObjectTreeLeaves(storeTree, (storeLeaf) => {
+        if (eigenstate.indexOf(storeLeaf) < 0) {
+          eigenstate.push(storeLeaf)
+        }
+      })
+
+      return { eigenstate }
     }
 
     render() {
 
-      //assert.propsDon'tconflictWithStore()
+      //assert.propsDon'tconflictWithStore() xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
       const effectiveStore = mapObjectTreeLeaves(storeTree, storeLeaf => storeLeaf())
 

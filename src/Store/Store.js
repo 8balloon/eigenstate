@@ -50,5 +50,6 @@ export function Store(stateDef) {
       }
     }
   })
+  
   return store
 }

@@ -1,4 +1,4 @@
-import { Provider, Store, verboseLogger} from '../../src'
+import { Store, connect, verboseLogger} from '../../src'
 
 const isMinSize = ({rows, columns}) => rows.length <= 1 || columns.length <= 1
 
@@ -49,10 +49,4 @@ export const GridView = (props) => {
   )
 }
 
-export default function Grid() {
-  return (
-    <Provider store={gridStore}>
-      <GridView />
-    </Provider>
-  )
-}
+export default connect(GridView, gridStore)

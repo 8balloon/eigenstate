@@ -11,7 +11,7 @@ import { Router, Route, hashHistory, Link } from 'react-router'
 import { Store, connect } from '../src'
 
 import Counter from './Counter'
-// import Grid from './Grid'
+import Grid from './Grid'
 // import ErroringCounter from './ErroringCounter'
 // import ConnectComparison from './ConnectComparison'
 // import Todos from './Todos'
@@ -28,10 +28,13 @@ const ReactRouterTester = (props) => (
     ROUTE TEST ({props.helloWorld})
     <Link to="/kids">Link to children</Link>
     <Link to="/">Link away from children</Link>
+    <Link to="/rrTester">Link to store-recursive thing</Link>
     <div onClick={props.armHelloWorld}>arm hello world</div>
     {props.children}
   </div>
 )
+
+const InternalTesterApp = connect(ReactRouterTester, indexStore)
 
 const Kids = (props) => {
   return (
@@ -42,8 +45,8 @@ const Kids = (props) => {
 const Apps = (props) => (
   <div className="apps">
     <Counter />
-  {/*
     <Grid />
+  {/*
     <GeneratedStore />
     <ErroringCounter />
     <ConnectComparison />
@@ -59,6 +62,7 @@ ReactDOM.render(
     <Router history={hashHistory}>
       <Route path="/" component={StatefulApps}>
         <Route path="kids" component={Kids} />
+        <Route path="rrTester" component={InternalTesterApp} />
       </Route>
     </Router>,
   document.getElementById('react-tests')
