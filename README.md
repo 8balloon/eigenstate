@@ -69,23 +69,15 @@ ReactDOM.render(
 
 ## Methods
 
-Methods are how you update your application's state.
+See the example above, which demonstrates all of these principles.
 
-**Methods are defined with two parameters, and called with one or zero arguments.**
+1. A method is defined with two parameters.
 
-The second parameter, `state`, is provided automatically. Look at each of the methods in the example above; they all use the `state` parameter to do useful stuff.
+2. A method is called with one or zero arguments. An argument for the second parameter (`state`) is provided by Eigenstate. You may not provide this argument. yourself.
 
-**Methods may update state by returning updated state data.**
+3. A method may update state by returning updated state data.
 
-Look at the methods `increment` and `changeColor` in the example above. Each of them updates state by returning an updated state data object. The view component updates accordingly, using state through `props`.
-
-Methods that return updated state data (like `increment` and `changeColor`) are called *pure methods*.
-
-**Methods may be pure XOR impure. Async code goes in impure methods.**
-
-Methods may invoke other methods. Methods that do this are called *impure methods*. Impure methods may not return updated state data, but they may still update state by calling methods which do. Look at `delayedIncrement` above for an example of this.
-
-Eigenstate will throw an error it finds you using a method that is pure *and* impure (see [here](https://github.com/8balloon/eigenstate#method-purity) for more explanation). Use impure methods for asynchronous code (callbacks), like `$.ajax` or `setTimeout`.
+4. A method may invoke other methods, but a method that does so may not update state directly by returning updated state data. (See [here](https://github.com/8balloon/eigenstate#method-purity) for a deeper explanation)
 
 ## API
 
@@ -107,9 +99,15 @@ Eigenstate will throw an error it finds you using a method that is pure *and* im
 
 #### Method purity
 
-The pure vs impure distinction is the central dogma of Eigenstate. Being forced to separate methods by purity will give you the separate benefits of functional code (for clean application logic) and procedural code (for Ajax calls, animations, and so forth).
+Methods may be pure XOR impure.
 
-It is suggested that you annotate your methods with `/* pure */` or `/* impure */` to keep them explicitly differentiated.
+Methods that return updated state data are called *pure methods*.
+
+Methods that invoke other methods are called *impure methods*. Async code goes in impure methods.
+
+Eigenstate will throw an error it finds you using a method that is pure *and* impure.
+
+This pure vs impure distinction is the central dogma of Eigenstate. Being forced to separate methods by purity will give you the separate benefits of functional code (for clean application logic) and procedural code (for Ajax calls, animations, and so forth).
 
 #### Store composition
 
