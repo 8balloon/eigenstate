@@ -12,7 +12,7 @@ export function mapObjectValues(obj, mapFunction) {
 
   if (obj instanceof Array) return obj.map(mapFunction)
 
-  if (Object.keys(obj).length === 0) return obj
+  if (Object.keys(obj).length === 0) return mapFunction(obj)
 
   return Object.assign.apply({},
     Object.keys(obj).map(key => ({

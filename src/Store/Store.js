@@ -29,22 +29,26 @@ export function Store(stateDef) {
   state = StateTree(stateDef, executor)
 
   var store = () => state
-  store._setEffectingSubscriber = (effectingSub) => {
+  Object.defineProperty(store, '_setEffectingSubscriber', {
+    value: (effectingSub) => {
 
-    assert.subscriberIsFunction(effectingSub)
-    effectingSubscriber = effectingSub
-  }
-  store.subscribe = (newSub) => {
-
-    assert.subscriberIsFunction(newSub)
-
-    const thisSubscriberIndex = subscribers.length
-    subscribers[thisSubscriberIndex] = newSub
-
-    return function unsubscribeFromUpdates() {
-      delete subscribers[thisSubscriberIndex]
-      return true
+      assert.subscriberIsFunction(effectingSub)
+      effectingSubscriber = effectingSub
     }
-  }
+  })
+  Object.defineProperty(store, 'subscribe', {
+    value: (newSub) => {
+
+      assert.subscriberIsFunction(newSub)
+
+      const thisSubscriberIndex = subscribers.length
+      subscribers[thisSubscriberIndex] = newSub
+
+      return function unsubscribeFromUpdates() {
+        delete subscribers[thisSubscriberIndex]
+        return true
+      }
+    }
+  })
   return store
 }
