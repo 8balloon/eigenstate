@@ -26,7 +26,7 @@ A fully working app demonstrating synchronous and asynchronous functionality.
 */
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Store, Provider } from 'eigenstate'
+import { Store, connect } from 'eigenstate'
 
 /*
 1
@@ -59,10 +59,9 @@ const View = (props) => (
 /*
 3
 */
+const App = connect(View, store)
 ReactDOM.render(
-  <Provider store={store}>
-    <View />
-  </Provider>,
+  <App />,
   document.getElementById('react-root')  
 )
 ```
@@ -87,9 +86,7 @@ See the example above, which demonstrates all of these principles.
 
   * **.subscribe** (store property, function) : A function that accepts a function, `subscriber`. The `subscriber` is called on every method invocation with an `invocationDetails` object. To unsubscribe a `subscriber`, invoke the function returned by `<store>.subscribe`
 
-* **Provider** (React component) : Provides store state to its children. Must be passed a `store` property to work. Provides state data and methods to its child component via the child component's `props`.
-
-* **connect** (function) : accepts a React component, and returns a `connect()`ed version of that component. The `connect`ed version has access to state from the nearest `Provider` store via its `props`, as though it was that `Provider`'s direct child. This is useful for integrating with [React Router](https://github.com/ReactTraining/react-router).
+* **connect** (function) : accepts a React component and a store, and returns a `connect()`ed version of that component. The `connect`ed version has access to the store's state through `props`.
 
 * **verboseLogger** (function) : an `onMethodListener` that logs useful information about method invocations to the console. Use by subscribing it to a store, like this:
 
@@ -153,7 +150,7 @@ If you implement this across your application, it will never re-render needlessl
 
 #### Effects
 
-Functions returned from methods are called "effects", and are executed after the view component of your application has completely updated. They are meant for kicking off imperative side effects, like a non-React animation or (in the worst case) imperative DOM mutations. They should be used as sparingly as possible. Do not get them mixed up with impure methods; effects have nothing to do with asynchronous code (callbacks).
+Functions returned from methods are called "effects", and are executed after the view component of your application has completely updated. Use sparingly.
 
 ## Advanced Example
 
