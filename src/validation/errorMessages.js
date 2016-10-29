@@ -2,7 +2,7 @@ const documentationURL = 'https://github.com/8balloon/switchless/blob/master/REA
 
 export const stateDefIsNotObject = "The Store constructor function requires a stateDef object as an argument."
 export const subscriberIsNotFunction = "Store subscribers must be functions."
-export const storeIsNotFunction = "Provider.props.store must be a function. Did you remember to create it with the Store constructor function, imported from 'eigenstate'?"
+export const storeIsNotFunction = "The 'store' argument you provided to connect does not appear to be a valid Eigenstate store. Did you remember to create it with Store(), imported from 'eigenstate'?"
 export const effectReturnedValue = "An Effect returned a value. This value will have no effect. The Effect and the returned value are:"
 
 export function tooManyMethodArguments(key, path) {
@@ -23,4 +23,8 @@ export function returnedDataIsNotJSON(key, path) {
 
 export function dataReturnerInvokedOtherMethod(key, path) {
   return `The method "${path.join('.') + '.' + key}" invoked another method before returning. Methods should return data OR invoke other methods -- in other words, please separate your pure and impure methods. See ${documentationURL}`
+}
+
+export function stateNotOverriddenByProps(propKey) {
+  return `The property ${propKey} is overriding Eigenstate state on the following component:`
 }

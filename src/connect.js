@@ -24,7 +24,7 @@ export function connect(Component, storeTree) {
 
       mapObjectTreeLeaves(storeTree, (storeLeaf) => {
 
-        assert.storeIsFunction(storeLeaf) //rewrite this assert xxxxxxxxxxxxxxxxxx
+        assert.storeIsFunction(storeLeaf)
 
         let storeIsInContext = false
         mapObjectTreeLeaves(context.eigenstate, (leaf) => {
@@ -51,7 +51,7 @@ export function connect(Component, storeTree) {
         mapObjectTreeLeaves(storeTree, storeLeaf => storeLeaf())
       )
 
-      //assert.propsDon'tconflictWithStoreState() xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      assert.stateNotOverriddenByProps(storeTreeState, this.props, Component)
 
       let componentProps = Object.assign({}, storeTreeState, this.props)
 
@@ -64,7 +64,7 @@ export function connect(Component, storeTree) {
       [].concat(this.context.eigenstate)
 
       mapObjectTreeLeaves(storeTree, (storeLeaf) => {
-        if (eigenstate.indexOf(storeLeaf) < 0) { // could be optimizedxxxxxxxxxxxx
+        if (eigenstate.indexOf(storeLeaf) < 0) { // could be optimized
           eigenstate.push(storeLeaf)
         }
       })

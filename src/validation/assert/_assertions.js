@@ -77,6 +77,15 @@ export function returnDataFitsStateDef(returnData, stateDef, key, path) {
 export function effectReturnsUndefined(effectReturn, effect) {
 
   if (effectReturn !== undefined) {
-    throw console.warn(errorMessages.effectReturnedValue, effect, effectReturn)
+    console.warn(errorMessages.effectReturnedValue, effect, effectReturn)
+  }
+}
+
+export function stateNotOverriddenByProps(storeTreeState, props, component) {
+
+  for (let propKey in props) {
+    if (propKey in storeTreeState) {
+      console.warn(errorMessages.stateNotOverriddenByProps(propKey), component)
+    }
   }
 }
