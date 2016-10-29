@@ -47,7 +47,7 @@ export function connect(Component, storeTree) {
 
     render() {
 
-      const storeTreeState = Immutable(
+      const storeTreeState = Immutable( // does this work?
         mapObjectTreeLeaves(storeTree, storeLeaf => storeLeaf())
       )
 
