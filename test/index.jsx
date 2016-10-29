@@ -17,6 +17,7 @@ import Grid from './Grid'
 // import Todos from './Todos'
 // import EffectsTest from './EffectsTest'
 // import GeneratedStore from './GeneratedStore/GeneratedStore'
+import NestedApp from './MultipleSameStores/NestedApp'
 
 const indexStore = Store({
   helloWorld: null,
@@ -53,6 +54,7 @@ const Apps = (props) => (
     <Todos />
     <EffectsTest />*/}
     <ReactRouterTester {...props} />
+    <NestedApp />
   </div>
 )
 
