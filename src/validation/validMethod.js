@@ -1,26 +1,26 @@
 import Immutable from 'seamless-immutable'
-import { mapObjectTreeLeaves, isProduction } from '../utils'
+import { mapObjectValues, isProduction } from '../utils'
 import { dataReturnerInvokedOtherMethod } from './errorMessages'
 
 // enforces pure XOR impure
-export default function validMethod(method, payload, stateTree, key, path) {
+export default function validMethod(method, payload, stateTree, key) {
 
   if (isProduction) return method(payload, stateTree)
 
   let invokedOtherMethod = false
   let shouldBePure = false
 
-  const enforcingStateTree = Immutable(mapObjectTreeLeaves(stateTree, (localProperty) => {
+  const enforcingStateTree = Immutable(mapObjectValues(stateTree, (property) => {
 
-    if (!(localProperty instanceof Function)) return localProperty
-    const localMethod = localProperty
+    if (!(property instanceof Function)) return property
+    const method = property
 
-    return (localPayload, illegalSecondArg) => {
+    return (payload, illegalSecondArg) => {
       if (shouldBePure) {
-        throw new Error(dataReturnerInvokedOtherMethod(key, path))
+        throw new Error(dataReturnerInvokedOtherMethod(key))
       }
       invokedOtherMethod = true
-      return localMethod(localPayload, illegalSecondArg)
+      return method(payload, illegalSecondArg)
     }
   }))
 
@@ -28,7 +28,7 @@ export default function validMethod(method, payload, stateTree, key, path) {
 
   if (methodReturnValue && (!(methodReturnValue instanceof Function))) { //Effects OK
     if (invokedOtherMethod) {
-      throw new Error(dataReturnerInvokedOtherMethod(key, path))
+      throw new Error(dataReturnerInvokedOtherMethod(key))
     }
     shouldBePure = true
   }

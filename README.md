@@ -106,7 +106,7 @@ Eigenstate will throw an error it finds you using a method that is pure *and* im
 
 This pure vs impure distinction is the central dogma of Eigenstate. Being forced to separate methods by purity will give you the separate benefits of functional code (for clean application logic) and procedural code (for Ajax calls, animations, and so forth).
 
-#### Store composition
+#### Store composition TODO: CHANGE THIS, AS NESTING IS NO LONGER SUPPORTED
 
 Stores are constructed with a `stateDefinition` parameter. `stateDefinition`s are easy to compose, like this:
 

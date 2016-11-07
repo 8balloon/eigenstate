@@ -1,8 +1,8 @@
 export function verboseLogger(invocationDetails) {
 
-  const { methodPath, methodKey, returnValue } = invocationDetails
+  const { methodKey, returnValue } = invocationDetails
 
-  console.log(`--> ${ methodPath.join('.') + '.' + methodKey } <-- METHOD CALLED.`)
+  console.log(`--> ${methodKey} <-- METHOD CALLED.`)
 
   if ( returnValue !== undefined ) {
     console.log('  return:', returnValue)

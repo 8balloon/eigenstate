@@ -1,23 +1,21 @@
 import Immutable from 'seamless-immutable'
-import { mapObjectTreeLeaves, getValueByPath } from '../utils'
+import { mapObjectValues } from '../utils'
 import assert from '../validation/assert'
 import validMethod from '../validation/validMethod'
 
 export default function StateTree(stateDef, executor) {
 
-  let stateTree = Immutable(mapObjectTreeLeaves(stateDef, (property, key, path, localStateDef) => {
+  let stateTree = Immutable(mapObjectValues(stateDef, (property, key) => {
 
     if (!(property instanceof Function)) return property
     const method = property
 
     return function armedMethod(payload, illegalSecondArg) {
 
-      assert.noSecondArgumentWasPassed(illegalSecondArg, key, path)
+      assert.noSecondArgumentWasPassed(illegalSecondArg, key)
 
-      const localStateTree = getValueByPath(stateTree, path)
-      const methodReturnValue = validMethod(method, payload, localStateTree, key, path)
-
-      let nextLocalState = null
+      const state = stateTree
+      const methodReturnValue = validMethod(method, payload, stateTree, key)
 
       if (methodReturnValue) {
 
@@ -27,26 +25,18 @@ export default function StateTree(stateDef, executor) {
         }
         else { // isData
 
-          assert.returnDataFitsStateDef(methodReturnValue, localStateDef, key, path)
+          assert.returnDataFitsStateDef(methodReturnValue, stateDef, key)
 
-          nextLocalState = localStateTree.merge(methodReturnValue)
-
-          if (path.length === 0) {
-            stateTree = stateTree.merge(nextLocalState)
-          }
-          else {
-            stateTree = stateTree.setIn(path, nextLocalState)
-          }
+          stateTree = stateTree.merge(methodReturnValue)
         }
       }
 
       executor.handleInvocation(stateTree, {
         methodKey: key,
-        methodPath: path,
         payload,
         returnValue: methodReturnValue,
-        localState: localStateTree,
-        nextLocalState: nextLocalState || localStateTree
+        state,
+        nextState: stateTree
       })
     }
   }))

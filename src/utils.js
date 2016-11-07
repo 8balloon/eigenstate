@@ -36,15 +36,3 @@ export function mapObjectTreeLeaves(obj, mapFunc, keyPath) {
     }
   })
 }
-
-export function getValueByPath(obj, path) {
-
-  let value = obj
-  let keys = path.slice()
-
-  while (keys.length) {
-    value = value[keys.shift()]
-  }
-
-  return value
-}

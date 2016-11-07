@@ -25,10 +25,10 @@ export function storeIsFunction(store) {
   }
 }
 
-export function noSecondArgumentWasPassed(illegalSecondArgument, key, path) {
+export function noSecondArgumentWasPassed(illegalSecondArgument, key) {
 
   if (typeof illegalSecondArgument !== 'undefined') {
-    throw new Error(errorMessages.tooManyMethodArguments(key, path))
+    throw new Error(errorMessages.tooManyMethodArguments(key))
   }
 }
 
@@ -56,21 +56,21 @@ function isJSON(value, errorMessage) {
   }
 }
 
-function returnDataIsJSONObject(returnData, key, path) {
+function returnDataIsJSONObject(returnData, key) {
 
-  assertIsObject(returnData, errorMessages.returnDataIsNotObject(key, path))
-  isJSON(errorMessages.returnedDataIsNotJSON(key, path))
+  assertIsObject(returnData, errorMessages.returnDataIsNotObject(key))
+  isJSON(errorMessages.returnedDataIsNotJSON(key))
 }
 
-export function returnDataFitsStateDef(returnData, stateDef, key, path) {
+export function returnDataFitsStateDef(returnData, stateDef, key) {
 
-  returnDataIsJSONObject(returnData, key, path)
+  returnDataIsJSONObject(returnData, key)
 
-  for (let localKey in returnData) {
+  for (let returnedKey in returnData) {
 
-    const stateDefProperty = stateDef[localKey]
+    const stateDefProperty = stateDef[returnedKey]
 
-    containsNoFunctions(stateDefProperty, errorMessages.methodWasOverwritten(key, path, localKey))
+    containsNoFunctions(stateDefProperty, errorMessages.methodWasOverwritten(key, returnedKey))
   }
 }
 
