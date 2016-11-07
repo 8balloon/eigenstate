@@ -46,13 +46,6 @@ const erroringStore = Store({
   methodThatRemovesOtherMethod: (payload, state) => {
     return {pureANDImpureIncremenet: null}
   },
-  downCount: {
-    count: 0,
-    random: Math.random(),
-    decrement: (payload, state) => ({
-      count: state.count - payload
-    })
-  },
   addNewKeyByMethod: (_, state) => ({ asdf: 'fdsa' })
 })
 erroringStore.subscribe(verboseLogger)
@@ -114,6 +107,14 @@ const View = function CounterView(props) {
   )
 }
 
-export default () => <Provider store={erroringStore}>
+const downCountStore = Store({
+  count: 9,
+  random: Math.random(),
+  decrement: (payload, state) => ({
+    count: state.count - payload
+  })
+})
+
+export default () => <Provider store={{downCount: downCountStore}}>
   <View />
 </Provider>

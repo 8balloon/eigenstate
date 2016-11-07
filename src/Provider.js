@@ -31,7 +31,7 @@ export class Provider extends React.Component {
     this.storeTreeState = Immutable(mapObjectTreeLeaves(props.store, (storeLeaf) => {
 
       assert.storeIsFunction(storeLeaf)
-      
+
       this.effectorUnsetters.push(storeLeaf._setEffector(executeUpdate))
 
       return storeLeaf()
@@ -52,13 +52,17 @@ export class Provider extends React.Component {
 
     mapObjectTreeLeaves(this.props.store, (storeLeaf, key, path) => {
 
-      if (path.length === 0) {
+      if (path === undefined) {
 
         this.storeTreeState = this.storeTreeState.merge(storeLeaf())
       }
+      else if (path.length === 0) {
+
+        this.storeTreeState = this.storeTreeState.setIn([key], storeLeaf())
+      }
       else {
 
-        this.storeTreeState = this.storeTreeState.setIn(path, storeLeaf())
+        this.storeTreeState = this.storeTreeState.setIn([...path, key], storeLeaf())
       }
     })
 

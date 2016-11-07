@@ -13,6 +13,7 @@ import { Store, Provider, connect } from '../src'
 import Counter from './Counter'
 import GeneratedStore from './GeneratedStore/GeneratedStore'
 import ErroringCounter from './ErroringCounter'
+import NamespacedCounter from './NamespacedCounter/NamespacedCounter'
 // import Grid from './Grid'
 // // import ConnectComparison from './ConnectComparison'
 // // import Todos from './Todos'
@@ -45,17 +46,18 @@ const Kids = (props) => {
 
 const Apps = (props) => (
   <div className="apps">
-    <Counter />
-    <GeneratedStore />
     <ErroringCounter />
+    <NamespacedCounter />
+    <GeneratedStore />
     {/*
+      <Counter />
     <Grid />
     <ConnectComparison />
     <Todos />
     <EffectsTest />
     <NestedApp />
-    */}
     <ReactRouterTester {...props} />
+    */}
   </div>
 )
 

@@ -5,12 +5,10 @@ export const isProduction = (
 
 export function isObject(value) {
 
-  return typeof value === 'object' && value !== null
+  return typeof value === 'object' && value !== null && !(value instanceof Function)
 }
 
 export function mapObjectValues(obj, mapFunc) {
-
-  if (Object.keys(obj).length === 0) return mapFunc(obj)
 
   if (obj instanceof Array) return obj.map(mapFunc)
 
@@ -23,7 +21,7 @@ export function mapObjectValues(obj, mapFunc) {
 
 export function mapObjectTreeLeaves(obj, mapFunc, keyPath) {
 
-  if (obj === undefined) return
+  if (!(isObject(obj))) return mapFunc(obj)
 
   const path = keyPath || []
 
