@@ -79,7 +79,7 @@ The example above demonstrates all of these principles.
 
 ## API
 
-* `Store` (function) : Accepts a `stateDefinition` object and returns an Eigenstate store. The Eigenstate store is a function which returns an immutable `state` object when invoked.
+* **Store** (function) : Accepts a `stateDefinition` object and returns an Eigenstate store. The Eigenstate store is a function which returns an immutable `state` object when invoked.
 
   * **stateDefinition** (constructor parameter, object) : an object of `key: data | method` pairs. Defines the Eigenstate state to be returned by `Store`. Data can be any JSON, and methods are described [here](https://github.com/8balloon/eigenstate#methods).
 
@@ -97,7 +97,9 @@ The example above demonstrates all of these principles.
 
 #### Optimization
 
-Eigenstate state is always immutable. This means that a `===` comparison will return `false` if state has changed. This is useful for your React components' `shouldComponentUpdate` functions. Here is an example `shouldComponentUpdate` that makes use of immutable state:
+Eigenstate state is *always* immutable. This means that a `===` comparison will return `false` if state has changed. This is useful for your React components' `shouldComponentUpdate` functions. 
+
+Here is an example `shouldComponentUpdate` that makes use of immutable state. If you implement similar `shouldComponentUpdate` logic across your application, it will never re-render needlessly, making it very fast.
 
 ```js
 //TodoList component
@@ -106,15 +108,13 @@ shouldComponentUpdate: function(nextProps) {
 }
 ```
 
-If you implement this across your application, it will never re-render needlessly, making it very fast.
-
 #### Method purity
 
 Methods may be pure XOR impure. Methods that update state directly by returning data are *pure*, while methods that invoke other methods are *impure*.
 
 Async methods go in impure methods. If Eigenstate catches you trying to update state directly from an impure method by returning data, it will throw an error.
 
-This pure vs impure distinction is the central dogma of Eigenstate. Forcing you to separate methods by purity gives you the separate benefits of functional code (for clean application logic) and procedural code (for Ajax calls, and other async things, like animations).
+This pure vs impure distinction is the central dogma of Eigenstate. By forcing you to separate methods by purity, Eigenstate gives you the separate benefits of functional code (for clean application logic) and procedural code (for Ajax calls and all other async things).
 
 #### Multiple Stores
 
@@ -139,4 +139,4 @@ Functions returned from methods are called "effects", and are executed after the
 
 See [here](https://github.com/8balloon/frontend-boilerplate/tree/master/src).
 
-This is a React Router setup that implements multiple routes in a single page. It demonstrates how to compose `stateDefinition`s and views through composition. It is a part of a larger [boilerplate](https://github.com/8balloon/frontend-boilerplate), which incorporates Webpack and SASS.
+This is a React Router setup that implements multiple routes in a single page. It demonstrates how to handle using multiple stores and views. It is a part of a larger [boilerplate](https://github.com/8balloon/frontend-boilerplate), which incorporates Webpack and SASS.
