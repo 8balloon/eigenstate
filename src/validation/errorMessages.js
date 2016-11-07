@@ -24,7 +24,3 @@ export function returnedDataIsNotJSON(key, path) {
 export function dataReturnerInvokedOtherMethod(key, path) {
   return `The method "${path.join('.') + '.' + key}" invoked another method before returning. Methods should return data OR invoke other methods -- in other words, please separate your pure and impure methods. See ${documentationURL}`
 }
-
-export function stateNotOverriddenByProps(propKey) {
-  return `The property ${propKey} is overriding Eigenstate state on the following component:`
-}

@@ -80,12 +80,3 @@ export function effectReturnsUndefined(effectReturn, effect) {
     console.warn(errorMessages.effectReturnedValue, effect, effectReturn)
   }
 }
-
-export function stateNotOverriddenByProps(storeTreeState, props, component) {
-
-  for (let propKey in props) {
-    if (propKey in storeTreeState) {
-      console.warn(errorMessages.stateNotOverriddenByProps(propKey), component)
-    }
-  }
-}

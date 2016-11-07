@@ -1,4 +1,4 @@
-import { Store, connect } from '../../src'
+import { Store, Provider } from '../../src'
 
 var incAmount = 1
 
@@ -24,11 +24,6 @@ const CounterView = (props) => {console.log("SIMPLECOUNTERPRPOS:", props); retur
   </div>
 )}
 
-function SimpleCounter(props) {
-
-  return React.createElement(connect(CounterView, props.store))
-}
-
 const controllerStore = Store({
   x: 0,
   rerender: (_, state) => ({x: state.x + 1})
@@ -36,12 +31,14 @@ const controllerStore = Store({
 
 const Controller = (props) => {
   const generatedStore = Store(nextCounterStateDef())
-  return React.createElement(connect(() => (
-    <div className="controller" style={{backgroundColor: 'orange'}}>
-      <SimpleCounter store={generatedStore} />
-      <div onClick={props.rerender}> RE RENDER </div>
-    </div>
-  ), generatedStore))
+  return  <div className="controller" style={{backgroundColor: 'orange'}}>
+    <Provider store={generatedStore}>
+      <CounterView />
+    </Provider>
+    <div onClick={props.rerender}> RE RENDER </div>
+  </div>
 }
 
-export default connect(Controller, controllerStore)
+export default () => <Provider store={controllerStore}>
+  <Controller />
+</Provider>

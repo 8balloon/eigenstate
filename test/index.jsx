@@ -8,16 +8,16 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, hashHistory, Link } from 'react-router'
 
-import { Store, connect } from '../src'
+import { Store, Provider, connect } from '../src'
 
 import Counter from './Counter'
-import Grid from './Grid'
-import ErroringCounter from './ErroringCounter'
-// import ConnectComparison from './ConnectComparison'
-// import Todos from './Todos'
-// import EffectsTest from './EffectsTest'
 import GeneratedStore from './GeneratedStore/GeneratedStore'
-import NestedApp from './MultipleSameStores/NestedApp'
+// import Grid from './Grid'
+// import ErroringCounter from './ErroringCounter'
+// // import ConnectComparison from './ConnectComparison'
+// // import Todos from './Todos'
+// // import EffectsTest from './EffectsTest'
+// import NestedApp from './MultipleSameStores/NestedApp'
 
 const indexStore = Store({
   helloWorld: null,
@@ -35,7 +35,7 @@ const ReactRouterTester = (props) => (
   </div>
 )
 
-const InternalTesterApp = connect(ReactRouterTester, indexStore)
+const InternalTesterApp = connect(ReactRouterTester)
 
 const Kids = (props) => {
   return (
@@ -46,26 +46,29 @@ const Kids = (props) => {
 const Apps = (props) => (
   <div className="apps">
     <Counter />
-    <Grid />
     <GeneratedStore />
+    {/*
+    <Grid />
     <ErroringCounter />
-  {/*
     <ConnectComparison />
     <Todos />
-    <EffectsTest />*/}
+    <EffectsTest />
     <ReactRouterTester {...props} />
     <NestedApp />
+    */}
   </div>
 )
 
-const StatefulApps = connect(Apps, indexStore)
+const StatefulApps = connect(Apps)
 
 ReactDOM.render(
+  <Provider store={indexStore}>
     <Router history={hashHistory}>
       <Route path="/" component={StatefulApps}>
         <Route path="kids" component={Kids} />
         <Route path="rrTester" component={InternalTesterApp} />
       </Route>
-    </Router>,
+    </Router>
+  </Provider>,
   document.getElementById('react-tests')
 )

@@ -1,4 +1,4 @@
-import { connect, Store } from '../../src'
+import { Store, Provider } from '../../src'
 
 export const counterState = {
   count: 0,
@@ -23,4 +23,6 @@ export const CounterView = (props) => (
   </div>
 )
 
-export default connect(CounterView, counterStore)
+export default () => <Provider store={counterStore}>
+  <CounterView />
+</Provider>
