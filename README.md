@@ -75,7 +75,7 @@ The example above demonstrates all of these principles.
 
 2. A method may update state by returning updated state data.
 
-3. A method may invoke other methods. **Caveat**: if a method calls another method, it's not allowed to return anything. (See [here](https://github.com/8balloon/eigenstate#method-purity) for a deeper explanation)
+3. A method may invoke other methods. **Caveat**: if a method calls another method, it's not allowed to update state directly buy returning updated state data. (See [here](https://github.com/8balloon/eigenstate#method-purity) for a deeper explanation)
 
 ## API
 
