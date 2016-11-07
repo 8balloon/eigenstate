@@ -53,9 +53,9 @@ const Apps = (props) => (
     <ConnectComparison />
     <Todos />
     <EffectsTest />
-    <ReactRouterTester {...props} />
     <NestedApp />
     */}
+    <ReactRouterTester {...props} />
   </div>
 )
 

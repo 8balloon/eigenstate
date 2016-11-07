@@ -28,11 +28,14 @@ export class Provider extends React.Component {
       }
     }
 
-    mapObjectTreeLeaves(props.store, (storeLeaf) => {
+    this.storeTreeState = Immutable(mapObjectTreeLeaves(props.store, (storeLeaf) => {
 
       assert.storeIsFunction(storeLeaf)
+      
       this.effectorUnsetters.push(storeLeaf._setEffector(executeUpdate))
-    })
+
+      return storeLeaf()
+    }))
   }
 
   componentWillReceiveProps(next) {
@@ -47,9 +50,17 @@ export class Provider extends React.Component {
 
   render() {
 
-    this.storeTreeState = Immutable( // does this work?
-      mapObjectTreeLeaves(this.props.store, storeLeaf => storeLeaf())
-    )
+    mapObjectTreeLeaves(this.props.store, (storeLeaf, key, path) => {
+
+      if (path.length === 0) {
+
+        this.storeTreeState = this.storeTreeState.merge(storeLeaf())
+      }
+      else {
+
+        this.storeTreeState = this.storeTreeState.setIn(path, storeLeaf())
+      }
+    })
 
     return React.cloneElement(
       React.Children.only(this.props.children),
