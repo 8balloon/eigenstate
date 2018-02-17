@@ -1,3 +1,7 @@
+# DEPRECATION WARNING
+
+This package is deprecated in favor of [Mobx](https://www.npmjs.com/package/mobx) + [Mobx-Actions](https://www.npmjs.com/package/mobx-actions)
+
 ![Eigenstate](assets/logo.png)
 
 # Eigenstate
